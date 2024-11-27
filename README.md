@@ -6,5 +6,5 @@ Unity 2022.3.53f1 LTS
 [![My Image](https://github.com/htanama/FPS-Team-Project/blob/main/Unity-2022.3.53f1.png)
 
 VS 2022 17.2.2
-![My Image](https://github.com/htanama/FPS-Team-Project/VS-version.png)
+![My Image](https://github.com/htanama/FPS-Team-Project/blob/main/VS-version.png)
 
