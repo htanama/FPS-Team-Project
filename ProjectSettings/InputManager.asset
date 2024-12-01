@@ -298,7 +298,7 @@ InputManager:
     descriptiveName: This is for world input
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: e
     altNegativeButton: 
     altPositiveButton: joystick button 3
     gravity: 1000
