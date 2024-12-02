@@ -5,39 +5,50 @@ using UnityEngine.UI;
 
 public class panel_door : MonoBehaviour
 {
-    bool isOpen = false;  // false = closed, true = open
-    bool inRange = false;
+    public float interactionDistance;
+    public GameObject inText;
+    public string doorOpenAnimName, doorCloseAnimName;
 
-    Animator animator;
     
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Action") && inRange)
+        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward, Color.red);
+
+        Ray ray = new Ray(transform.position, transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactionDistance));
         {
-            ToggleDoor();
+            if(hit.collider.gameObject.tag == "door")
+            {
+                GameObject doorParent = hit.collider.transform.root.gameObject;
+                Animator doorAnim = doorParent.GetComponent<Animator>();
+                inText.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorOpenAnimName))
+                    {
+                        doorAnim.ResetTrigger("open");
+                        doorAnim.SetTrigger("close");
+                    }
+                    if (doorAnim.GetCurrentAnimatorStateInfo(0).IsName(doorOpenAnimName))
+                    {
+                        doorAnim.ResetTrigger("open");
+                        doorAnim.SetTrigger("close");
+                    }
+                }
+            }
+            else
+            {
+                inText.SetActive(false);
+            }
         }
-    }
-
-    void ToggleDoor()
-    {
-        isOpen = !isOpen;
-        animator.SetBool("DoorState", isOpen);
-    }
-
-    void OnTriggerEnter(Collider col)
-    {
-        if (col.gameObject.tag == "Player") inRange = true;
-    }
-
-    private void OnTriggerExit(Collider col)
-    {
-        if (col.gameObject.tag == "Player") inRange = false;
     }
 }
