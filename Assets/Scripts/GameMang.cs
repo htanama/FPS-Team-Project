@@ -4,9 +4,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameMang : MonoBehaviour
-{ public static GameMang Instance; 
+{
+    public static GameMang Instance;
 
-    public enum GameState {MainMenu, Playing, Paused, Win ,Lose };
+    public enum GameState { MainMenu, Playing, Paused, Win, Lose };
     public GameState CurrentState;
 
     private void Awake()
@@ -16,15 +17,17 @@ public class GameMang : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else { 
-          Destroy(gameObject);
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
     public void ChangeState(GameState newState)
     {
         CurrentState = newState;
-        switch (newState) {
+        switch (newState)
+        {
 
             case GameState.MainMenu:
                 Debug.Log("Game in the Main Menu");
@@ -53,3 +56,19 @@ public class GameMang : MonoBehaviour
 
 
     }
+    public  void PauseGame()
+    {
+        if (CurrentState == GameState.Playing)
+        {
+            ChangeState(GameState.Paused);
+        }
+
+    }
+
+    public void ResumeGame()
+    {
+        ChangeState(GameState.Playing);
+    }
+
+}
+
