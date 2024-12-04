@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class cameraController : MonoBehaviour
 {
-    [SerializeField] int sens;
-    [SerializeField] int lockVertMin, lockVertMax;
-    [SerializeField] bool invertY;
+    [SerializeField] float sensitivity;
+    [SerializeField] float verticalMin, verticalMax;
 
-    float rotX;
+    private float verticalRotation;
 
     // Start is called before the first frame update
     void Start()
@@ -21,29 +19,20 @@ public class cameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // get input
+        //get input
+        float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
 
-        float mouseX = Input.GetAxis("Mouse X") * sens * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * sens * Time.deltaTime;
+        //Not adding invert option
+        verticalRotation -= mouseY;
 
-        // tie the mouse imput to rotX
-        if (!invertY)
-        {
-            rotX -= mouseY;
-        }
-        else
-        {
-            rotX += mouseY;
-        }
+        //Clamping x rotation of cam
+        verticalRotation = Mathf.Clamp(verticalRotation, verticalMin, verticalMax);
 
-        //clamp the camera rotX
-        rotX = Mathf.Clamp(rotX, lockVertMin, lockVertMax);
+        //Rotate camera on x-axis
+        transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
 
-        //Rotate the cam on the x-axis
-        transform.localRotation = Quaternion.Euler(rotX, 0, 0);  // this code is for up and down.
-
-        // rotate the player on the y-axis - this is for the player because camera is child
+        //Rotate player on y-axis
         transform.parent.Rotate(Vector3.up * mouseX);
-
     }
 }

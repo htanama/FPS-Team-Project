@@ -4,7 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - door
+  - Water
+  - Platform1
+  - Platform2
+  - BlueFlag
+  - RedFlag
+  - RedBase
+  - Enemy
   layers:
   - Default
   - TransparentFX
