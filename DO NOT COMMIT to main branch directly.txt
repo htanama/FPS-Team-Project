@@ -1,0 +1,7 @@
+Please do not commit to main branch directly
+
+Please merge your branch to Testing branch. 
+
+The Testing branch will be merge to main branch when the game prototype is completed. 
+
+Thank you!
