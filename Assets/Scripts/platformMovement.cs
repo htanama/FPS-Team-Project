@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// Script Author: Erik Segura
+// Assisted by:
+
 public class platformMovement : MonoBehaviour
 {
     public enum MovementDirection
@@ -35,7 +39,5 @@ public class platformMovement : MonoBehaviour
             float newY = Mathf.PingPong(Time.time * speed, distance);
             transform.position = new Vector3(startPosition.x, startPosition.y + newY, startPosition.z);
         }
-
-        transform.position = startPosition;
     }
 }
