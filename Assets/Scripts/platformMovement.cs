@@ -18,6 +18,7 @@ public class platformMovement : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float distance;
 
+
     private Vector3 startPosition;
 
     // Start is called before the first frame update
@@ -40,4 +41,6 @@ public class platformMovement : MonoBehaviour
             transform.position = new Vector3(startPosition.x, startPosition.y + newY, startPosition.z);
         }
     }
+
+    
 }
