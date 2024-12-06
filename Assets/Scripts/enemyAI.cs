@@ -4,17 +4,25 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class enemyAI : MonoBehaviour, IDamage
-{
+{       
     [SerializeField] Renderer model;
+
+    [SerializeField] public Transform shootPos;
+
+    [SerializeField] GameObject bullet;
+
+    [SerializeField] float shootRate;
+
 
     [SerializeField] NavMeshAgent agent;
 
-    [Header("To Chase the Player")]
+    [Header("To Chase the Target")]
     [SerializeField] Transform playerPosition; 
 
     [SerializeField] int HP;
 
     bool playerInRange;
+
     bool isShooting; 
 
     Color colorOrig;
@@ -29,9 +37,15 @@ public class enemyAI : MonoBehaviour, IDamage
     // Update is called once per frame
     void Update()
     {
+        if (!isShooting)
+        {
+            StartCoroutine(shoot());
+        }
+
         if (playerInRange)
         {
             //agent.SetDestination(playerPosition.position);
+            
         }
     }
 
@@ -54,6 +68,18 @@ public class enemyAI : MonoBehaviour, IDamage
         model.material.color = Color.red;
         yield return new WaitForSeconds(0.1f);
         model.material.color = colorOrig;
+    }
+
+    // adding to shoot
+    IEnumerator shoot()
+    {
+        isShooting = true;
+
+        Instantiate(bullet, shootPos.position, transform.rotation);
+
+        yield return new WaitForSeconds(shootRate);
+
+        isShooting = false;
     }
 
 }

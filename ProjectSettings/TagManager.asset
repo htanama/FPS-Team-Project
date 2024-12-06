@@ -11,6 +11,7 @@ TagManager:
   - RedFlag
   - RedBase
   - Enemy
+  - Damage-Ball
   layers:
   - Default
   - TransparentFX

@@ -123,6 +123,29 @@ public class playerController : MonoBehaviour
         }
     }
 
+
+    void OnTriggerEnter(Collider other)
+    {
+        // Check if the trigger is the sphere
+        if (other.CompareTag("Damage-Ball"))
+        {
+            #if UNITY_EDITOR
+                Debug.Log("Player hit by ball");
+            #endif
+            
+
+            // Get the direction vector from the ball (sphere) to the player
+            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
+
+            // Define the push distance
+            float pushDistance = 11.0f;
+
+            // Use CharacterController to move the player
+            controller.Move(pushDirection * pushDistance);
+        }
+    }
+
+
     /*IEnumerator shoot()     //needs a yield
     {
         isShooting = true;
