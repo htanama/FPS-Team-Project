@@ -2,6 +2,16 @@
   Code Author: Juan Contreras
   Date: 12/03/2024
   Class: DEV2
+
+ Added: Lemons (Weapons)
+    - Added fields shoot damage, distance, rate
+    - Also field HP
+    - uncommented layer mask
+    - Added bool/flag isShooting
+    - update, added draw ray (raycast)
+    - movement, added "fire"
+    - added take damage 
+    - added shoot
 */
 
 using System.Collections;
@@ -13,9 +23,17 @@ public class playerController : MonoBehaviour
 
     [Header("      COMPONENTS      ")]
     [SerializeField] CharacterController controller;
-    //[SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
+    [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
+
+    [Header("      WEAPONS      ")]
+    //[SerializeField] weaponType; weaponEquipped; ammoCount;
+    [SerializeField] int shootDamage;
+    [SerializeField] int shootDistance;
+    [SerializeField] float shootRate;
+    
 
     [Header("      STATS      ")]
+    [SerializeField][Range(0, 10)] int HP;
     [SerializeField][Range(1, 10)] int speed;      //Range adds a slider
     [SerializeField][Range(2, 5)] int sprintMod;
     [SerializeField][Range(1, 5)] int jumpMax;
@@ -32,8 +50,10 @@ public class playerController : MonoBehaviour
     int jumpCount;
 
     bool isSprinting;
-
     bool isScaling;                 //To allow to modify crouch speed
+
+    bool isShooting;
+    //bool isReloading; isEquipping;
 
     private int currentSpeed;     //To avoid bugs by modifying speed directly
 
@@ -44,7 +64,6 @@ public class playerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         currentSpeed = speed;
         originalScaleY = controller.transform.localScale.y;
         originalScale = controller.transform.localScale;
@@ -53,6 +72,9 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //draw ray
+        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDistance, Color.red);
+
         //always checking for these
         movement();
         sprint();
@@ -80,6 +102,12 @@ public class playerController : MonoBehaviour
         controller.Move(horizontalVelocity * Time.deltaTime);
         //start pulling down immediately after the jump
         horizontalVelocity.y -= gravity * Time.deltaTime;
+
+        // Weapons Add //
+        if (Input.GetButton("Fire1") && !isShooting)
+        {
+            StartCoroutine(Shoot());
+        }
 
     }
 
@@ -142,4 +170,53 @@ public class playerController : MonoBehaviour
         //      the line would only execute about half way or so
 
     }
+
+    // Weapons //
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+
+        if (HP <= 0)
+        {
+            //death/lose screen
+            //gameManager.instance.youLose();
+        }
+    }
+
+    IEnumerator Shoot()
+    {
+        isShooting = true;
+
+        //shoot code
+        RaycastHit contact;
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
+        {
+            Debug.Log(contact.collider.name);
+
+            IDamage dmg = contact.collider.GetComponent<IDamage>();
+            if (dmg != null)
+            {
+                dmg.takeDamage(shootDamage);
+            }
+
+        }
+
+        yield return new WaitForSeconds(shootRate);
+
+        isShooting = false;
+    }
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
 }
