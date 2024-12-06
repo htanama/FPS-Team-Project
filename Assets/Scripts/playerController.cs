@@ -3,22 +3,24 @@
   Date: 12/03/2024
   Class: DEV2
 
- Added: Lemons (Weapons)
-    - Added fields shoot damage, distance, rate
-    - Also field HP
-    - uncommented layer mask
-    - Added bool/flag isShooting
-    - update, added draw ray (raycast)
-    - movement, added "fire"
-    - added take damage 
-    - added shoot
+  Edited by: Lemons (Weapons)
+            - Added fields shoot damage, distance, rate
+            - Also field HP
+            - uncommented layer mask
+            - Added bool/flag isShooting
+            - update, added draw ray (raycast)
+            - movement, added "fire"
+            - added take damage 
+            - added shoot
+            -------------------------------------------
+            - added derive from IDamage
 */
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerController : MonoBehaviour
+public class playerController : MonoBehaviour, IDamage
 {
 
     [Header("      COMPONENTS      ")]
@@ -182,9 +184,9 @@ public class playerController : MonoBehaviour
             //gameManager.instance.youLose();
         }
     }
-
     IEnumerator Shoot()
     {
+        //turn on
         isShooting = true;
 
         //shoot code
@@ -202,21 +204,9 @@ public class playerController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(shootRate);
-
+        
+        //turn off
         isShooting = false;
     }
-
-   
-
-
-
-
-
-
-
-
-
-
-
 
 }
