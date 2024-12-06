@@ -62,7 +62,11 @@ public class Flag : MonoBehaviour
     {
         carrier = newCarrier; // Assign the new carrier
         isCarried = true;     // Mark the flag as carried
-        Debug.Log($"{carrier.name} is now carrying the flag.");
+        
+        #if UNITY_EDITOR
+            Debug.Log($"{carrier.name} is now carrying the flag.");
+        #endif
+
     }
 
     public void DropFlag()
@@ -73,7 +77,9 @@ public class Flag : MonoBehaviour
             carrier = null;
             isCarried = false;
 
-            Debug.Log("Flag dropped!");
+            #if UNITY_EDITOR
+                Debug.Log("Flag dropped!");
+            #endif
         }
     }
 
@@ -91,8 +97,9 @@ public class Flag : MonoBehaviour
     {
         if (isCarried)
         {
-            Debug.Log($"{carrier.name} delivered the flag to the base!");
-
+            #if UNITY_EDITOR
+                Debug.Log($"{carrier.name} delivered the flag to the base!");
+            #endif
             // Reset the flag to its original position
             ResetFlag();
         }
