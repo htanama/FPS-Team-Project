@@ -2449,6 +2449,9 @@ MonoBehaviour:
   jumpMax: 2
   jumpSpeed: 11
   gravity: 30
+  uncrouchSpeed: 20
+  crouchWalkSpeed: 0.5
+  crouchHeight: 0.5
 --- !u!4 &1218129217
 Transform:
   m_ObjectHideFlags: 0
