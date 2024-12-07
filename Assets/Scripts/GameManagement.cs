@@ -1,3 +1,4 @@
+// Edited - implemented HP Bar
 
 using System.Collections;
 using System.Collections.Generic;
