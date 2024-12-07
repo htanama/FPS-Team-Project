@@ -86,12 +86,12 @@ public class enemyAI : MonoBehaviour, IDamage
             Debug.Log("before HP < 0");
         #endif
 
-        if (HP < 0)
+        if (HP <= 0)
         {
             #if UNITY_EDITOR
                 Debug.Log("dead");
             #endif      
-            GameManager.instance.UpdateGame(-1); // problem code cannot kill the enemy
+            GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
             // I am dead
             Destroy(gameObject);            
         }

@@ -25,8 +25,7 @@ public class AICaptureFlag : MonoBehaviour
     }
 
     void Start()
-    {
-        GameManager.instance.UpdateGame(1);
+    {        
         // Get the NavMeshAgent component
         agent = GetComponent<NavMeshAgent>();
 
@@ -144,8 +143,7 @@ public class AICaptureFlag : MonoBehaviour
         // Needs the part about Shooting and gets damage
         if (HP <= 0)
         {
-            Destroy(gameObject);
-            GameManager.instance.UpdateGame(-1);
+            Destroy(gameObject);           
         }
     }
     */

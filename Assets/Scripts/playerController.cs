@@ -34,7 +34,6 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
     
-
     [Header("      STATS      ")]    
     [SerializeField][Range(1, 10)] int speed;      //Range adds a slider
     [SerializeField][Range(2, 5)] int sprintMod;
@@ -86,7 +85,7 @@ public class playerController : MonoBehaviour, IDamage
         sprint();
         crouch();
 
-        UpdateCrosshair();
+        UpdateCrosshair(); 
     }
 
     void movement()
@@ -217,10 +216,12 @@ public class playerController : MonoBehaviour, IDamage
     {
         //turn on
         isShooting = true;
-
+        
+        //RaycastHit hit;
         //shoot code
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
-        {
+        {         
+
             Debug.Log(contact.collider.name); //being overridden
 
             IDamage dmg = contact.collider.GetComponent<IDamage>();
@@ -237,16 +238,17 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = false;
     }
 
+
     public void UpdateCrosshair()
     {
         Crosshair crosshair = FindObjectOfType<Crosshair>();
         int crossDefault = crosshair.GetDefaultValue();
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
-        {           
-            crosshair.SetDefaultValue(crosshair.GetTargetValue());                
+        {
+            crosshair.SetDefaultValue(crosshair.GetTargetValue());
         }
-        else 
+        else
         {
             crosshair.SetDefaultValue(crossDefault);
         }

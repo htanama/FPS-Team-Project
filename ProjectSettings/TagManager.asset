@@ -9,6 +9,7 @@ TagManager:
   - Damage-Ball
   - Enemy
   - Flag
+  - Damage
   layers:
   - Default
   - TransparentFX
