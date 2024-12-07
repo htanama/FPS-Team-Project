@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5558596303879204719}
   - component: {fileID: 2951173312165690376}
   - component: {fileID: 2574175719837873058}
-  m_Layer: 0
-  m_Name: Damage-Ball
+  m_Layer: 3
+  m_Name: Enemy-Paint-Ball
   m_TagString: Damage-Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -27,6 +27,15 @@ public class damage : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        #if UNITY_EDITOR
+            Debug.Log("Triggered by: " + other.name);
+        #endif
+
+        if (other.isTrigger)
+        {
+            return; // ignore trigger colliding with other triggers. 
+        }
+
         IDamage dmg = other.GetComponent<IDamage>();
 
         if (dmg != null)

@@ -8,20 +8,19 @@ TagManager:
   - Platform1
   - Platform2
   - BlueFlag
-  - RedFlag
   - RedBase
   - Enemy
-  - Damage-Ball
+  - RedFlag
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy-Paint-Ball
   - Water
   - UI
-  - 
-  - 
-  - 
+  - EnemyOne
+  - Player
+  - Player-Paint-Ball
   - 
   - 
   - 

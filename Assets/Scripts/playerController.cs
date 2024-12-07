@@ -124,7 +124,7 @@ public class playerController : MonoBehaviour
     }
 
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         // Check if the trigger is the sphere
         if (other.CompareTag("Damage-Ball"))
