@@ -5792,7 +5792,7 @@ MonoBehaviour:
   jumpMax: 2
   jumpSpeed: 11
   gravity: 30
-  HP: 1
+  HP: 5
   uncrouchSpeed: 20
   crouchWalkSpeed: 0.5
   crouchHeight: 0.5

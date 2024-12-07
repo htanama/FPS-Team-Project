@@ -210,7 +210,7 @@ public class playerController : MonoBehaviour, IDamage
         if (HP <= 0)
         {
             //death/lose screen
-            //gameManager.instance.youLose();
+            GameManager.instance.LoseGame();
         }
     }
     IEnumerator Shoot()
@@ -219,12 +219,12 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = true;
 
         //shoot code
-       
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
         {
             Debug.Log(contact.collider.name); //being overridden
 
             IDamage dmg = contact.collider.GetComponent<IDamage>();
+
             if (dmg != null)
             {
                dmg.takeDamage(shootDamage);
