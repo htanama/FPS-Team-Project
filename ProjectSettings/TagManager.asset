@@ -4,23 +4,21 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Water
-  - Platform1
+  - HUD
   - Platform2
-  - BlueFlag
-  - RedFlag
-  - RedBase
+  - Damage-Ball
   - Enemy
+  - Flag
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Enemy
+  - Player Bullet
+  - Enemy Bullet
   - 
   - 
   - 

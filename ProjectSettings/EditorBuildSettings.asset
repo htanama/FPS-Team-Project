@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Levels/Proto_Turn_IN.unity
+    guid: 91e5939aaf34dd04086fe9287dfe56b8
   m_configObjects: {}
