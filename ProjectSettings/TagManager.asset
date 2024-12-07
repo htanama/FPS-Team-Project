@@ -12,10 +12,13 @@ TagManager:
   - Enemy
   - RedFlag
   - Damage-Ball
+  - Weapon
+  - HUD
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
+<<<<<<< HEAD
   - Enemy-Paint-Ball
   - Water
   - UI
@@ -23,6 +26,15 @@ TagManager:
   - Player
   - Player-Paint-Ball
   - Damage-Bullet-Red
+=======
+  - Player
+  - Water
+  - UI
+  - Player bullet
+  - Enemy
+  - Enemy bullet
+  - 
+>>>>>>> Testing
   - 
   - 
   - 
