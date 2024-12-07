@@ -11,6 +11,7 @@ public class AICaptureFlag : MonoBehaviour
     [SerializeField] private Transform flagPosition; // Position of the flag
     [SerializeField] private Transform basePosition; // Position of the base
     [SerializeField] private NavMeshAgent agent;
+    [SerializeField] int HP;
 
     private Flag flag; // Reference to the flag
     
@@ -26,6 +27,7 @@ public class AICaptureFlag : MonoBehaviour
 
     void Start()
     {
+        GameManager.instance.UpdateGame(1);
         // Get the NavMeshAgent component
         agent = GetComponent<NavMeshAgent>();
 
@@ -131,4 +133,22 @@ public class AICaptureFlag : MonoBehaviour
     {
         currentState = newState;        
     }
+
+    /*
+     * Code can only be used once damage is implemented
+     * 
+    public void TakeDamage(int damage)
+    {
+        // Code by Jammie Parks 
+
+        HP -= damage;
+        // Needs the part about Shooting and gets damage
+        if (HP <= 0)
+        {
+            Destroy(gameObject);
+            GameManager.instance.UpdateGame(-1);
+        }
+    }
+    */
+
 }

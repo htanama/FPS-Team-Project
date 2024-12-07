@@ -13,7 +13,7 @@ public class playerController : MonoBehaviour
 
     [Header("      COMPONENTS      ")]
     [SerializeField] CharacterController controller;
-    [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
+    //[SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
 
     [Header("      STATS      ")]
     [SerializeField][Range(1, 10)] int speed;      //Range adds a slider
@@ -21,41 +21,43 @@ public class playerController : MonoBehaviour
     [SerializeField][Range(1, 5)] int jumpMax;
     [SerializeField][Range(5, 30)] int jumpSpeed;
     [SerializeField][Range(10, 60)] int gravity;
+    [SerializeField, Range(5, 25)] int HP;
 
-    /*[Header("----- Gun Stats -----")]     //if guns are added
-    [SerializeField] int shootDamage;
-    [SerializeField] int shootDist;
-    [SerializeField] float shootRate;*/
+    [SerializeField][Range(1, 20)] int uncrouchSpeed;
+    [SerializeField][Range(0.1f, 1.0f)] float crouchWalkSpeed;
+    [SerializeField][Range(0.1f, 1.0f)] float crouchHeight;
 
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
 
-
     int jumpCount;
 
-    bool isShooting;
     bool isSprinting;
+
+    bool isScaling;                 //To allow to modify crouch speed
 
     private int currentSpeed;     //To avoid bugs by modifying speed directly
 
+    private float originalScaleY; //For use when crouching
+    private Vector3 originalScale; //Used when releasing crouch
+    private Vector3 targetScale; //For use when releasing crouch
 
     // Start is called before the first frame update
     void Start()
     {
 
         currentSpeed = speed;
-
+        originalScaleY = controller.transform.localScale.y;
+        originalScale = controller.transform.localScale;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        //Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red);  //Shows shooting path
-
-
+        //always checking for these
         movement();
-        sprint();   //always checking for sprint
+        sprint();
+        crouch();
     }
 
     void movement()
@@ -67,8 +69,6 @@ public class playerController : MonoBehaviour
 
             horizontalVelocity = Vector3.zero;
         }
-        //moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        //transform.position += moveDirection * speed * Time.deltaTime;
 
         moveDirection = transform.right * Input.GetAxis("Horizontal") +
                   transform.forward * Input.GetAxis("Vertical");    //Normalized to handle diagonal movement
@@ -82,12 +82,6 @@ public class playerController : MonoBehaviour
         //start pulling down immediately after the jump
         horizontalVelocity.y -= gravity * Time.deltaTime;
 
-
-        /*if (Input.GetButton("Fire1") && !isShooting)
-        {
-            //IEnumerators have to be called with StartCoroutine
-            StartCoroutine(shoot());
-        }*/
     }
 
     void jump()
@@ -146,36 +140,30 @@ public class playerController : MonoBehaviour
     }
 
 
-    /*IEnumerator shoot()     //needs a yield
+    IEnumerator shoot()     //needs a yield
+    void crouch()
     {
-        isShooting = true;
-
-        //shoot code
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask)) //~ignoreMask to prevent player shooting themselves
+        if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
         {
-            Debug.Log(hit.collider.name);
+            isScaling = true;
+            currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
 
-            //Get IDamage
-            IDamage dmg = hit.collider.GetComponent<IDamage>();
-            //if it returns a value we know it has IDamage
-            if (dmg != null)
-            {
-                dmg.takeDamage(shootDamage);        //Therefore apply damage
-            }
+            targetScale = new Vector3(transform.localScale.x, originalScaleY * crouchHeight, transform.localScale.z);  //Change scale to crouch scale
+
         }
-        yield return new WaitForSeconds(shootRate);
-        isShooting = false;
+        else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
+        {
+            isScaling = true;
+            currentSpeed = speed; //Restore speed
+
+            targetScale = new Vector3(transform.localScale.x, originalScaleY, transform.localScale.z); //Restore original scale
+
+        }
+        //Bool check to prevent incorrect scaling
+        if (isScaling)
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
+        //Note: The line above is here and not in the if statement b/e of the nature in which Unity checks for button presses,
+        //      the line would only execute about half way or so
 
     }
-
-    public void takeDamage(int amount)
-    {
-        HP -= amount;
-
-        if (HP <= 0)
-        {
-
-        }
-    }*/
 }
