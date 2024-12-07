@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-
-
 public class GameManager : MonoBehaviour
 {
 
@@ -89,4 +87,15 @@ public class GameManager : MonoBehaviour
         menuActive = menuLose;
         menuActive.SetActive(true);
     }
+    
+    // Times is up-- you Lose
+    void TimeUp()
+    {
+        // Handle what happens when the timer reaches zero
+        StatePause();
+        menuActive = menuLose; // Show the lose menu when time is up
+        menuActive.SetActive(true);
+    }
+
+   
 }

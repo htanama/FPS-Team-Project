@@ -634,7 +634,7 @@ MonoBehaviour:
   HP: 5
   faceTargetSpeed: 10
   bullet: {fileID: 4898961823348458642, guid: c2f035458a357a0498714063c0f4b06c, type: 3}
-  shootRate: 0.25
+  shootRate: 0.5
 --- !u!114 &8957540195006805487
 MonoBehaviour:
   m_ObjectHideFlags: 0
