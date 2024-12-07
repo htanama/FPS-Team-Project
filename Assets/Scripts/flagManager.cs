@@ -45,10 +45,8 @@ public class flagManager : MonoBehaviour
         {
             if(Vector3.Distance(playerTransform.position, flagBase.transform.position) < captureDistance)
             {
-                //if(Input.GetButtonDown("Interact"))     //Maybe add button?
-                //{
-                    PickupFlag();
-                //}
+
+                PickupFlag();
             }
         }
     }
