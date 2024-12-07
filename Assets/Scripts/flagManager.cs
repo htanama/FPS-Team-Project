@@ -11,6 +11,7 @@ public class flagManager : MonoBehaviour
     [SerializeField][Range(0.1f, 4.0f)] float captureDistance;
 
     private bool isHoldingFlag = false;
+    private Vector3 flagOffset = new Vector3(0, 2.9f, 0); //Adjust flag to not clip the ground
 
     //Getters and setters
     public GameObject Flag
@@ -66,7 +67,7 @@ public class flagManager : MonoBehaviour
         //return the flag to base
         isHoldingFlag = false;
         flag.transform.SetParent(null);
-        flag.transform.position = flagBase.transform.position; //Respawn flag back at base
+        flag.transform.position = flagBase.transform.position + flagOffset; //Respawn flag back at base
         flag.GetComponent<Collider>().enabled = true; //Enable flag collider
 
         Debug.Log("Flag returned to base");
@@ -75,7 +76,7 @@ public class flagManager : MonoBehaviour
     void ResetFlag()
     {
         //flag is reset to base if not held
-        flag.transform.position = flagBase.transform.position;
+        flag.transform.position = flagBase.transform.position + flagOffset;
         flag.GetComponent<Collider>().enabled = true;
     }
 }
