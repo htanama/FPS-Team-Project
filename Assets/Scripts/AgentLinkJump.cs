@@ -46,20 +46,27 @@ public class AgentLinkJump : MonoBehaviour
         if (Physics.Raycast(linkData.endPos + Vector3.up, Vector3.down, out hit, Mathf.Infinity))
         {
             endPos = hit.point + Vector3.up * agent.baseOffset;
-            Debug.Log($"Landing position adjusted to: {endPos}");
+    
+            #if UNITY_EDITOR
+               Debug.Log($"Landing position adjusted to: {endPos}");
+            #endif
+
         }
         else
         {
-            Debug.LogWarning("Raycast failed! Using default end position.");
+            #if UNITY_EDITOR
+                Debug.LogWarning("Raycast failed! Using default end position.");
+            #endif
         }
+
 
         // Perform a parabolic jump
         float elapsedTime = 0f;
         while (elapsedTime < jumpDuration)
         {
-            float t = elapsedTime / jumpDuration; // Normalized time
-            float height = Mathf.Sin(t * Mathf.PI) * jumpHeight; // Parabolic height
-            agent.transform.position = Vector3.Lerp(startPos, endPos, t) + Vector3.up * height;
+            float normalizedTime = elapsedTime / jumpDuration; // Normalized time
+            float height = Mathf.Sin(normalizedTime * Mathf.PI) * jumpHeight; // Parabolic height
+            agent.transform.position = Vector3.Lerp(startPos, endPos, normalizedTime) + Vector3.up * height;
             elapsedTime += Time.deltaTime;
             yield return null;
         }

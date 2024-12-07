@@ -10,8 +10,7 @@ public class AICaptureFlag : MonoBehaviour
 {
     [SerializeField] private Transform flagPosition; // Position of the flag
     [SerializeField] private Transform basePosition; // Position of the base
-    [SerializeField] private NavMeshAgent agent;
-    [SerializeField] int HP;
+    [SerializeField] private NavMeshAgent agent;    
 
     private Flag flag; // Reference to the flag
     
@@ -47,8 +46,9 @@ public class AICaptureFlag : MonoBehaviour
         }
         else
         {
+            //#if UNITY_EDITOR
             //Debug.Log("Cannot return to base without the flag!");
-            // Add alternative behavior if the flag is not attached
+            //#endif            
         }
 
         switch (currentState)
@@ -78,7 +78,11 @@ public class AICaptureFlag : MonoBehaviour
             if (Vector3.Distance(transform.position, flagPosition.position) < 0.5f)
             {
                 flag.SetCarrier(transform); // Attach the flag to the AI
-                Debug.Log("Flag captured! Moving to base...");
+                
+                #if UNITY_EDITOR
+                    Debug.Log("Flag captured! Moving to base...");
+                #endif
+                
                 currentState = AIState.MovingToBase; // Switch to base state
             }
         }
@@ -89,19 +93,23 @@ public class AICaptureFlag : MonoBehaviour
         Debug.Log("In the MoveToBase() function");
         if (basePosition != null)
         {
-            Debug.Log("Moving to base...");
+            #if UNITY_EDITOR
+                Debug.Log("Moving to base...");
+            #endif
+            
             agent.SetDestination(basePosition.position);
 
             // Check if AI has reached the base
             if (Vector3.Distance(transform.position, basePosition.position) < 2.0f)
             {
-                Debug.Log("Flag delivered to base!");
+                //Flag delivered to base!
 
                 // Reset the flag to its original position
                 if (flag != null && flag.IsCarriedBy(transform))
                 {
                     flag.ResetFlag();
-                    Debug.Log("Flag successfully reset after delivery.");
+
+                    //Flag successfully reset after delivery
                     currentState = AIState.MovingToFlag;
                 }
 
@@ -122,8 +130,7 @@ public class AICaptureFlag : MonoBehaviour
 
     public void SetState(AIState newState)
     {
-        currentState = newState;
-        Debug.Log($"AI state changed to: {newState}");
+        currentState = newState;        
     }
 
     /*
