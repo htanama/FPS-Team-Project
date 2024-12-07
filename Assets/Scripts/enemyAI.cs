@@ -83,11 +83,15 @@ public class enemyAI : MonoBehaviour, IDamage
         HP -= amount;
         StartCoroutine(flashRed());
 
-        if (HP <= 0)
+        if (HP < 0)
         {
+            
             GameManager.instance.UpdateGame(-1);
             // I am dead
             Destroy(gameObject);
+            #if UNITY_EDITOR
+                Debug.Log("dead");
+            #endif
         }
     }
 
