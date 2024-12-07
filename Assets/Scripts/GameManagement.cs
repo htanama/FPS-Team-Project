@@ -29,9 +29,9 @@ public class GameManager : MonoBehaviour
         instance = this;
         timeScaleOrig = Time.timeScale;
         player = GameObject.FindWithTag("Player");
-        playerScript = player.GetComponent<playerController>();
+        //playerScript = player.GetComponent<playerController>();
 
-        goalCount = playerScript.GetHP();
+        //goalCount = playerScript.GetHP();
     }
 
     // Update is called once per frame
