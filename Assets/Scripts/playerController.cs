@@ -14,6 +14,7 @@
             - added shoot
             -------------------------------------------
             - added derive from IDamage
+            - workin on a feedback crosshair
 */
 
 using System.Collections;
@@ -55,6 +56,7 @@ public class playerController : MonoBehaviour, IDamage
     bool isScaling;                 //To allow to modify crouch speed
 
     bool isShooting;
+    RaycastHit contact;
     //bool isReloading; isEquipping;
 
     private int currentSpeed;     //To avoid bugs by modifying speed directly
@@ -81,6 +83,8 @@ public class playerController : MonoBehaviour, IDamage
         movement();
         sprint();
         crouch();
+
+        UpdateCrosshair();
     }
 
     void movement()
@@ -190,17 +194,16 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = true;
 
         //shoot code
-        RaycastHit contact;
+       
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
         {
-            Debug.Log(contact.collider.name);
+            Debug.Log(contact.collider.name); //being overridden
 
             IDamage dmg = contact.collider.GetComponent<IDamage>();
             if (dmg != null)
             {
                 dmg.takeDamage(shootDamage);
             }
-
         }
 
         yield return new WaitForSeconds(shootRate);
@@ -209,4 +212,18 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = false;
     }
 
+    public void UpdateCrosshair()
+    {
+        Crosshair crosshair = FindObjectOfType<Crosshair>();
+        int crossDefault = crosshair.GetDefaultValue();
+
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
+        {           
+            crosshair.SetDefaultValue(crosshair.GetTargetValue());                
+        }
+        else 
+        {
+            crosshair.SetDefaultValue(crossDefault);
+        }
+    }
 }

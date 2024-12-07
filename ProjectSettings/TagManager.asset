@@ -12,6 +12,7 @@ TagManager:
   - RedBase
   - Enemy
   - Weapon
+  - HUD
   layers:
   - Default
   - TransparentFX
