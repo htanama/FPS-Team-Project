@@ -8,7 +8,7 @@ public class TimerScript : MonoBehaviour
     public float TimeLeft; // Time in seconds
     public TMP_Text TimerTxt; // Text to display the timer
     public bool TimerOn = false; // Control whether the timer is running
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +30,7 @@ public class TimerScript : MonoBehaviour
                 TimeLeft = 0; // Ensure time doesn't go below 0
                 TimerOn = false; // Stop the timer
                 TimerTxt.text = "Time's Up!"; // Display end message
+                //GameManager.instance.TimeUp();
             }
         }
     }

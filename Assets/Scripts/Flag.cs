@@ -26,7 +26,7 @@ public class Flag : MonoBehaviour
         if (isCarried && carrier != null)
         {
             // Update the flag's position to follow the carrier with an offset
-            transform.position = carrier.position + new Vector3(0, 0, 0.5f); // Adjust for visibility            
+            transform.position = carrier.position + new Vector3(0.0f, 0, 0.1f); // Adjust for visibility            
         }
     }
 

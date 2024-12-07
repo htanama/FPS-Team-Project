@@ -184,7 +184,7 @@ public class playerController : MonoBehaviour, IDamage
             currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
 
             targetScale = new Vector3(transform.localScale.x, originalScaleY * crouchHeight, transform.localScale.z);  //Change scale to crouch scale
-
+            // talk to 
         }
         else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
         {

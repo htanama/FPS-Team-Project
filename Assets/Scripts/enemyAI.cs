@@ -91,7 +91,7 @@ public class enemyAI : MonoBehaviour, IDamage
             #if UNITY_EDITOR
                 Debug.Log("dead");
             #endif      
-            //GameManager.instance.UpdateGame(-1); // problem code cannot kill the enemy
+            GameManager.instance.UpdateGame(-1); // problem code cannot kill the enemy
             // I am dead
             Destroy(gameObject);            
         }
