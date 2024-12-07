@@ -1,12 +1,16 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+
+
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
+    playerController player;
 
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject menuPause;
@@ -21,6 +25,8 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        player = FindObjectOfType<playerController>();
+        goalCount = player.GetHP();
         instance = this;
         timeScaleOrig = Time.timeScale;
     }
@@ -63,14 +69,14 @@ public class GameManager : MonoBehaviour
 
     public void UpdateGame(int amount)
     {
-        goalCount += amount;
-        goalCountText.text = goalCount.ToString("F0");
 
-        if (goalCount <= 0)
+        
+        goalCountText.text = goalCount.ToString("F0");
+        goalCount -= amount;
+
+        if (goalCount < 0)
         {
-            StatePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
+            // character will respawn when HP hits zero
         }
     }
 }
