@@ -7,22 +7,17 @@ using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 public class enemyAI : MonoBehaviour, IDamage
 {       
     [SerializeField] Renderer model;
+    [SerializeField] NavMeshAgent agent;
 
     [SerializeField] public Transform shootPos;
 
-    [SerializeField] GameObject bullet;
-
-    [SerializeField] float shootRate;
-    
-
-    [SerializeField] NavMeshAgent agent;
-
     [SerializeField] int HP;
     [SerializeField] int faceTargetSpeed;
-        
 
+    [SerializeField] GameObject bullet;
+    [SerializeField] float shootRate;
+    
     bool playerInRange;
-
     bool isShooting; 
 
     Color colorOrig;
@@ -33,7 +28,7 @@ public class enemyAI : MonoBehaviour, IDamage
     void Start()
     {
         colorOrig = model.material.color;
-        //gamemanager.instance.updateGameGoal(1);
+        GameManager.instance.UpdateGame(1);
         
     }
 
@@ -88,13 +83,12 @@ public class enemyAI : MonoBehaviour, IDamage
         HP -= amount;
         StartCoroutine(flashRed());
 
-        if (HP < 0)
+        if (HP <= 0)
         {
-            //gamemanager.instance.updateGameGoal(-1);
+            GameManager.instance.UpdateGame(-1);
             // I am dead
             Destroy(gameObject);
         }
-
     }
 
     IEnumerator flashRed()
