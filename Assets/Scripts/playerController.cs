@@ -25,6 +25,7 @@ public class playerController : MonoBehaviour, IDamage
 {
 
     [Header("      COMPONENTS      ")]
+    [SerializeField] Renderer model;
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
 
@@ -48,6 +49,7 @@ public class playerController : MonoBehaviour, IDamage
 
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
+    Color colorOrig;
 
     int jumpCount;
 
@@ -205,6 +207,7 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
+        StartCoroutine(flashRed());
 
         if (HP <= 0)
         {
@@ -252,5 +255,12 @@ public class playerController : MonoBehaviour, IDamage
         {
             crosshair.SetDefaultValue(crossDefault);
         }
+    }
+
+    IEnumerator flashRed()
+    {
+        model.material.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        model.material.color = colorOrig;
     }
 }
