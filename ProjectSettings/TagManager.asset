@@ -11,16 +11,18 @@ TagManager:
   - RedFlag
   - RedBase
   - Enemy
+  - Weapon
+  - HUD
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player bullet
+  - Enemy
+  - Enemy bullet
   - 
   - 
   - 
