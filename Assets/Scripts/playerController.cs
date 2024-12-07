@@ -35,13 +35,13 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] float shootRate;
     
 
-    [Header("      STATS      ")]
+    [Header("      STATS      ")]    
     [SerializeField][Range(1, 10)] int speed;      //Range adds a slider
     [SerializeField][Range(2, 5)] int sprintMod;
     [SerializeField][Range(1, 5)] int jumpMax;
     [SerializeField][Range(5, 30)] int jumpSpeed;
     [SerializeField][Range(10, 60)] int gravity;
-    [SerializeField, Range(5, 25)] public int HP;
+    [SerializeField][Range(1, 10)] public int HP; // turn into Get/Setter
 
     [SerializeField][Range(1, 20)] int uncrouchSpeed;
     [SerializeField][Range(0.1f, 1.0f)] float crouchWalkSpeed;
@@ -153,6 +153,29 @@ public class playerController : MonoBehaviour, IDamage
     }
 
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the trigger is the sphere
+        if (other.CompareTag("Damage-Ball"))
+        {
+            #if UNITY_EDITOR
+                Debug.Log("Player hit by ball");
+            #endif
+            
+
+            // Get the direction vector from the ball (sphere) to the player
+            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
+
+            // Define the push distance
+            float pushDistance = 11.0f;
+
+            // Use CharacterController to move the player
+            controller.Move(pushDirection * pushDistance);
+        }
+    }
+
+
+    //IEnumerator shoot()     //needs a yield
     void crouch()
     {
         if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
@@ -187,7 +210,7 @@ public class playerController : MonoBehaviour, IDamage
         if (HP <= 0)
         {
             //death/lose screen
-            //gameManager.instance.youLose();
+            GameManager.instance.LoseGame();
         }
     }
     IEnumerator Shoot()
@@ -196,15 +219,15 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = true;
 
         //shoot code
-       
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
         {
             Debug.Log(contact.collider.name); //being overridden
 
             IDamage dmg = contact.collider.GetComponent<IDamage>();
+
             if (dmg != null)
             {
-                dmg.takeDamage(shootDamage);
+               dmg.takeDamage(shootDamage);
             }
         }
 

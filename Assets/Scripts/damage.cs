@@ -1,35 +1,44 @@
+// Harry Tanama
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Damage : MonoBehaviour
+public class damage : MonoBehaviour
 {
-    enum damageType { moving, stationary }
+    enum damageType { moving, stationary };
 
     [SerializeField] damageType type;
     [SerializeField] Rigidbody rb;
 
     [SerializeField] int damageAmount;
     [SerializeField] int speed;
-    [SerializeField] int destroyTime;
+    [SerializeField] int destoryTime;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        if(type == damageType.moving)
+        if (type == damageType.moving)
         {
             rb.velocity = transform.forward * speed;
-            Destroy(gameObject, destroyTime);
+            Destroy(gameObject, destoryTime);
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.isTrigger) { return; }
+        #if UNITY_EDITOR
+            Debug.Log("Triggered by: " + other.name);
+        #endif
+
+        if (other.isTrigger)
+        {
+            return; // ignore trigger colliding with other triggers. 
+        }
 
         IDamage dmg = other.GetComponent<IDamage>();
 
-        if(dmg != null )
+        if (dmg != null)
         {
             dmg.takeDamage(damageAmount);
         }
@@ -39,4 +48,5 @@ public class Damage : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
 }
