@@ -36,7 +36,6 @@ public class playerController : MonoBehaviour, IDamage
     
 
     [Header("      STATS      ")]
-    [SerializeField][Range(0, 10)] int HP;
     [SerializeField][Range(1, 10)] int speed;      //Range adds a slider
     [SerializeField][Range(2, 5)] int sprintMod;
     [SerializeField][Range(1, 5)] int jumpMax;

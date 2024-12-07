@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
-    playerController player;
+    public GameObject player;
+    public playerController playerScript;
 
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject menuPause;
@@ -25,10 +26,12 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        player = FindObjectOfType<playerController>();
-        goalCount = player.GetHP();
         instance = this;
         timeScaleOrig = Time.timeScale;
+        player = GameObject.FindWithTag("Player");
+        playerScript = player.GetComponent<playerController>();
+
+        goalCount = playerScript.GetHP();
     }
 
     // Update is called once per frame
@@ -69,14 +72,21 @@ public class GameManager : MonoBehaviour
 
     public void UpdateGame(int amount)
     {
-
-        
+        goalCount += amount;
         goalCountText.text = goalCount.ToString("F0");
-        goalCount -= amount;
 
-        if (goalCount < 0)
+        if (goalCount <= 0)// character will respawn when HP hits zero
         {
-            // character will respawn when HP hits zero
+            StatePause();
+            menuActive = menuWin;
+            menuActive.SetActive(true);
         }
+    }
+
+    public void LoseGame()
+    {
+        StatePause();
+        menuActive = menuLose;
+        menuActive.SetActive(true);
     }
 }
