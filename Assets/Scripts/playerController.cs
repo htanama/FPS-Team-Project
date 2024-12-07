@@ -42,8 +42,7 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField][Range(1, 5)] int jumpMax;
     [SerializeField][Range(5, 30)] int jumpSpeed;
     [SerializeField][Range(10, 60)] int gravity;
-    [SerializeField, Range(5, 25)] public int HP;
-
+    
     [SerializeField][Range(1, 20)] int uncrouchSpeed;
     [SerializeField][Range(0.1f, 1.0f)] float crouchWalkSpeed;
     [SerializeField][Range(0.1f, 1.0f)] float crouchHeight;
@@ -228,7 +227,7 @@ public class playerController : MonoBehaviour, IDamage
             IDamage dmg = contact.collider.GetComponent<IDamage>();
             if (dmg != null)
             {
-                dmg.takeDamage(shootDamage);
+               dmg.takeDamage(shootDamage);
             }
         }
 
