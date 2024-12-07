@@ -11372,6 +11372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 804c172d108f8334181fc7528231ef86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  model: {fileID: 8805551003469760817}
   controller: {fileID: 3643085934083463164}
   ignoreMask:
     serializedVersion: 2
