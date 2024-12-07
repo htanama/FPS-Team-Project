@@ -19,13 +19,13 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 
 public class playerController : MonoBehaviour, IDamage
 {
 
     [Header("      COMPONENTS      ")]
+    [SerializeField] Renderer model;
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
 
@@ -49,9 +49,9 @@ public class playerController : MonoBehaviour, IDamage
 
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
+    Color colorOrig;
 
     int jumpCount;
-    int HPOrig;
 
     bool isSprinting;
     bool isScaling;                 //To allow to modify crouch speed
@@ -72,8 +72,6 @@ public class playerController : MonoBehaviour, IDamage
         currentSpeed = speed;
         originalScaleY = controller.transform.localScale.y;
         originalScale = controller.transform.localScale;
-        HPOrig = HP;
-        updatePlayerUI();
     }
 
     //public int GetHP() => HP;   // this code cause bugs in the game. 
@@ -209,7 +207,7 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        updatePlayerUI();
+        StartCoroutine(flashRed());
 
         if (HP <= 0)
         {
@@ -217,12 +215,6 @@ public class playerController : MonoBehaviour, IDamage
             GameManager.instance.LoseGame();
         }
     }
-
-    public void updatePlayerUI()
-    {
-        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
-    }
-
     IEnumerator Shoot()
     {
         //turn on
@@ -263,5 +255,12 @@ public class playerController : MonoBehaviour, IDamage
         {
             crosshair.SetDefaultValue(crossDefault);
         }
+    }
+
+    IEnumerator flashRed()
+    {
+        model.material.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        model.material.color = colorOrig;
     }
 }
