@@ -17,16 +17,17 @@ public class enemyAI : MonoBehaviour, IDamage
 
     [SerializeField] NavMeshAgent agent;
 
-    [Header("To Chase the Target")]    
-    [SerializeField] public GameObject player; // remove this one later when we have gamemanager setup
-
     [SerializeField] int HP;
+    [SerializeField] int faceTargetSpeed;
+        
 
     bool playerInRange;
 
     bool isShooting; 
 
     Color colorOrig;
+
+    Vector3 playerDirection;
 
     // Start is called before the first frame update
     void Start()
@@ -39,15 +40,31 @@ public class enemyAI : MonoBehaviour, IDamage
 
     // Update is called once per frame
     void Update()
-    {       
+    {
         if (playerInRange)
         {
+            playerDirection = GameManager.instance.player.transform.position - transform.position;
+
+            agent.SetDestination(GameManager.instance.player.transform.position);
+
+            if (agent.remainingDistance < agent.stoppingDistance)
+            {
+                faceTarget();
+            }
+
             //agent.SetDestination(playerPosition.position);
             if (!isShooting)
             {
                 StartCoroutine(shoot());
             }
         }
+        
+    }
+    void faceTarget()
+    {
+        Quaternion rot = Quaternion.LookRotation(playerDirection);  //This 'snaps' in the given direction
+        //Lerp it, change it over time; first param is what you're lerping, second is destination, last is time with turn speed multiplier
+        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 
     private void OnTriggerEnter(Collider other)

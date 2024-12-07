@@ -10,8 +10,7 @@ public class AICaptureFlag : MonoBehaviour
 {
     [SerializeField] private Transform flagPosition; // Position of the flag
     [SerializeField] private Transform basePosition; // Position of the base
-    [SerializeField] private NavMeshAgent agent;
-    [SerializeField] int HP;
+    [SerializeField] private NavMeshAgent agent;    
 
     private Flag flag; // Reference to the flag
     

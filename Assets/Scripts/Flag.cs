@@ -43,6 +43,8 @@ public class Flag : MonoBehaviour
         {
             OnTriggerPickUpFlag(other);
         }
+
+       
     }
 
     private void OnTriggerPickUpFlag(Collider other)
