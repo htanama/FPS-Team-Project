@@ -13,7 +13,7 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] GameObject bullet;
 
     [SerializeField] float shootRate;
-
+    
 
     [SerializeField] NavMeshAgent agent;
 
@@ -34,8 +34,7 @@ public class enemyAI : MonoBehaviour, IDamage
     {
         colorOrig = model.material.color;
         //gamemanager.instance.updateGameGoal(1);
-
-        player = GameObject.FindWithTag("Player");
+        
     }
 
     // Update is called once per frame
@@ -68,13 +67,11 @@ public class enemyAI : MonoBehaviour, IDamage
     }
 
     private void OnTriggerEnter(Collider other)
-    {
-        
+    {        
 
         if (other.CompareTag("Player"))
         {
-            playerInRange = true;
-            MoveToPlayer();
+            playerInRange = true;     
         }
     }
 
@@ -85,18 +82,6 @@ public class enemyAI : MonoBehaviour, IDamage
             playerInRange = false;
         }
     }
-
-    private void MoveToPlayer()
-    {
-        if (player != null)
-        {
-            agent.SetDestination(player.transform.position);
-            #if UNITY_EDITOR
-                Debug.DrawLine(transform.position, player.transform.position, Color.red);
-            #endif
-        }
-    }
-
 
     public void takeDamage(int amount)
     {
