@@ -2714,9 +2714,9 @@ GameObject:
   - component: {fileID: 970378214}
   - component: {fileID: 970378216}
   - component: {fileID: 970378215}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: Reticle
-  m_TagString: Untagged
+  m_TagString: HUD
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3064,9 +3064,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1008738624}
   - component: {fileID: 1008738625}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: CrossHair
-  m_TagString: Untagged
+  m_TagString: HUD
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6619,7 +6619,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1813833725}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
