@@ -151,7 +151,7 @@ public class playerController : MonoBehaviour, IDamage
         }
     }
 
-
+    // Paint ball gun effect implementation
     private void OnTriggerEnter(Collider other)
     {
         // Check if the trigger is the sphere
@@ -166,7 +166,7 @@ public class playerController : MonoBehaviour, IDamage
             Vector3 pushDirection = (transform.position - other.transform.position).normalized;
 
             // Define the push distance
-            float pushDistance = 11.0f;
+            float pushDistance = 13.0f; // knock player backward.
 
             // Use CharacterController to move the player
             controller.Move(pushDirection * pushDistance);
