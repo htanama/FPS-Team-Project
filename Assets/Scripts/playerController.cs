@@ -73,7 +73,7 @@ public class playerController : MonoBehaviour, IDamage
         originalScale = controller.transform.localScale;
     }
 
-    public int GetHP() => HP;
+    //public int GetHP() => HP;
 
     // Update is called once per frame
     void Update()

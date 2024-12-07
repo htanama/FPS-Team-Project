@@ -79,15 +79,21 @@ public class enemyAI : MonoBehaviour, IDamage
     }
 
     public void takeDamage(int amount)
-    {
+    {   
         HP -= amount;
         StartCoroutine(flashRed());
+        #if UNITY_EDITOR
+            Debug.Log("before HP < 0");
+        #endif
 
-        if (HP <= 0)
+        if (HP < 0)
         {
-            GameManager.instance.UpdateGame(-1);
+            #if UNITY_EDITOR
+                Debug.Log("dead");
+            #endif      
+            //GameManager.instance.UpdateGame(-1); // problem code cannot kill the enemy
             // I am dead
-            Destroy(gameObject);
+            Destroy(gameObject);            
         }
     }
 
