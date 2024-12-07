@@ -19,6 +19,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 
 public class playerController : MonoBehaviour, IDamage
@@ -50,6 +51,7 @@ public class playerController : MonoBehaviour, IDamage
     Vector3 horizontalVelocity;
 
     int jumpCount;
+    int HPOrig;
 
     bool isSprinting;
     bool isScaling;                 //To allow to modify crouch speed
@@ -70,6 +72,8 @@ public class playerController : MonoBehaviour, IDamage
         currentSpeed = speed;
         originalScaleY = controller.transform.localScale.y;
         originalScale = controller.transform.localScale;
+        HPOrig = HP;
+        updatePlayerUI();
     }
 
     //public int GetHP() => HP;   // this code cause bugs in the game. 
@@ -205,6 +209,7 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
+        updatePlayerUI();
 
         if (HP <= 0)
         {
@@ -212,6 +217,12 @@ public class playerController : MonoBehaviour, IDamage
             GameManager.instance.LoseGame();
         }
     }
+
+    public void updatePlayerUI()
+    {
+        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+    }
+
     IEnumerator Shoot()
     {
         //turn on
