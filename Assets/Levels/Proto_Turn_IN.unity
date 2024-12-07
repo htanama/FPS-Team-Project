@@ -4924,7 +4924,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 132.31152, y: -53.208923}
+  m_AnchoredPosition: {x: 132.31152, y: -53.208984}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1042303520
@@ -5404,7 +5404,6 @@ MonoBehaviour:
   menuLose: {fileID: 390244492}
   goalCountText: {fileID: 1259231386}
   isPaused: 0
-  timerText: {fileID: 0}
 --- !u!1001 &1153990862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10904,7 +10903,7 @@ Transform:
   m_GameObject: {fileID: 8291547337718369789}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 33.48, y: 8.339, z: -31.88}
+  m_LocalPosition: {x: 28.726, y: 8.339, z: -30.975}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11166,7 +11165,7 @@ MonoBehaviour:
   jumpMax: 2
   jumpSpeed: 11
   gravity: 30
-  HP: 5
+  HP: 7
   uncrouchSpeed: 20
   crouchWalkSpeed: 0.5
   crouchHeight: 0.5
