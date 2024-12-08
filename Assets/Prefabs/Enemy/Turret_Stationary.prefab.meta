@@ -1,13 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
-<<<<<<<< HEAD:Assets/Prefabs/Enemy/Turret_Stationary.prefab.meta
 guid: 975983c10f4fc0949a6d40c699bf498c
-========
-guid: acb5a79b214bb4c4ba80daeb15a375f5
->>>>>>>> HarryTesting:Assets/Flag.prefab.meta
-=======
-guid: 1a9f437c8ea4ddb448855b8b64a733da
->>>>>>> HarryTesting
 PrefabImporter:
   externalObjects: {}
   userData: 
