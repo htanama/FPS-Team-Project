@@ -1,8 +1,10 @@
+// Edited - implemented HP Bar
 
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin, menuLose;
     [SerializeField] TMP_Text goalCountText;
+    public Image playerHPBar;
 
     public bool isPaused;
 
