@@ -214,7 +214,9 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        updatePlayerUI();        
+
+        updatePlayerUI();
+        StartCoroutine(screenFlashRed());
 
         if (HP <= 0)
         {
@@ -270,10 +272,9 @@ public class playerController : MonoBehaviour, IDamage
         }
     }
 
-    IEnumerator flashRed()
-    {
-        model.material.color = Color.red;
+    IEnumerator screenFlashRed()
+    {   GameManager.instance.playerDamageScreen.SetActive(true);
         yield return new WaitForSeconds(0.1f);
-        model.material.color = colorOrig;
+        GameManager.instance.playerDamageScreen.SetActive(false);
     }
 }
