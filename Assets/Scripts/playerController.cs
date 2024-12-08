@@ -234,11 +234,13 @@ public class playerController : MonoBehaviour, IDamage
     {
         //turn on
         isShooting = true;
-        
-        //RaycastHit hit;
+
+        RaycastHit hit;
         //shoot code
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
-        {         
+        //if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance)) 
+        // need to use raycasting to shoot, otherwise you can shoot enemy everywhere. 
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDistance, ~ignoreMask))
+        {
 
             Debug.Log(contact.collider.name); //being overridden
 

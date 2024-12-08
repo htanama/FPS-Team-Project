@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
@@ -9,10 +10,12 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
 
-    [SerializeField] public Transform shootPos;
+    [SerializeField] Transform shootPos;
+    [SerializeField] Transform headPos;
 
     [SerializeField] int HP;
     [SerializeField] int faceTargetSpeed;
+    [SerializeField] int FOV;
 
     [SerializeField] GameObject bullet;
     [SerializeField] float shootRate;
@@ -23,6 +26,7 @@ public class enemyAI : MonoBehaviour, IDamage
     Color colorOrig;
 
     Vector3 playerDirection;
+    float angleToPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -35,27 +39,57 @@ public class enemyAI : MonoBehaviour, IDamage
     // Update is called once per frame
     void Update()
     {
-        if (playerInRange)
+        if (playerInRange && canSeePlayer())
         {
-            playerDirection = GameManager.instance.player.transform.position - transform.position;
-
-            agent.SetDestination(GameManager.instance.player.transform.position);
-
-            if (agent.remainingDistance < agent.stoppingDistance)
-            {
-                faceTarget();
-            }
-
-            //agent.SetDestination(playerPosition.position);
-            if (!isShooting)
-            {
-                StartCoroutine(shoot());
-            }
+            
         }
         
     }
+
+    bool canSeePlayer()
+    {
+        // this is the head position of the enemy
+        playerDirection = GameManager.instance.player.transform.position - headPos.position;
+        angleToPlayer = Vector3.Angle(playerDirection, transform.forward);
+
+        // playerDirection = GameManager.instance.player.transform.position - transform.position; // this is the feet position of the enemy, not the head position. 
+
+        // Draw the Raycast inside the debug mode
+        #if UNITY_EDITOR
+            Debug.DrawRay(headPos.position, playerDirection);
+        #endif
+
+        RaycastHit hit;
+        // To know the location of the player by using raycasting, do we hit the player
+        if (Physics.Raycast(headPos.position, playerDirection, out hit)) // Inside the sphere range.
+        {
+            // if the Raycast hit the player then do the statement inside the if statement.
+            if (hit.collider.CompareTag("Player"))
+            {
+                agent.SetDestination(GameManager.instance.player.transform.position);
+
+                if (agent.remainingDistance < agent.stoppingDistance)
+                {
+                    faceTarget();
+                }
+
+                //agent.SetDestination(playerPosition.position);
+                if (!isShooting)
+                {
+                    StartCoroutine(shoot());
+                }
+                return true;
+            }
+            
+        }
+
+        return false; // do not see the player, raycast did not hit the player
+    }
+
     void faceTarget()
     {
+        // There is bug here to be fix, the center point of the enemy is at its feet and the player center point is at the middle of the capsule.
+
         Quaternion rot = Quaternion.LookRotation(playerDirection);  //This 'snaps' in the given direction
         //Lerp it, change it over time; first param is what you're lerping, second is destination, last is time with turn speed multiplier
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
