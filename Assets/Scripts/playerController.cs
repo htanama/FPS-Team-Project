@@ -15,6 +15,9 @@
             -------------------------------------------
             - added derive from IDamage
             - workin on a feedback crosshair
+
+        Edited: Erik Segura
+            - Added HP Bar functionality
 */
 
 using System.Collections;
@@ -25,6 +28,7 @@ public class playerController : MonoBehaviour, IDamage
 {
 
     [Header("      COMPONENTS      ")]
+    [SerializeField] Renderer model;
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
 
@@ -33,9 +37,8 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
-    
 
-    [Header("      STATS      ")]    
+    [Header("      STATS      ")]
     [SerializeField][Range(1, 10)] int speed;      //Range adds a slider
     [SerializeField][Range(2, 5)] int sprintMod;
     [SerializeField][Range(1, 5)] int jumpMax;
@@ -49,8 +52,10 @@ public class playerController : MonoBehaviour, IDamage
 
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
+    Color colorOrig;
 
     int jumpCount;
+    int HPOrig;
 
     bool isSprinting;
     bool isScaling;                 //To allow to modify crouch speed
@@ -71,9 +76,12 @@ public class playerController : MonoBehaviour, IDamage
         currentSpeed = speed;
         originalScaleY = controller.transform.localScale.y;
         originalScale = controller.transform.localScale;
+        HPOrig = HP;
+        updatePlayerUI();
+
     }
 
-    //public int GetHP() => HP;
+
 
     // Update is called once per frame
     void Update()
@@ -158,10 +166,10 @@ public class playerController : MonoBehaviour, IDamage
         // Check if the trigger is the sphere
         if (other.CompareTag("Damage-Ball"))
         {
-            #if UNITY_EDITOR
-                Debug.Log("Player hit by ball");
-            #endif
-            
+#if UNITY_EDITOR
+            Debug.Log("Player hit by ball");
+#endif
+
 
             // Get the direction vector from the ball (sphere) to the player
             Vector3 pushDirection = (transform.position - other.transform.position).normalized;
@@ -184,7 +192,7 @@ public class playerController : MonoBehaviour, IDamage
             currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
 
             targetScale = new Vector3(transform.localScale.x, originalScaleY * crouchHeight, transform.localScale.z);  //Change scale to crouch scale
-
+            // talk to 
         }
         else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
         {
@@ -206,6 +214,7 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
+        updatePlayerUI();        
 
         if (HP <= 0)
         {
@@ -213,14 +222,22 @@ public class playerController : MonoBehaviour, IDamage
             GameManager.instance.LoseGame();
         }
     }
+
+    public void updatePlayerUI()
+    {
+        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+    }
+    
     IEnumerator Shoot()
     {
         //turn on
         isShooting = true;
-
+        
+        //RaycastHit hit;
         //shoot code
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
-        {
+        {         
+
             Debug.Log(contact.collider.name); //being overridden
 
             IDamage dmg = contact.collider.GetComponent<IDamage>();
@@ -237,18 +254,26 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = false;
     }
 
+
     public void UpdateCrosshair()
     {
         Crosshair crosshair = FindObjectOfType<Crosshair>();
         int crossDefault = crosshair.GetDefaultValue();
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
-        {           
-            crosshair.SetDefaultValue(crosshair.GetTargetValue());                
+        {
+            crosshair.SetDefaultValue(crosshair.GetTargetValue());
         }
-        else 
+        else
         {
             crosshair.SetDefaultValue(crossDefault);
         }
+    }
+
+    IEnumerator flashRed()
+    {
+        model.material.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        model.material.color = colorOrig;
     }
 }

@@ -1,10 +1,10 @@
+// Edited - implemented HP Bar
 
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
-
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin, menuLose;
     [SerializeField] TMP_Text goalCountText;
+    public Image playerHPBar;
 
     public bool isPaused;
 
@@ -89,4 +90,15 @@ public class GameManager : MonoBehaviour
         menuActive = menuLose;
         menuActive.SetActive(true);
     }
+    
+    // Times is up-- you Lose
+    void TimeUp()
+    {
+        // Handle what happens when the timer reaches zero
+        StatePause();
+        menuActive = menuLose; // Show the lose menu when time is up
+        menuActive.SetActive(true);
+    }
+
+   
 }

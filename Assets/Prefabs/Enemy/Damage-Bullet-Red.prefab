@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1651648746854868565}
   - component: {fileID: 1766837512430984883}
   - component: {fileID: 595960487366245364}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Damage-Bullet-Red
-  m_TagString: Damage-Ball
+  m_TagString: Damage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   rb: {fileID: 1766837512430984883}
-  damageAmount: 2
+  damageAmount: 1
   speed: 5
   destoryTime: 3
 --- !u!135 &1651648746854868565

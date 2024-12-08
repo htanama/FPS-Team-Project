@@ -594,7 +594,7 @@ GameObject:
   - component: {fileID: 4090254216911895966}
   - component: {fileID: 8052703125404695038}
   - component: {fileID: 8327072463383238891}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: EnemyPaintBall
   m_TagString: Enemy
   m_Icon: {fileID: 0}
