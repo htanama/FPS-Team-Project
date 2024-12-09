@@ -37,6 +37,8 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
+    [SerializeField] Transform shootPos;
+    [SerializeField] GameObject bullet;
 
     [Header("      STATS      ")]
     [SerializeField][Range(1, 10)] int speed;      //Range adds a slider
@@ -109,7 +111,7 @@ public class playerController : MonoBehaviour, IDamage
 
         moveDirection = transform.right * Input.GetAxis("Horizontal") +
                   transform.forward * Input.GetAxis("Vertical");    //Normalized to handle diagonal movement
-        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+        controller.Move(moveDirection * speed * Time.deltaTime);
 
 
         jump();
@@ -235,22 +237,20 @@ public class playerController : MonoBehaviour, IDamage
         //turn on
         isShooting = true;
 
-        RaycastHit hit;
-        //shoot code
-        //if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance)) 
-        // need to use raycasting to shoot, otherwise you can shoot enemy everywhere. 
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDistance, ~ignoreMask))
+        //shoot code        
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
         {
+            Debug.Log(contact.collider.name);                   
 
-            Debug.Log(contact.collider.name); //being overridden
-
+             //being overridden            
             IDamage dmg = contact.collider.GetComponent<IDamage>();
 
             if (dmg != null)
             {
-               dmg.takeDamage(shootDamage);
+                dmg.takeDamage(shootDamage);
             }
-        }
+            
+        }        
 
         yield return new WaitForSeconds(shootRate);
         
@@ -258,13 +258,12 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = false;
     }
 
-
     public void UpdateCrosshair()
     {
         Crosshair crosshair = FindObjectOfType<Crosshair>();
         int crossDefault = crosshair.GetDefaultValue();
 
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
         {
             crosshair.SetDefaultValue(crosshair.GetTargetValue());
         }
