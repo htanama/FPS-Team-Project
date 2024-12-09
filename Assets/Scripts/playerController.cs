@@ -37,6 +37,8 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
+    [SerializeField] Transform shootPos;
+    [SerializeField] GameObject bullet;
 
     [Header("      STATS      ")]
     [SerializeField][Range(1, 10)] int speed;      //Range adds a slider
@@ -160,7 +162,7 @@ public class playerController : MonoBehaviour, IDamage
         }
     }
 
-
+    // Paint ball gun effect implementation
     private void OnTriggerEnter(Collider other)
     {
         // Check if the trigger is the sphere
@@ -175,7 +177,7 @@ public class playerController : MonoBehaviour, IDamage
             Vector3 pushDirection = (transform.position - other.transform.position).normalized;
 
             // Define the push distance
-            float pushDistance = 11.0f;
+            float pushDistance = 13.0f; // knock player backward.
 
             // Use CharacterController to move the player
             controller.Move(pushDirection * pushDistance);
@@ -214,7 +216,9 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        updatePlayerUI();        
+
+        updatePlayerUI();
+        StartCoroutine(screenFlashRed());
 
         if (HP <= 0)
         {
@@ -232,21 +236,21 @@ public class playerController : MonoBehaviour, IDamage
     {
         //turn on
         isShooting = true;
-        
-        //RaycastHit hit;
-        //shoot code
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
-        {         
 
-            Debug.Log(contact.collider.name); //being overridden
+        //shoot code        
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
+        {
+            Debug.Log(contact.collider.name);                   
 
+             //being overridden            
             IDamage dmg = contact.collider.GetComponent<IDamage>();
 
             if (dmg != null)
             {
-               dmg.takeDamage(shootDamage);
+                dmg.takeDamage(shootDamage);
             }
-        }
+            
+        }        
 
         yield return new WaitForSeconds(shootRate);
         
@@ -254,13 +258,12 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = false;
     }
 
-
     public void UpdateCrosshair()
     {
         Crosshair crosshair = FindObjectOfType<Crosshair>();
         int crossDefault = crosshair.GetDefaultValue();
 
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
         {
             crosshair.SetDefaultValue(crosshair.GetTargetValue());
         }
@@ -270,10 +273,9 @@ public class playerController : MonoBehaviour, IDamage
         }
     }
 
-    IEnumerator flashRed()
-    {
-        model.material.color = Color.red;
+    IEnumerator screenFlashRed()
+    {   GameManager.instance.playerDamageScreen.SetActive(true);
         yield return new WaitForSeconds(0.1f);
-        model.material.color = colorOrig;
+        GameManager.instance.playerDamageScreen.SetActive(false);
     }
 }
