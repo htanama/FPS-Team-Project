@@ -13,18 +13,21 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public playerController playerScript;
 
+
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin, menuLose;
     [SerializeField] TMP_Text goalCountText;
+    [SerializeField] GameObject timerGoal;
     public Image playerHPBar;
 
     public GameObject playerDamageScreen;
 
     public bool isPaused;
 
-    float timeScaleOrig;
+    float timeScaleOrig;    
     int goalCount;
+    //int numberFlags;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -102,5 +105,10 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
-   
+    void HowManyFlagsCapture(int amount)
+    {
+        //numberFlags += amount;
+    }
+
+
 }

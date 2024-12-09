@@ -30,7 +30,7 @@ public class TimerScript : MonoBehaviour
                 TimeLeft = 0; // Ensure time doesn't go below 0
                 TimerOn = false; // Stop the timer
                 TimerTxt.text = "Time's Up!"; // Display end message
-                //GameManager.instance.TimeUp();
+                GameManager.instance.LoseGame();
             }
         }
     }
