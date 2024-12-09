@@ -6852,6 +6852,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_withCrosshair
       objectReference: {fileID: 0}
+    - target: {fileID: 4573338685374570106, guid: 1dace03aa0f63a64ab9c3eba1be9e2cf, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

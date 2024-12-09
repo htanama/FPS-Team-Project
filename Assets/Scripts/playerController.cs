@@ -48,9 +48,9 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField][Range(10, 60)] int gravity;
     [SerializeField][Range(1, 10)] public int HP; // turn into Get/Setter
 
-    [SerializeField][Range(1, 20)] int uncrouchSpeed;
+    //[SerializeField][Range(1, 20)] int uncrouchSpeed; //Fixing later
     [SerializeField][Range(0.1f, 1.0f)] float crouchWalkSpeed;
-    [SerializeField][Range(0.1f, 1.0f)] float crouchHeight;
+    [SerializeField][Range(0.01f, 1.0f)] float crouchHeight;
 
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
@@ -60,24 +60,31 @@ public class playerController : MonoBehaviour, IDamage
     int HPOrig;
 
     bool isSprinting;
-    bool isScaling;                 //To allow to modify crouch speed
+    bool isCrouching;
+    //bool isCrouchLerping;                 //To allow to modify crouch speed
 
     bool isShooting;
     RaycastHit contact;
     //bool isReloading; isEquipping;
 
+    //Crouching variables
     private int currentSpeed;     //To avoid bugs by modifying speed directly
+    private float originalHeight; //When releasing crouch
+    //private float targetHeight;
+    private Vector3 originalCenter;
 
-    private float originalScaleY; //For use when crouching
-    private Vector3 originalScale; //Used when releasing crouch
-    private Vector3 targetScale; //For use when releasing crouch
+    //private float originalScaleY; //For use when crouching
+    //private Vector3 originalScale; //Used when releasing crouch
+    //private Vector3 targetScale; //For use when releasing crouch
 
     // Start is called before the first frame update
     void Start()
     {
         currentSpeed = speed;
-        originalScaleY = controller.transform.localScale.y;
-        originalScale = controller.transform.localScale;
+        originalHeight = controller.height;
+        originalCenter = controller.center;
+        //originalScaleY = controller.transform.localScale.y;
+        //originalScale = controller.transform.localScale;
         HPOrig = HP;
         updatePlayerUI();
 
@@ -142,7 +149,7 @@ public class playerController : MonoBehaviour, IDamage
 
     void sprint()
     {
-        if (Input.GetButtonDown("Sprint"))
+        if (Input.GetButtonDown("Sprint") && !isCrouching)  //Won't sprint if crouching
         {
 
             speed *= sprintMod;
@@ -151,7 +158,7 @@ public class playerController : MonoBehaviour, IDamage
 
             isSprinting = true;
         }
-        else if (Input.GetButtonUp("Sprint"))
+        else if (Input.GetButtonUp("Sprint"))       //Potential bug with crouching
         {
 
             speed /= sprintMod;
@@ -190,23 +197,33 @@ public class playerController : MonoBehaviour, IDamage
     {
         if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
         {
-            isScaling = true;
+            isCrouching = true;
             currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
 
-            targetScale = new Vector3(transform.localScale.x, originalScaleY * crouchHeight, transform.localScale.z);  //Change scale to crouch scale
-            // talk to 
+            //Change height when crouching
+            controller.height = originalHeight * crouchHeight;
+            controller.center = new Vector3(0, controller.height / 2, 0);
+
+            //isCrouchLerping = true;
         }
         else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
         {
-            isScaling = true;
+            isCrouching = false;
             currentSpeed = speed; //Restore speed
 
-            targetScale = new Vector3(transform.localScale.x, originalScaleY, transform.localScale.z); //Restore original scale
+            //Restore height when releasing crouch button
+            controller.height = originalHeight;
+            controller.center = originalCenter;
 
+            //isCrouchLerping = true;
         }
-        //Bool check to prevent incorrect scaling
-        if (isScaling)
-            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
+        //Adjust speed at which player crouches/uncrouches
+        //if (isCrouchLerping)
+        //{
+        //    controller.height = Mathf.Lerp(controller.height, targetHeight, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
+
+        //    isCrouchLerping = false;
+        //}
         //Note: The line above is here and not in the if statement b/e of the nature in which Unity checks for button presses,
         //      the line would only execute about half way or so
 
