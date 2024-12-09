@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 804c172d108f8334181fc7528231ef86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  model: {fileID: 0}
   controller: {fileID: 8807342066918006282}
   ignoreMask:
     serializedVersion: 2
@@ -59,7 +60,9 @@ MonoBehaviour:
   shootDamage: 1
   shootDistance: 100
   shootRate: 1
-  speed: 2
+  shootPos: {fileID: 0}
+  bullet: {fileID: 0}
+  speed: 10
   sprintMod: 2
   jumpMax: 2
   jumpSpeed: 11

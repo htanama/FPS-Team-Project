@@ -111,7 +111,7 @@ public class playerController : MonoBehaviour, IDamage
 
         moveDirection = transform.right * Input.GetAxis("Horizontal") +
                   transform.forward * Input.GetAxis("Vertical");    //Normalized to handle diagonal movement
-        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+        controller.Move(moveDirection * speed * Time.deltaTime);
 
 
         jump();
