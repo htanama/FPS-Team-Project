@@ -291,7 +291,8 @@ public class playerController : MonoBehaviour, IDamage
     }
 
     IEnumerator screenFlashRed()
-    {   GameManager.instance.playerDamageScreen.SetActive(true);
+    {   
+        GameManager.instance.playerDamageScreen.SetActive(true);
         yield return new WaitForSeconds(0.1f);
         GameManager.instance.playerDamageScreen.SetActive(false);
     }
