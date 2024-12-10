@@ -103,7 +103,7 @@ public class playerController : MonoBehaviour, IDamage
         sprint();
         crouch();
 
-        UpdateCrosshair();
+        //UpdateCrosshair();
     }
 
     void movement()
@@ -275,20 +275,20 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = false;
     }
 
-    public void UpdateCrosshair()
-    {
-        Crosshair crosshair = FindObjectOfType<Crosshair>();
-        int crossDefault = crosshair.GetDefaultValue();
+    //public void UpdateCrosshair()
+    //{
+    //    Crosshair crosshair = FindObjectOfType<Crosshair>();
+    //    int crossDefault = crosshair.GetDefaultValue();
 
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
-        {
-            crosshair.SetDefaultValue(crosshair.GetTargetValue());
-        }
-        else
-        {
-            crosshair.SetDefaultValue(crossDefault);
-        }
-    }
+    //    if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
+    //    {
+    //        crosshair.SetDefaultValue(crosshair.GetTargetValue());
+    //    }
+    //    else
+    //    {
+    //        crosshair.SetDefaultValue(crossDefault);
+    //    }
+    //}
 
     IEnumerator screenFlashRed()
     {   
