@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 5677453764233951061}
   - component: {fileID: 2871694306517733398}
   m_Layer: 0
-  m_Name: Cylinder
+  m_Name: Flag Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 126
   m_IsActive: 1
 --- !u!4 &7503755591154532165
 Transform:
