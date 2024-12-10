@@ -10,6 +10,8 @@ TagManager:
   - Enemy
   - Flag
   - Damage
+  - RedBase
+  - trap_door
   layers:
   - Default
   - TransparentFX

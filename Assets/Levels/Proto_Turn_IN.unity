@@ -3454,11 +3454,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3065334670398833356, guid: 1dace03aa0f63a64ab9c3eba1be9e2cf, type: 3}
       propertyPath: speed
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4573338685374570106, guid: 1dace03aa0f63a64ab9c3eba1be9e2cf, type: 3}
       propertyPath: m_IsTrigger
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5035229624296912024, guid: 1dace03aa0f63a64ab9c3eba1be9e2cf, type: 3}
+      propertyPath: sensitivity
+      value: 900
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
