@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class Wall_Trap_Swing : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject trapDoor;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        trapDoor.GetComponent<Animation>().Play("trapAnim");
     }
 }
