@@ -191,8 +191,6 @@ public class playerController : MonoBehaviour, IDamage
         }
     }
 
-
-    //IEnumerator shoot()     //needs a yield
     void crouch()
     {
         if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
