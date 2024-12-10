@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5677453764233951061}
   - component: {fileID: 2871694306517733398}
   m_Layer: 0
-  m_Name: Cylinder
+  m_Name: Flag Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
