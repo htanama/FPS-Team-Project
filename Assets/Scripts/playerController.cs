@@ -90,7 +90,20 @@ public class playerController : MonoBehaviour, IDamage
 
     }
 
-
+    //Player moves with platform they're on
+    //void OnControllerColliderHit(ControllerColliderHit hit)
+    //{
+    //    Debug.Log("Collided with: " + hit.collider.name);
+    //    //Check if the player is standing on a moving platform
+    //    if (hit.collider.CompareTag("MovingPlatform"))
+    //    {
+    //        transform.parent = hit.collider.transform; //Attach player to the platform
+    //    }
+    //    else
+    //    {
+    //        transform.parent = null; //Detach player from the platform
+    //    }
+    //}
 
     // Update is called once per frame
     void Update()
@@ -226,6 +239,8 @@ public class playerController : MonoBehaviour, IDamage
         //      the line would only execute about half way or so
 
     }
+
+
 
     // Weapons //
     public void takeDamage(int amount)
