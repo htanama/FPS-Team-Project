@@ -24,7 +24,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerController : MonoBehaviour, IDamage
+public class playerController : MonoBehaviour, IDamage, IAttach
 {
 
     [Header("      COMPONENTS      ")]
