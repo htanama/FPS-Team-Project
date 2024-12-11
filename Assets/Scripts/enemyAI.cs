@@ -16,34 +16,67 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] int HP;
     [SerializeField] int faceTargetSpeed;
     [SerializeField] int FOV;
+    [SerializeField] int roamDist; // sphere distance of roaming
+    [SerializeField] int roamTimer; // how long to wait before move again
+    [SerializeField] int animSpeedTransition;
 
     [SerializeField] GameObject bullet;
     [SerializeField] float shootRate;
     
     bool playerInRange;
-    bool isShooting; 
+    bool isShooting;
+    bool isRoaming;
 
-    Color colorOrig;
+        Color colorOrig;
 
     Vector3 playerDirection;
+    Vector3 startingPos;
     float angleToPlayer;
+    float stoppingDistOrig; // to remember our original stopping distance. 
+    Coroutine coroutine;
 
     // Start is called before the first frame update
     void Start()
     {
         colorOrig = model.material.color;
         GameManager.instance.UpdateGame(1);
-        
+        startingPos = transform.position; // to remember the starting position 
+        stoppingDistOrig = agent.stoppingDistance; // to remember our original stopping distance. 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerInRange && canSeePlayer())
+        if (playerInRange && !canSeePlayer())
         {
+            // check the timer && check distance if it is closer to the distance by 0.01f
+            if (!isRoaming && agent.remainingDistance < 0.01f)
+                coroutine = StartCoroutine(roam());
+        }
+        else if (!playerInRange) // the enemy is not in player range
+        {
+            if (!isRoaming && agent.remainingDistance < 0.01f)            
+                coroutine = StartCoroutine(roam());
             
         }
-        
+    }
+
+    IEnumerator roam()
+    {
+        isRoaming = true;
+
+        yield return new WaitForSeconds(roamTimer); // wait for second before continuing. 
+
+        agent.stoppingDistance = 0; // only for roaming to make sure the AI reach its destination
+
+        Vector3 randomPos = Random.insideUnitSphere * roamDist; // how big is our roaming distance        
+        randomPos += startingPos;
+
+        NavMeshHit hit; // get info using similar like raycast
+        NavMesh.SamplePosition(randomPos, out hit, roamDist, 1); // remember where the hit is at. 
+        agent.SetDestination(hit.position);
+
+        isRoaming = false;
     }
 
     bool canSeePlayer()
@@ -82,7 +115,7 @@ public class enemyAI : MonoBehaviour, IDamage
             }
             
         }
-
+        agent.stoppingDistance = stoppingDistOrig; // get the distance closer to the player but not very close to the player face. 
         return false; // do not see the player, raycast did not hit the player
     }
 
@@ -109,6 +142,7 @@ public class enemyAI : MonoBehaviour, IDamage
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            agent.stoppingDistance = 0; // agent cannot see player set stopping distance at zero
         }
     }
 
