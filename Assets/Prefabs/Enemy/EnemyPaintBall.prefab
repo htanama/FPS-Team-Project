@@ -888,7 +888,7 @@ Animator:
   m_GameObject: {fileID: 7248030858739896123}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: f4209d51d1ad0434299f2d498ee076ba, type: 3}
-  m_Controller: {fileID: 9100000, guid: dc0fa12d0ef6fa34e813e20e7967b575, type: 2}
+  m_Controller: {fileID: 9100000, guid: 67f1fc9ff05fb2640b6ac55bed02945e, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -918,7 +918,7 @@ MonoBehaviour:
   HP: 10
   faceTargetSpeed: 100
   FOV: 90
-  bullet: {fileID: 3682685498415511839, guid: 953c33a8c249edb4b88eb0bb86401315, type: 3}
+  bullet: {fileID: 7377984041384149564, guid: 451e504475653df44bf8356866cfde2b, type: 3}
   shootRate: 0.25
 --- !u!114 &4908571296106190191
 MonoBehaviour:
