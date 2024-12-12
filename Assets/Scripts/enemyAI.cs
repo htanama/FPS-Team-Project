@@ -27,7 +27,7 @@ public class enemyAI : MonoBehaviour, IDamage
     bool isShooting;
     bool isRoaming;
 
-        Color colorOrig;
+    Color colorOrig;
 
     Vector3 playerDirection;
     Vector3 startingPos;
@@ -89,7 +89,7 @@ public class enemyAI : MonoBehaviour, IDamage
 
         // Draw the Raycast inside the debug mode
         #if UNITY_EDITOR
-            Debug.DrawRay(headPos.position, playerDirection);
+            //Debug.DrawRay(headPos.position, playerDirection);
         #endif
 
         RaycastHit hit;
@@ -150,14 +150,11 @@ public class enemyAI : MonoBehaviour, IDamage
     {   
         HP -= amount;
         StartCoroutine(flashRed());
-        #if UNITY_EDITOR
-            Debug.Log("before HP < 0");
-        #endif
-
+       
         if (HP <= 0)
         {
             #if UNITY_EDITOR
-                Debug.Log("dead");
+                //Debug.Log("dead");
             #endif      
             GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
             // I am dead

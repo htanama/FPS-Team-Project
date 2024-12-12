@@ -91,8 +91,8 @@ public class Flag : MonoBehaviour
         carrier = null;
         isCarried = false;
 
-        transform.position = flagOriginalPosition; // Reset to (0, 0, 0)
-
+        transform.position = flagOriginalPosition; // Reset to (0, 0, 0)        
+        
     }
 
     public void DeliverFlag()

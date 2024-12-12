@@ -9,7 +9,7 @@ using UnityEngine.AI;
 public class AICaptureFlag : MonoBehaviour
 {
     [SerializeField] private Transform flagPosition; // Position of the flag
-    [SerializeField] private Transform basePosition; // Position of the base
+    [SerializeField] private Transform basePosition; // Position of the base    
     [SerializeField] private NavMeshAgent agent;    
 
     private Flag flag; // Reference to the flag
@@ -74,7 +74,7 @@ public class AICaptureFlag : MonoBehaviour
 
             Debug.Log("Move to find flag");
             // Check if AI has reached the flag
-            if (Vector3.Distance(transform.position, flagPosition.position) < 0.5f)
+            if (Vector3.Distance(transform.position, flagPosition.position) < 3.5f)
             {
                 flag.SetCarrier(transform); // Attach the flag to the AI
                 
@@ -107,6 +107,8 @@ public class AICaptureFlag : MonoBehaviour
                 if (flag != null && flag.IsCarriedBy(transform))
                 {
                     flag.ResetFlag();
+
+                    GameManager.instance.UpdateFlagCount(-1); // reduce flag counts for enemy
 
                     //Flag successfully reset after delivery
                     currentState = AIState.MovingToFlag;

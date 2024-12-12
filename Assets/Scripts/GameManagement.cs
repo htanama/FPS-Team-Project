@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin, menuLose;
     [SerializeField] TMP_Text goalCountText;
+    [SerializeField] TMP_Text flagCaptureText;
     [SerializeField] GameObject timerGoal;
     public Image playerHPBar;
 
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
     public bool isPaused;
 
     float timeScaleOrig;    
-    int goalCount;
+    int goalCount, flagCount;
     //int numberFlags;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -79,7 +80,9 @@ public class GameManager : MonoBehaviour
     public void UpdateGame(int amount)
     {
         goalCount += amount;
+       
         goalCountText.text = goalCount.ToString("F0");
+        
 
         if (goalCount <= 0)// character will respawn when HP hits zero
         {
@@ -87,6 +90,26 @@ public class GameManager : MonoBehaviour
             menuActive = menuWin;
             menuActive.SetActive(true);
         }
+    }
+
+    public void UpdateFlagCount(int amount)
+    {
+        flagCount += amount;
+        flagCaptureText.text = flagCount.ToString("F0");
+
+        if (flagCount >= 3)
+        {
+            StatePause();
+            menuActive = menuWin;
+            menuActive.SetActive(true);
+        }
+        else if (flagCount <= -3)
+        {
+            StatePause();
+            menuActive = menuLose;
+            menuActive.SetActive(true);
+        }
+
     }
 
     public void LoseGame()
