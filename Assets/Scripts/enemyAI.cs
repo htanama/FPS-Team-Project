@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
-public class enemyAI : MonoBehaviour, IDamage
+public class enemyAI : MonoBehaviour, IDamage, IOpen
 {       
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
@@ -21,12 +21,14 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] float shootRate;
     
     bool playerInRange;
-    bool isShooting; 
+    bool isShooting;
 
     Color colorOrig;
 
     Vector3 playerDirection;
     float angleToPlayer;
+
+    Vector3 lastPlatformPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +45,6 @@ public class enemyAI : MonoBehaviour, IDamage
         {
             
         }
-        
     }
 
     bool canSeePlayer()
@@ -102,6 +103,7 @@ public class enemyAI : MonoBehaviour, IDamage
         {
             playerInRange = true;     
         }
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -110,6 +112,7 @@ public class enemyAI : MonoBehaviour, IDamage
         {
             playerInRange = false;
         }
+
     }
 
     public void takeDamage(int amount)
