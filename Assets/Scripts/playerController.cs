@@ -23,6 +23,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class playerController : MonoBehaviour, IDamage, IOpen
 {
@@ -52,6 +53,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField][Range(0.1f, 1.0f)] float crouchWalkSpeed;
     [SerializeField][Range(0.01f, 1.0f)] float crouchHeight;
 
+    [Header("      Capture the Flag      ")]
+    [SerializeField] private Transform captureFlagBasePosition; // Position of the base
+    [SerializeField] private Flag flag;
+    private Transform flagOriginalPosition;
+
+
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
     Color colorOrig;
@@ -73,6 +80,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     //private float targetHeight;
     private Vector3 originalCenter;
 
+   
     //private float originalScaleY; //For use when crouching
     //private Vector3 originalScale; //Used when releasing crouch
     //private Vector3 targetScale; //For use when releasing crouch
@@ -88,6 +96,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         HPOrig = HP;
         updatePlayerUI();
 
+        flagOriginalPosition = flag.GetComponentInParent<Transform>(); // store original position of the flag
     }
 
     //Player moves with platform they're on
@@ -116,7 +125,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         sprint();
         crouch();
 
-        //UpdateCrosshair();
+        ReachToBase();
+        
+            //UpdateCrosshair();
     }
 
     void movement()
@@ -188,9 +199,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         // Check if the trigger is the sphere
         if (other.CompareTag("Damage-Ball"))
         {
-#if UNITY_EDITOR
-            Debug.Log("Player hit by ball");
-#endif
+            #if UNITY_EDITOR
+                //Debug.Log("Player hit by ball");
+            #endif
 
 
             // Get the direction vector from the ball (sphere) to the player
@@ -308,5 +319,33 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         GameManager.instance.playerDamageScreen.SetActive(true);
         yield return new WaitForSeconds(0.1f);
         GameManager.instance.playerDamageScreen.SetActive(false);
+    }
+
+    // For capture the flag only
+    // checking if player reach to base with the flag and score
+    private void ReachToBase()
+    {    
+     
+        if (captureFlagBasePosition != null)
+        {
+            // Check if Player has reached the base
+            if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
+            {
+                #if UNITY_EDITOR
+                    Debug.Log($"Player Touch Based");
+                #endif
+                
+                if(flag != null && flag.IsCarriedBy(transform))
+                {
+                    #if UNITY_EDITOR
+                        Debug.Log("Player has the flag and reached the base!");
+                    #endif
+                    GameManager.instance.UpdateFlagCount(+1);
+                    flag.ResetFlag();
+                }           
+                
+                
+            }
+        }
     }
 }
