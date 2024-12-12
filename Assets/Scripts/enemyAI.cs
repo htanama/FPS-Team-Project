@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
-public class enemyAI : MonoBehaviour, IDamage
+public class enemyAI : MonoBehaviour, IDamage, IOpen
 {       
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
@@ -34,6 +34,8 @@ public class enemyAI : MonoBehaviour, IDamage
     float angleToPlayer;
     float stoppingDistOrig; // to remember our original stopping distance. 
     Coroutine coroutine;
+
+    Vector3 lastPlatformPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -135,6 +137,7 @@ public class enemyAI : MonoBehaviour, IDamage
         {
             playerInRange = true;     
         }
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -144,6 +147,7 @@ public class enemyAI : MonoBehaviour, IDamage
             playerInRange = false;
             agent.stoppingDistance = 0; // agent cannot see player set stopping distance at zero
         }
+
     }
 
     public void takeDamage(int amount)
