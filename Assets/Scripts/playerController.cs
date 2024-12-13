@@ -304,26 +304,26 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     // Triggers //
     // Paint ball gun effect implementation
-    private void OnTriggerEnter(Collider other)
-    {
-        // Check if the trigger is the sphere
-        if (other.CompareTag("Damage-Ball"))
-        {
-#if UNITY_EDITOR
-            //Debug.Log("Player hit by ball");
-#endif
+//    private void OnTriggerEnter(Collider other)
+//    {
+//        // Check if the trigger is the sphere
+//        if (other.CompareTag("Damage-Ball"))
+//        {
+//#if UNITY_EDITOR
+//            //Debug.Log("Player hit by ball");
+//#endif
 
-            // Get the direction vector from the ball (sphere) to the player
-            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
+//            // Get the direction vector from the ball (sphere) to the player
+//            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
 
-            // Define the push distance
-            float pushDistance = 13.0f; // knock player backward.
+//            // Define the push distance
+//            float pushDistance = 13.0f; // knock player backward.
 
-            // Use CharacterController to move the player
-            controller.Move(pushDirection * pushDistance);
-        }
-        // is there an exit? ontriggerenter ontriggerexit?
-    }
+//            // Use CharacterController to move the player
+//            controller.Move(pushDirection * pushDistance);
+//        }
+//        // is there an exit? ontriggerenter ontriggerexit?
+//    }
 
     // Capture the Flag //
 

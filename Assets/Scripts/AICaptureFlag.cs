@@ -72,7 +72,7 @@ public class AICaptureFlag : MonoBehaviour
         {
             agent.SetDestination(flagPosition.position);
 
-            Debug.Log("Move to find flag");
+            //Debug.Log("Move to find flag");
             // Check if AI has reached the flag
             if (Vector3.Distance(transform.position, flagPosition.position) < 0.5f)
             {
