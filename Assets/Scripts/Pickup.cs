@@ -8,6 +8,9 @@ public class Pickup : MonoBehaviour
     //speed powerup?
     //power?
     //inventory? (hold more than one flag?)
+    
+    [SerializeField] flagStats flag;
+
 
     // Start is called before the first frame update
     void Start()
@@ -17,14 +20,22 @@ public class Pickup : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.isTrigger) return; // ignore trigger colliding with other triggers. 
+        
+
+        if (other.CompareTag("Player"))
         {
             // flag?
 
             // power ups
 
             // jammie gun/ammo stuff
-        
+            if (other.CompareTag("Player"))
+            {
+                Debug.Log("pickup");
+                GameManager.instance.playerScript.getFlagStatus(flag);
+                Destroy(gameObject);
+            }
             Destroy(gameObject);
         }
     }

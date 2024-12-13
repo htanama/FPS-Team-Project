@@ -70,7 +70,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     
     [Header("      CAPTURE THE FLAG      ")]
     [SerializeField] private Transform captureFlagBasePosition; // Position of the base
-    [SerializeField] private Flag flag;
+    [SerializeField] private GameObject flagPole;  // this is the flagPole object. 
+    private Flag flag; // flag logic that control when to drop the flag at the base. 
     private Transform flagOriginalPosition;
 
     // Vectors //
@@ -103,7 +104,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         HPOrig = HP;
         updatePlayerUI();
-
+        
+        flag = flagPole.GetComponent<Flag>(); //put all the components of the flagPole from the inspector to the flag object(has info who carry the flag)
         flagOriginalPosition = flag.GetComponentInParent<Transform>(); // store original position of the flag
     }
 
@@ -353,5 +355,14 @@ public class playerController : MonoBehaviour, IDamage, IOpen
                 
             }
         }
+    }
+
+     public void getFlagStatus(flagStats flag)
+    {
+        //flagPole is the flag object on the scene.  
+        flagPole.GetComponent<MeshFilter>().sharedMesh = flag.model.GetComponent<MeshFilter>().sharedMesh;
+        flagPole.GetComponent<MeshRenderer>().sharedMaterial = flag.model.GetComponent<MeshRenderer>().sharedMaterial;
+        
+        flag.model.GetComponent<Transform>().position = flagPole.GetComponent<Transform>().position; // put the flag in the correct position of the player
     }
 }
