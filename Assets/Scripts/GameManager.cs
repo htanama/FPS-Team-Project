@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
+    public AudioSource aud;
 
     [Header("Game Menus")]
     [SerializeField] GameObject menuActive;
@@ -25,8 +26,8 @@ public class GameManager : MonoBehaviour
     public GameObject Player => player;     //Read-only getter
     public playerController PlayerScript => playerScript;
 
-    private Image playerHPBar;
-    private GameObject playerDamageScreen;
+    [SerializeField] private Image playerHPBar;
+    [SerializeField] private GameObject playerDamageScreen;
 
     private bool isPaused;
 

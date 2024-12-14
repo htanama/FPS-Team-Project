@@ -71,7 +71,11 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [Header("      Player Audio      ")]
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip[] audJump;
-    [SerializeField][Range (0, 1)] float audJumpVol; 
+    [SerializeField] [Range (0, 1)] float audJumpVol;
+    [SerializeField] AudioClip[] audDamage;
+    [SerializeField] [Range(0, 10)] float audDamageVol;
+    [SerializeField] AudioClip[] audShootSound;
+    [SerializeField] [Range(0, 1)] float audShootSoundVol;
 
 
     [Header("      CAPTURE THE FLAG      ")]
@@ -263,6 +267,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         updatePlayerUI();
         StartCoroutine(screenFlashRed());
+        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
 
         if (HP <= 0)
         {
@@ -287,6 +292,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {
         //turn on
         isShooting = true;
+        aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
 
         //shoot code        
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
