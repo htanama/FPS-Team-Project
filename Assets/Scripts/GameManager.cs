@@ -19,12 +19,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text goalCountText;
     [SerializeField] TMP_Text flagCaptureText;
     [SerializeField] GameObject timerGoal;
+    [SerializeField] Transform spawnPoint;
+    [SerializeField] int playerLives = 3;
 
     private GameObject player;
+    private GameObject flag;
     private playerController playerScript;
+    private flagManager flagScript;
 
     public GameObject Player => player;     //Read-only getter
+    public GameObject Flag => flag;
     public playerController PlayerScript => playerScript;
+    public flagManager FlagScript => flagScript;
 
     [SerializeField] private Image playerHPBar;
     [SerializeField] private GameObject playerDamageScreen;
@@ -51,7 +57,7 @@ public class GameManager : MonoBehaviour
     }
 
     float timeScaleOrig;    
-    int goalCount, flagCount;
+    //int goalCount, flagCount;
     //int numberFlags;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -61,7 +67,8 @@ public class GameManager : MonoBehaviour
         timeScaleOrig = Time.timeScale;
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
-
+        flag = GameObject.FindWithTag("Flag");
+        flagScript = flag.GetComponent<flagManager>();
         //goalCount = playerScript.GetHP();
     }
 
@@ -101,38 +108,67 @@ public class GameManager : MonoBehaviour
         menuActive = null;
     }
 
-    public void UpdateGame(int amount)
+    public void UpdateCaptures(int amount)
     {
-        goalCount += amount;
+        //goalCount += amount;
        
-        goalCountText.text = goalCount.ToString("F0");
+        flagCaptureText.text = amount.ToString("F0");
         
 
-        if (goalCount <= 0)// character will respawn when HP hits zero
-        {
-            StatePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
-        }
+        //if (goalCount <= 0)// character will respawn when HP hits zero
+        //{
+        //    StatePause();
+        //    menuActive = menuWin;
+        //    menuActive.SetActive(true);
+        //}
     }
 
-    public void UpdateFlagCount(int amount)
-    {
-        flagCount += amount;
-        flagCaptureText.text = flagCount.ToString("F0");
+    //public void UpdateFlagCount(int amount)
+    //{
+    //    flagCount += amount;
+    //    flagCaptureText.text = flagCount.ToString("F0");
 
-        if (flagCount >= 3)
+    //    if (flagCount >= 3)
+    //    {
+    //        StatePause();
+    //        menuActive = menuWin;
+    //        menuActive.SetActive(true);
+    //    }
+    //    else if (flagCount <= -3)
+    //    {
+    //        StatePause();
+    //        menuActive = menuLose;
+    //        menuActive.SetActive(true);
+    //    }
+
+    //}
+
+    public void Respawn()
+    {
+        if (playerLives > 0)
         {
-            StatePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
+            //drop flag
+            if (FlagScript.IsHoldingFlag)
+            {
+                FlagScript.DropFlag();
+            }
+
+            //move player to spawn point (don't destroy)
+            player.transform.position = spawnPoint.position;
+
+            //change life counter
+            playerLives--;
+
+            Debug.Log($"Player Respawned. Lives remaining: {playerLives}");
+
+            //Update lives shown in the UI
+            UpdateLives();
         }
-        else if (flagCount <= -3)
-        {
-            StatePause();
-            menuActive = menuLose;
-            menuActive.SetActive(true);
-        }
+
+    }
+
+    private void UpdateLives()
+    {
 
     }
 

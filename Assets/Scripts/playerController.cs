@@ -139,7 +139,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         }
 
-        sprint(); //lecture puts outside of if
+        sprint(); //Outside of condition to prevent infinite sprint glitch
         crouch();
 
         //ReachToBase();        
@@ -267,6 +267,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (HP <= 0)
         {
             //death/lose screen
+            //GameManager.instance.FlagScript.DropFlag();
             GameManager.instance.LoseGame();
         }
     }

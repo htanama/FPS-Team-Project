@@ -51,7 +51,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
 
     void Start()
     {
-        GameManager.instance.UpdateGame(1);
+        //GameManager.instance.UpdateGame(1);
         colorOrig = model.material.color; // for flash red
         startingPos = transform.position; // to remember the starting position for roaming
         stoppingDistOrig = agent.stoppingDistance; // remember for roam/idle reset
@@ -238,7 +238,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         if (HP <= 0)
         {
            /// this is only if the goal is killing enemies, want to make -1 to enemycount    
-            GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
+           // GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
            
             // I am dead
             Destroy(gameObject);            
