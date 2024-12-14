@@ -375,8 +375,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     //        // is there an exit? ontriggerenter ontriggerexit?
     //    }
 
-    // Capture the Flag //
-
+    // Capture the Flag 
     // For capture the flag only
     // checking if player reach to base with the flag and score
     private void ReachToBase()
