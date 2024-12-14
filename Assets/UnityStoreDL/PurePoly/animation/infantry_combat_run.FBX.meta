@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4d42c633df9f84941a88a2729aff09d7
+guid: adde12196c137914ebee8cac80b7dddb
 timeCreated: 1489674411
 licenseType: Store
 ModelImporter:
@@ -49,7 +49,7 @@ ModelImporter:
     400038: Bip001 R UpperArm
     400040: Bip001 Spine
     400042: //RootNode
-    7400000: infantry_combat_shoot
+    7400000: infantry_combat_run
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -73,21 +73,21 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: infantry_combat_shoot
+      name: infantry_combat_run
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 30
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1

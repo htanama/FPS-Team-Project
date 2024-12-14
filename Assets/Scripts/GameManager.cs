@@ -1,5 +1,3 @@
-// Edited - implemented HP Bar
-
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,22 +8,46 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
-    public GameObject player;
-    public playerController playerScript;
-    public AudioSource audWeapon;
 
-
+    [Header("Game Menus")]
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin, menuLose;
+
+    [Header("Goal Settings")]
     [SerializeField] TMP_Text goalCountText;
     [SerializeField] TMP_Text flagCaptureText;
     [SerializeField] GameObject timerGoal;
-    public Image playerHPBar;
 
-    public GameObject playerDamageScreen;
+    private GameObject player;
+    private playerController playerScript;
 
-    public bool isPaused;
+    public GameObject Player => player;     //Read-only getter
+    public playerController PlayerScript => playerScript;
+
+    private Image playerHPBar;
+    private GameObject playerDamageScreen;
+
+    private bool isPaused;
+
+    //getters and setters
+    public Image PlayerHPBar
+    {
+        get => playerHPBar;
+        set => playerHPBar = value;
+    }
+
+    public GameObject PlayerDamageScreen
+    {
+        get => playerDamageScreen;
+        set => playerDamageScreen = value;
+    }
+
+    public bool IsPaused
+    {
+        get => isPaused;
+        set => isPaused = value;
+    }
 
     float timeScaleOrig;    
     int goalCount, flagCount;

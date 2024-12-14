@@ -13,7 +13,7 @@ public class flagManager : MonoBehaviour
     [Header("     Flag Options     ")]
     [SerializeField] Transform playerTransform;
     [SerializeField] private GameObject flag;
-    [SerializeField] private GameObject flagBase;
+    [SerializeField] private GameObject flagStartBase;
     [SerializeField][Range(0.1f, 4.0f)] float captureDistance;
 
     private bool isHoldingFlag = false;
@@ -22,25 +22,26 @@ public class flagManager : MonoBehaviour
     //Getters and setters
     public GameObject Flag
     {
-        get { return flag; }
-        set { flag = value; }
+        get => flag;
+        set => flag = value;
     }
 
-    public GameObject FlagBase
+    public GameObject FlagStartBase
     { 
-        get { return flagBase; }
-        set { flagBase = value; }
+        get => flagStartBase;
+        set => flagStartBase = value;
     }
 
     public bool IsHoldingFlag
     {
-        get { return isHoldingFlag; }
-        set { isHoldingFlag = value; }
+        get => isHoldingFlag;
+        set => isHoldingFlag = value;
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        playerTransform = GameManager.instance.Player.transform;
         //Flag setup
         ResetFlag();
     }
@@ -50,11 +51,15 @@ public class flagManager : MonoBehaviour
     {
         if(!isHoldingFlag)
         {
-            if(Vector3.Distance(playerTransform.position, flagBase.transform.position) < captureDistance)
+            if(Vector3.Distance(playerTransform.position, flagStartBase.transform.position) < captureDistance)
             {
 
                 PickupFlag();
             }
+        }
+        else
+        {
+
         }
     }
 
@@ -62,7 +67,7 @@ public class flagManager : MonoBehaviour
     {
         //pick up the flag
         isHoldingFlag = true;
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        //playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         flag.transform.SetParent(playerTransform);  //Flag attaches to the player
         flag.transform.localPosition = new Vector3(0, 1, 0); //Set flag position on player
         flag.GetComponent<Collider>().enabled = false; //Turn off flag collider
@@ -73,7 +78,7 @@ public class flagManager : MonoBehaviour
         //return the flag to base
         isHoldingFlag = false;
         flag.transform.SetParent(null);
-        flag.transform.position = flagBase.transform.position + flagOffset; //Respawn flag back at base
+        flag.transform.position = flagStartBase.transform.position + flagOffset; //Respawn flag back at base
         flag.GetComponent<Collider>().enabled = true; //Enable flag collider
 
         Debug.Log("Flag returned to base");
@@ -82,7 +87,7 @@ public class flagManager : MonoBehaviour
     void ResetFlag()
     {
         //flag is reset to base if not held
-        flag.transform.position = flagBase.transform.position + flagOffset;
+        flag.transform.position = flagStartBase.transform.position + flagOffset;
         flag.GetComponent<Collider>().enabled = true;
     }
 }

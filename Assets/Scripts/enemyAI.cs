@@ -143,7 +143,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     bool canSeePlayer()
     {
         // this is the head position of the enemy
-        playerDirection = GameManager.instance.player.transform.position - headPos.position;
+        playerDirection = GameManager.instance.Player.transform.position - headPos.position;
         angleToPlayer = Vector3.Angle(playerDirection, transform.forward);
 
         // To know the location of the player by using raycasting, do we hit the player
@@ -158,7 +158,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
             if (hit.collider.CompareTag("Player"))
             {
                 // run towards player
-                agent.SetDestination(GameManager.instance.player.transform.position);
+                agent.SetDestination(GameManager.instance.Player.transform.position);
 
                 // turn towards player
                 if (agent.remainingDistance < agent.stoppingDistance)
@@ -232,7 +232,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         StartCoroutine(flashRed());
         
         //run toward player's last known position
-        agent.SetDestination(GameManager.instance.player.transform.position);
+        agent.SetDestination(GameManager.instance.Player.transform.position);
 
         // no HP left
         if (HP <= 0)
