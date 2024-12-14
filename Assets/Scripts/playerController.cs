@@ -18,10 +18,12 @@
 
         Edited: Erik Segura
             - Added HP Bar functionality
+            - Added audio to movement, gun firing, jump
 */
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
@@ -72,6 +74,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] AudioSource aud;
     [SerializeField] AudioClip[] audJump;
     [SerializeField] [Range (0, 1)] float audJumpVol;
+    [SerializeField] AudioClip[] audStep;
+    [SerializeField] [Range(0, 1)] float audStepVol;
     [SerializeField] AudioClip[] audDamage;
     [SerializeField] [Range(0, 10)] float audDamageVol;
     [SerializeField] AudioClip[] audShootSound;
@@ -97,6 +101,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     bool isShooting;
     bool isSprinting;
+    bool isPlayingStep;
     bool isCrouching;
     //bool isCrouchLerping;                 //To allow to modify crouch speed
 
@@ -119,21 +124,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         flagOriginalPosition = flag.GetComponentInParent<Transform>(); // store original position of the flag
     }
 
-    //Player moves with platform they're on
-    //void OnControllerColliderHit(ControllerColliderHit hit)
-    //{
-    //    Debug.Log("Collided with: " + hit.collider.name);
-    //    //Check if the player is standing on a moving platform
-    //    if (hit.collider.CompareTag("MovingPlatform"))
-    //    {
-    //        transform.parent = hit.collider.transform; //Attach player to the platform
-    //    }
-    //    else
-    //    {
-    //        transform.parent = null; //Detach player from the platform
-    //    }
-    //}
-
     // Update is called once per frame
     void Update()
     {
@@ -152,7 +142,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         sprint(); //lecture puts outside of if
         crouch();
 
-        ReachToBase();        
+        //ReachToBase();        
     }
 
     // Player Movement //
@@ -161,6 +151,11 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //Resets number of jumps once player is on the ground
         if (controller.isGrounded)
         {
+            if (moveDirection.magnitude > 0.3f && !isPlayingStep) // check for step movement.
+            {
+                StartCoroutine(playStep());
+            }
+
             jumpCount = 0;
             // falling/ledge
             horizontalVelocity = Vector3.zero;
@@ -338,6 +333,24 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         isShooting = false;
     }
 
+    // code for walking audio
+
+    IEnumerator playStep()
+    {
+        isPlayingStep = true;
+        aud.PlayOneShot(audStep[Random.Range(0, audStep.Length)], audStepVol);
+
+        if (!isSprinting)
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.3f);
+        }
+        isPlayingStep = false;
+    }
+
     // Triggers //
     // Paint ball gun effect implementation
 //    private void OnTriggerEnter(Collider other)
@@ -365,31 +378,31 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     // For capture the flag only
     // checking if player reach to base with the flag and score
-    private void ReachToBase()
-    {    
+    //private void ReachToBase()
+    //{    
      
-        if (captureFlagBasePosition != null)
-        {
-            // Check if Player has reached the base
-            if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
-            {
-                #if UNITY_EDITOR
-                    Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
-                #endif
+    //    if (captureFlagBasePosition != null)
+    //    {
+    //        // Check if Player has reached the base
+    //        if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
+    //        {
+    //            #if UNITY_EDITOR
+    //                Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
+    //            #endif
                 
-                if(flag != null && flag.IsCarriedBy(transform))
-                {
-                    #if UNITY_EDITOR
-                        Debug.Log("Player has the flag and reached the base!");
-                    #endif
-                    GameManager.instance.UpdateFlagCount(+1);
-                    flag.ResetFlag();
-                }           
+    //            if(flag != null && flag.IsCarriedBy(transform))
+    //            {
+    //                #if UNITY_EDITOR
+    //                    Debug.Log("Player has the flag and reached the base!");
+    //                #endif
+    //                GameManager.instance.UpdateFlagCount(+1);
+    //                flag.ResetFlag();
+    //            }           
                 
                 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     
 }
