@@ -362,7 +362,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
             {
                 #if UNITY_EDITOR
-                    Debug.Log($"Player Touch Based");
+                    Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
                 #endif
                 
                 if(flag != null && flag.IsCarriedBy(transform))
@@ -379,12 +379,5 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
     }
 
-     public void getFlagStatus(flagStats flag)
-    {
-        //flagPole is the flag object on the scene.  
-        flagPole.GetComponent<MeshFilter>().sharedMesh = flag.model.GetComponent<MeshFilter>().sharedMesh;
-        flagPole.GetComponent<MeshRenderer>().sharedMaterial = flag.model.GetComponent<MeshRenderer>().sharedMaterial;
-        
-        flag.model.GetComponent<Transform>().position = flagPole.GetComponent<Transform>().position; // put the flag in the correct position of the player
-    }
+    
 }
