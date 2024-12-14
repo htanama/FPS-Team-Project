@@ -19,11 +19,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text flagCaptureText;
     [SerializeField] GameObject timerGoal;
 
-    [SerializeField] private GameObject player;
-    [SerializeField] private playerController playerScript;
+    private GameObject player;
+    private GameObject flag;
+    private playerController playerScript;
+    private flagManager flagScript;
 
-    private Image playerHPBar;
-    private GameObject playerDamageScreen;
+    public GameObject Player => player;     //Read-only getter
+    public GameObject Flag => flag;
+    public playerController PlayerScript => playerScript;
+    public flagManager FlagScript => flagScript;
+
+    [SerializeField] private Image playerHPBar;
+    [SerializeField] private GameObject playerDamageScreen;
 
     private bool isPaused;
 
@@ -57,7 +64,8 @@ public class GameManager : MonoBehaviour
         timeScaleOrig = Time.timeScale;
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
-
+        flag = GameObject.FindWithTag("Flag");
+        flagScript = flag.GetComponent<flagManager>();
         //goalCount = playerScript.GetHP();
     }
 
@@ -130,6 +138,15 @@ public class GameManager : MonoBehaviour
             menuActive.SetActive(true);
         }
 
+    }
+
+    public void Respawn()
+    {
+        //drop flag
+
+        //move player to spawn point (don't destroy)
+
+        //change life counter
     }
 
     public void LoseGame()
