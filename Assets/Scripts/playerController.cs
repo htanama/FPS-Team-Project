@@ -261,7 +261,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (HP <= 0)
         {
             //death/lose screen
-            GameManager.instance.LoseGame();
+            GameManager.instance.FlagScript.DropFlag();
+            //GameManager.instance.LoseGame();
         }
     }
 

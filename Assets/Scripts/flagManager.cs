@@ -11,11 +11,13 @@ using UnityEngine;
 public class flagManager : MonoBehaviour
 {
     [Header("     Flag Options     ")]
-    [SerializeField] Transform playerTransform;
     [SerializeField] private GameObject flag;
     [SerializeField] private GameObject flagStartBase;
+    [SerializeField] private GameObject flagGoalBase;
     [SerializeField][Range(0.1f, 4.0f)] float captureDistance;
+    [SerializeField][Range(0.1f, 4.0f)] float goalDistance;     //How close to get to the goal
 
+    private Transform playerTransform;
     private bool isHoldingFlag = false;
     private Vector3 flagOffset = new Vector3(0, 2.9f, 0); //Adjust flag to not clip the ground
 
@@ -51,15 +53,18 @@ public class flagManager : MonoBehaviour
     {
         if(!isHoldingFlag)
         {
-            if(Vector3.Distance(playerTransform.position, flagStartBase.transform.position) < captureDistance)
+            if(Vector3.Distance(playerTransform.position, flagGoalBase.transform.position) < goalDistance)
             {
 
-                PickupFlag();
+                //FlagCaptured();
             }
         }
         else
         {
-
+            if(Vector3.Distance(playerTransform.position, flagStartBase.transform.position) < captureDistance)
+            {
+                PickupFlag();
+            }
         }
     }
 
@@ -71,6 +76,19 @@ public class flagManager : MonoBehaviour
         flag.transform.SetParent(playerTransform);  //Flag attaches to the player
         flag.transform.localPosition = new Vector3(0, 1, 0); //Set flag position on player
         flag.GetComponent<Collider>().enabled = false; //Turn off flag collider
+    }
+
+    public void DropFlag()
+    {
+        if (isHoldingFlag)
+        {
+            isHoldingFlag = false;
+            flag.transform.SetParent(null);     //Detach flag from carrier
+            flag.transform.position = playerTransform.position; //Drop flag at carrier's location
+            flag.GetComponent<Collider>().enabled = true;   //Enable flag collider for pickup
+
+            Debug.Log("Flag Dropped");
+        }
     }
 
     void ReturnFlag()
