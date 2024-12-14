@@ -180,9 +180,15 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 86d900ba94a2cb440a6682ea1f26343c, type: 3}
   - {fileID: 8300000, guid: 54d41f15ac9115140afaecd6b9b90f3e, type: 3}
   audJumpVol: 0.5
+  audStep:
+  - {fileID: 8300000, guid: c444c147b3e33e048bafc2ccd4890dc3, type: 3}
+  - {fileID: 8300000, guid: cb91a9e7836dfca48a283e2a5aaf7ca1, type: 3}
+  - {fileID: 8300000, guid: 3f918baeb931f9942bfdbf03bdde6cea, type: 3}
+  - {fileID: 8300000, guid: c25098d9f20f08947b99f090e7ca2f99, type: 3}
+  audStepVol: 0.5
   audDamage:
   - {fileID: 8300000, guid: fbce1e3480f368142a6f362531ac50ac, type: 3}
-  audDamageVol: 0
+  audDamageVol: 0.5
   audShootSound:
   - {fileID: 8300000, guid: cd9a92dedfe874f4b84017da6f195ccb, type: 3}
   audShootSoundVol: 0.5
