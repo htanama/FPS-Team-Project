@@ -78,11 +78,11 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] [Range(0, 1)] float audShootSoundVol;
 
 
-    [Header("      CAPTURE THE FLAG      ")]
-    [SerializeField] private Transform captureFlagBasePosition; // Position of the base
-    [SerializeField] private GameObject flagPole;  // this is the flagPole object. 
-    private Flag flag; // flag logic that control when to drop the flag at the base. 
-    private Transform flagOriginalPosition;
+    //[Header("      CAPTURE THE FLAG      ")]
+    //[SerializeField] private Transform captureFlagBasePosition; // Position of the base
+    //[SerializeField] private GameObject flagPole;  // this is the flagPole object. 
+    //private Flag flag; // flag logic that control when to drop the flag at the base. 
+    //private Transform flagOriginalPosition;
 
     // Vectors //
     Vector3 moveDirection;
@@ -115,8 +115,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         HPOrig = HP;
         updatePlayerUI();
         
-        flag = flagPole.GetComponent<Flag>(); //put all the components of the flagPole from the inspector to the flag object(has info who carry the flag)
-        flagOriginalPosition = flag.GetComponentInParent<Transform>(); // store original position of the flag
+        //flag = flagPole.GetComponent<Flag>(); //put all the components of the flagPole from the inspector to the flag object(has info who carry the flag)
+        //flagOriginalPosition = flag.GetComponentInParent<Transform>(); // store original position of the flag
     }
 
     //Player moves with platform they're on
@@ -272,8 +272,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (HP <= 0)
         {
             //death/lose screen
-            //GameManager.instance.FlagScript.DropFlag();
-            GameManager.instance.LoseGame();
+            GameManager.instance.Respawn();
+            //GameManager.instance.LoseGame();
         }
     }
 

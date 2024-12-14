@@ -115,6 +115,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3572869463769148871}
+  - component: {fileID: 1152705653310035204}
   - component: {fileID: 6356846819945205257}
   - component: {fileID: 2947291754557308978}
   - component: {fileID: 2848462196644270137}
@@ -144,6 +145,22 @@ Transform:
   - {fileID: 7880867196937835515}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1152705653310035204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591980134347763296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c35335584d01a42a4fd8417296440d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flagStartBase: {fileID: 0}
+  flagGoalBase: {fileID: 0}
+  captureDistance: 2
+  goalDistance: 0.1
 --- !u!114 &6356846819945205257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,7 +178,7 @@ MonoBehaviour:
   ignoreMask:
     serializedVersion: 2
     m_Bits: 8
-  HP: 10
+  HP: 1
   speed: 7
   sprintMod: 3
   jumpMax: 2
@@ -186,8 +203,6 @@ MonoBehaviour:
   audShootSound:
   - {fileID: 8300000, guid: cd9a92dedfe874f4b84017da6f195ccb, type: 3}
   audShootSoundVol: 0.5
-  captureFlagBasePosition: {fileID: 0}
-  flagPole: {fileID: 0}
 --- !u!143 &2947291754557308978
 CharacterController:
   m_ObjectHideFlags: 0
