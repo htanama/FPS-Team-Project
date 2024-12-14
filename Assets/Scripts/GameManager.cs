@@ -19,11 +19,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text flagCaptureText;
     [SerializeField] GameObject timerGoal;
 
-    private GameObject player;
-    private playerController playerScript;
-
-    public GameObject Player => player;     //Read-only getter
-    public playerController PlayerScript => playerScript;
+    [SerializeField] private GameObject player;
+    [SerializeField] private playerController playerScript;
 
     private Image playerHPBar;
     private GameObject playerDamageScreen;

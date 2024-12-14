@@ -33,7 +33,7 @@ public class Pickup : MonoBehaviour
             if (other.CompareTag("Player"))
             {
                 Debug.Log("pickup");
-                GameManager.instance.playerScript.getFlagStatus(flag);
+              
                 Destroy(gameObject);
             }
             Destroy(gameObject);
