@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
+    public AudioSource aud;
 
     [Header("Game Menus")]
     [SerializeField] GameObject menuActive;

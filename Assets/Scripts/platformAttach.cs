@@ -1,17 +1,23 @@
-// Code Author
+// Code Author: Erik Segura
 
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class platformAttach : MonoBehaviour
 {
-    public GameObject player;
+    [SerializeField]GameObject player;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.isTrigger)
+            return;
+
+        IAttach attachPlayer = other.GetComponent<IAttach>();
+
+        if (attachPlayer != null)
         {
             player.transform.parent = transform;
         }
@@ -19,9 +25,11 @@ public class platformAttach : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == player)
+        IAttach attachPlayer = other.GetComponent<IAttach>();
+
+        if (attachPlayer != null)
         {
-            player.transform.parent = null;
+            player.transform.parent = transform;
         }
     }
 }
