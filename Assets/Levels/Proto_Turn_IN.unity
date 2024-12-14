@@ -888,6 +888,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 964530724124751355, guid: 796a4e34e97be5a449fc320105925c4d, type: 3}
   m_PrefabInstance: {fileID: 546294153}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &247187445 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5272006041922035217, guid: c4f9201d8b93db24c8eb1f2527705572, type: 3}
+  m_PrefabInstance: {fileID: 501139027}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &259370284 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2127601472997054975, guid: 2f62c6c0b90e20e45b103f414402a489, type: 3}
@@ -2098,6 +2103,11 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 0
   m_Area: 0
+--- !u!4 &517757746 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1350878888024269769, guid: ae95715c37294ab47810d7730ebb2ffc, type: 3}
+  m_PrefabInstance: {fileID: 1494129778}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &522956942
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5165,6 +5175,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6356846819945205257, guid: e6c1720e613fc284bad15be53d06df9b, type: 3}
+      propertyPath: flagPole
+      value: 
+      objectReference: {fileID: 247187445}
+    - target: {fileID: 6356846819945205257, guid: e6c1720e613fc284bad15be53d06df9b, type: 3}
+      propertyPath: captureFlagBasePosition
+      value: 
+      objectReference: {fileID: 517757746}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5592,10 +5610,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 764929645436651374, guid: 3e54eccbe562f3a4393f3f72c290c281, type: 3}
-      propertyPath: rotationSpeed
-      value: 300
-      objectReference: {fileID: 0}
     - target: {fileID: 1387577721228991170, guid: 3e54eccbe562f3a4393f3f72c290c281, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5248566
