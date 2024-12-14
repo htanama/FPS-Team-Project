@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameObject player;
     public playerController playerScript;
+    public AudioSource audWeapon;
 
 
     [SerializeField] GameObject menuActive;

@@ -67,7 +67,13 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] float shootRate;
 
     [SerializeField] Transform shootPos;
-    
+
+    [Header("      Player Audio      ")]
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip[] audJump;
+    [SerializeField][Range (0, 1)] float audJumpVol; 
+
+
     [Header("      CAPTURE THE FLAG      ")]
     [SerializeField] private Transform captureFlagBasePosition; // Position of the base
     [SerializeField] private GameObject flagPole;  // this is the flagPole object. 
@@ -188,7 +194,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         {
             jumpCount++;
             horizontalVelocity.y = jumpSpeed;
-
+            aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
         }
     }
 
