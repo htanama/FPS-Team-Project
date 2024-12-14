@@ -131,7 +131,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDistance, Color.red);
 
         //if game is not paused
-        if(!GameManager.instance.isPaused)
+        if(!GameManager.instance.IsPaused)
         {
             //always checking for these
             movement();
@@ -246,7 +246,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Player UI //
     public void updatePlayerUI()
     {
-        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+        GameManager.instance.PlayerHPBar.fillAmount = (float)HP / HPOrig;
     }
 
 
@@ -272,9 +272,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     IEnumerator screenFlashRed()
     {   
-        GameManager.instance.playerDamageScreen.SetActive(true);
+        GameManager.instance.PlayerDamageScreen.SetActive(true);
         yield return new WaitForSeconds(0.1f);
-        GameManager.instance.playerDamageScreen.SetActive(false);
+        GameManager.instance.PlayerDamageScreen.SetActive(false);
     }
     
     IEnumerator Shoot()
@@ -362,7 +362,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
             {
                 #if UNITY_EDITOR
-                    Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
+                    Debug.Log($"Player Touch Based");
                 #endif
                 
                 if(flag != null && flag.IsCarriedBy(transform))
@@ -379,5 +379,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
     }
 
-    
+     public void getFlagStatus(flagStats flag)
+    {
+        //flagPole is the flag object on the scene.  
+        flagPole.GetComponent<MeshFilter>().sharedMesh = flag.model.GetComponent<MeshFilter>().sharedMesh;
+        flagPole.GetComponent<MeshRenderer>().sharedMaterial = flag.model.GetComponent<MeshRenderer>().sharedMaterial;
+        
+        flag.model.GetComponent<Transform>().position = flagPole.GetComponent<Transform>().position; // put the flag in the correct position of the player
+    }
 }
