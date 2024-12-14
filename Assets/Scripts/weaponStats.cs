@@ -20,6 +20,11 @@ public class weaponStats : ScriptableObject //Acts as data storage
     public int ammoCurrent;
     public int ammoMax;
 
+    [Header("Area Damage")]
+    public float areaOfEffectRadius;
+    public int splashDamage;
+
+    [Header("FX")]
     public ParticleSystem hitEffect;//Drag weapon hit effect here
     public AudioClip[] shootingSounds;  //As an array to choose different sounds
     public float weaponSoundVolume;

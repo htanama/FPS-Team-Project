@@ -8,12 +8,13 @@ public class generateRandomEnemy : MonoBehaviour
     [SerializeField] private GameObject whoToChase;
 
     [Header("Randomize Enemy Positions")]
-    [SerializeField] private int minX;
-    [SerializeField] private int maxX;
-    [SerializeField] private int minY;
-    [SerializeField] private int maxY;
-    [SerializeField] private int minZ;
-    [SerializeField] private int maxZ;
+    [SerializeField] private float xMin = -20f;
+    [SerializeField] private float xMax = 20f;
+    [SerializeField] private float yMin = -20f;
+    [SerializeField] private float yMax = 20f;
+    [SerializeField] private float zMin = -20f;
+    [SerializeField] private float zMax = 20f;
+
 
     [Header("How Many Enemy to Create")]
     [SerializeField][Range(1, 50)] private int maximumEnemyCount;
@@ -22,13 +23,7 @@ public class generateRandomEnemy : MonoBehaviour
     [SerializeField][Range(0.5f, 10.0f)] private float spawningRate;
 
     // Position ranges for randomization
-    [SerializeField] private float xMin = -20f;
-    [SerializeField] private float xMax = 20f;
-    [SerializeField] private float yMin = -20f;
-    [SerializeField] private float yMax = 20f;
-    [SerializeField] private float zMin = -20f;
-    [SerializeField] private float zMax = 20f;
-
+  
     public bool randomizeRespawnPosition = true;
     private int enemyCount;
 
