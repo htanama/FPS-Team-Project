@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     private GameObject player;
     private GameObject flag;
-    private playerController playerScript;
+    public playerController playerScript;
     private flagManager flagScript;
 
     public GameObject Player => player;     //Read-only getter

@@ -24,6 +24,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.TextCore.Text;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
@@ -67,6 +68,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
+    [SerializeField] GameObject gunModel;
+    [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
+    int gunListpos; 
 
     [SerializeField] Transform shootPos;
 
@@ -244,7 +248,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         //    isCrouchLerping = false;
         //}
-        //Note: The line above is here and not in the if statement b/e of the nature in which Unity checks for button presses,
+        //Note: The line above is here and not in the if statement b/c of the nature in which Unity checks for button presses,
         //      the line would only execute about half way or so
     }
 
@@ -270,6 +274,16 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             //GameManager.instance.FlagScript.DropFlag();
             GameManager.instance.LoseGame();
         }
+    }
+
+    public void GetGunStats(weaponStats gun)
+    {
+        gunList.Add(gun);
+        shootDamage = gun.damage;
+        shootDistance = gun.weaponRange;
+        shootRate = gun.shootRate;
+        gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
     }
 
     // somewhere around this section
