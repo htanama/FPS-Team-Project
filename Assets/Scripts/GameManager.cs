@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
     }
 
     float timeScaleOrig;    
-    //int goalCount, flagCount;
+    int goalCount, flagCount;
     //int numberFlags;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -123,25 +123,25 @@ public class GameManager : MonoBehaviour
         //}
     }
 
-    //public void UpdateFlagCount(int amount)
-    //{
-    //    flagCount += amount;
-    //    flagCaptureText.text = flagCount.ToString("F0");
+    public void UpdateFlagCount(int amount)
+    {
+        flagCount += amount;
+        flagCaptureText.text = flagCount.ToString("F0");
 
-    //    if (flagCount >= 3)
-    //    {
-    //        StatePause();
-    //        menuActive = menuWin;
-    //        menuActive.SetActive(true);
-    //    }
-    //    else if (flagCount <= -3)
-    //    {
-    //        StatePause();
-    //        menuActive = menuLose;
-    //        menuActive.SetActive(true);
-    //    }
+        if (flagCount >= 3)
+        {
+            StatePause();
+            menuActive = menuWin;
+            menuActive.SetActive(true);
+        }
+        else if (flagCount <= -3)
+        {
+            StatePause();
+            menuActive = menuLose;
+            menuActive.SetActive(true);
+        }
 
-    //}
+    }
 
     public void Respawn()
     {

@@ -142,7 +142,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         sprint(); //Outside of condition to prevent infinite sprint glitch
         crouch();
 
-        //ReachToBase();        
+        ReachToBase();        
     }
 
     // Player Movement //
@@ -354,56 +354,56 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     // Triggers //
     // Paint ball gun effect implementation
-//    private void OnTriggerEnter(Collider other)
-//    {
-//        // Check if the trigger is the sphere
-//        if (other.CompareTag("Damage-Ball"))
-//        {
-//#if UNITY_EDITOR
-//            //Debug.Log("Player hit by ball");
-//#endif
+    //    private void OnTriggerEnter(Collider other)
+    //    {
+    //        // Check if the trigger is the sphere
+    //        if (other.CompareTag("Damage-Ball"))
+    //        {
+    //#if UNITY_EDITOR
+    //            //Debug.Log("Player hit by ball");
+    //#endif
 
-//            // Get the direction vector from the ball (sphere) to the player
-//            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
+    //            // Get the direction vector from the ball (sphere) to the player
+    //            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
 
-//            // Define the push distance
-//            float pushDistance = 13.0f; // knock player backward.
+    //            // Define the push distance
+    //            float pushDistance = 13.0f; // knock player backward.
 
-//            // Use CharacterController to move the player
-//            controller.Move(pushDirection * pushDistance);
-//        }
-//        // is there an exit? ontriggerenter ontriggerexit?
-//    }
+    //            // Use CharacterController to move the player
+    //            controller.Move(pushDirection * pushDistance);
+    //        }
+    //        // is there an exit? ontriggerenter ontriggerexit?
+    //    }
 
     // Capture the Flag //
 
     // For capture the flag only
     // checking if player reach to base with the flag and score
-    //private void ReachToBase()
-    //{    
-     
-    //    if (captureFlagBasePosition != null)
-    //    {
-    //        // Check if Player has reached the base
-    //        if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
-    //        {
-    //            #if UNITY_EDITOR
-    //                Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
-    //            #endif
-                
-    //            if(flag != null && flag.IsCarriedBy(transform))
-    //            {
-    //                #if UNITY_EDITOR
-    //                    Debug.Log("Player has the flag and reached the base!");
-    //                #endif
-    //                GameManager.instance.UpdateFlagCount(+1);
-    //                flag.ResetFlag();
-    //            }           
-                
-                
-    //        }
-    //    }
-    //}
+    private void ReachToBase()
+    {
 
-    
+        if (captureFlagBasePosition != null)
+        {
+            // Check if Player has reached the base
+            if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
+            {
+                #if UNITY_EDITOR    
+                    Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
+                #endif
+
+                if (flag != null && flag.IsCarriedBy(transform))
+                {
+                    #if UNITY_EDITOR
+                        Debug.Log("Player has the flag and reached the base!");
+                    #endif
+                    GameManager.instance.UpdateFlagCount(+1);
+                    flag.ResetFlag();
+                }
+
+
+            }
+        }
+    }
+
+
 }
