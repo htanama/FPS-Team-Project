@@ -2176,16 +2176,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flag
       objectReference: {fileID: 0}
+    - target: {fileID: 7973271024903539574, guid: c4f9201d8b93db24c8eb1f2527705572, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4f9201d8b93db24c8eb1f2527705572, type: 3}
---- !u!1 &501139028 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5272006041922035217, guid: c4f9201d8b93db24c8eb1f2527705572, type: 3}
-  m_PrefabInstance: {fileID: 501139027}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &507488984
 GameObject:
   m_ObjectHideFlags: 0
@@ -2746,11 +2745,6 @@ MonoBehaviour:
   m_Bidirectional: 1
   m_AutoUpdatePosition: 0
   m_Area: 0
---- !u!4 &623898040 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1350878888024269769, guid: ae95715c37294ab47810d7730ebb2ffc, type: 3}
-  m_PrefabInstance: {fileID: 1494129778}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &656144283
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5302,14 +5296,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6356846819945205257, guid: e6c1720e613fc284bad15be53d06df9b, type: 3}
-      propertyPath: flagPole
-      value: 
-      objectReference: {fileID: 501139028}
-    - target: {fileID: 6356846819945205257, guid: e6c1720e613fc284bad15be53d06df9b, type: 3}
-      propertyPath: captureFlagBasePosition
-      value: 
-      objectReference: {fileID: 623898040}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

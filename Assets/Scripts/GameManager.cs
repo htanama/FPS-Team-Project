@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text goalCountText;
     [SerializeField] TMP_Text flagCaptureText;
     [SerializeField] GameObject timerGoal;
+    [SerializeField] Transform spawnPoint;
+    [SerializeField] int playerLives = 3;
 
     private GameObject player;
     private GameObject flag;
@@ -55,7 +57,7 @@ public class GameManager : MonoBehaviour
     }
 
     float timeScaleOrig;    
-    int goalCount, flagCount;
+    //int goalCount, flagCount;
     //int numberFlags;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -106,48 +108,68 @@ public class GameManager : MonoBehaviour
         menuActive = null;
     }
 
-    public void UpdateGame(int amount)
+    public void UpdateCaptures(int amount)
     {
-        goalCount += amount;
+        //goalCount += amount;
        
-        goalCountText.text = goalCount.ToString("F0");
+        flagCaptureText.text = amount.ToString("F0");
         
 
-        if (goalCount <= 0)// character will respawn when HP hits zero
-        {
-            StatePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
-        }
+        //if (goalCount <= 0)// character will respawn when HP hits zero
+        //{
+        //    StatePause();
+        //    menuActive = menuWin;
+        //    menuActive.SetActive(true);
+        //}
     }
 
-    public void UpdateFlagCount(int amount)
-    {
-        flagCount += amount;
-        flagCaptureText.text = flagCount.ToString("F0");
+    //public void UpdateFlagCount(int amount)
+    //{
+    //    flagCount += amount;
+    //    flagCaptureText.text = flagCount.ToString("F0");
 
-        if (flagCount >= 3)
-        {
-            StatePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
-        }
-        else if (flagCount <= -3)
-        {
-            StatePause();
-            menuActive = menuLose;
-            menuActive.SetActive(true);
-        }
+    //    if (flagCount >= 3)
+    //    {
+    //        StatePause();
+    //        menuActive = menuWin;
+    //        menuActive.SetActive(true);
+    //    }
+    //    else if (flagCount <= -3)
+    //    {
+    //        StatePause();
+    //        menuActive = menuLose;
+    //        menuActive.SetActive(true);
+    //    }
 
-    }
+    //}
 
     public void Respawn()
     {
-        //drop flag
+        if (playerLives > 0)
+        {
+            //drop flag
+            if (FlagScript.IsHoldingFlag)
+            {
+                FlagScript.DropFlag();
+            }
 
-        //move player to spawn point (don't destroy)
+            //move player to spawn point (don't destroy)
+            player.transform.position = spawnPoint.position;
 
-        //change life counter
+            //change life counter
+            playerLives--;
+
+            Debug.Log($"Player Respawned. Lives remaining: {playerLives}");
+
+            //Update lives shown in the UI
+            UpdateLives();
+        }
+
+    }
+
+    private void UpdateLives()
+    {
+
     }
 
     public void LoseGame()

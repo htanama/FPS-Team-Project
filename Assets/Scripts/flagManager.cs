@@ -21,6 +21,8 @@ public class flagManager : MonoBehaviour
     private bool isHoldingFlag = false;
     private Vector3 flagOffset = new Vector3(0, 2.9f, 0); //Adjust flag to not clip the ground
 
+    int captureCount = 0;   //To keep track of score
+
     //Getters and setters
     public GameObject Flag
     {
@@ -51,21 +53,28 @@ public class flagManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!isHoldingFlag)
+        if (!isHoldingFlag)
         {
-            if(Vector3.Distance(playerTransform.position, flagGoalBase.transform.position) < goalDistance)
+            if (Vector3.Distance(playerTransform.position, flagGoalBase.transform.position) < goalDistance)
             {
 
                 //FlagCaptured();
             }
         }
-        else
+        else if (Vector3.Distance(playerTransform.position, flagStartBase.transform.position) < captureDistance)
         {
-            if(Vector3.Distance(playerTransform.position, flagStartBase.transform.position) < captureDistance)
-            {
-                PickupFlag();
-            }
+            PickupFlag();
         }
+    }
+
+    void FlagCaptured()
+    {
+        captureCount++;
+        GameManager.instance.UpdateCaptures(captureCount);  //Update the number of captures on the UI
+
+        Debug.Log($"Flag captured! Total captures: {captureCount}");
+
+        ReturnFlag();
     }
 
     void PickupFlag()
@@ -96,7 +105,7 @@ public class flagManager : MonoBehaviour
         //return the flag to base
         isHoldingFlag = false;
         flag.transform.SetParent(null);
-        flag.transform.position = flagStartBase.transform.position + flagOffset; //Respawn flag back at base
+        flag.transform.position = flagStartBase.transform.position + flagOffset; //Respawn/Move flag back at base
         flag.GetComponent<Collider>().enabled = true; //Enable flag collider
 
         Debug.Log("Flag returned to base");

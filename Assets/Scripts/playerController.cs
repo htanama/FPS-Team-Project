@@ -149,10 +149,10 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         }
 
-        sprint(); //lecture puts outside of if
+        sprint(); //Outside of condition to prevent infinite sprint glitch
         crouch();
 
-        ReachToBase();        
+        //ReachToBase();        
     }
 
     // Player Movement //
@@ -272,8 +272,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (HP <= 0)
         {
             //death/lose screen
-            GameManager.instance.FlagScript.DropFlag();
-            //GameManager.instance.LoseGame();
+            //GameManager.instance.FlagScript.DropFlag();
+            GameManager.instance.LoseGame();
         }
     }
 
@@ -366,31 +366,31 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     // For capture the flag only
     // checking if player reach to base with the flag and score
-    private void ReachToBase()
-    {    
+    //private void ReachToBase()
+    //{    
      
-        if (captureFlagBasePosition != null)
-        {
-            // Check if Player has reached the base
-            if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
-            {
-                #if UNITY_EDITOR
-                    Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
-                #endif
+    //    if (captureFlagBasePosition != null)
+    //    {
+    //        // Check if Player has reached the base
+    //        if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
+    //        {
+    //            #if UNITY_EDITOR
+    //                Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
+    //            #endif
                 
-                if(flag != null && flag.IsCarriedBy(transform))
-                {
-                    #if UNITY_EDITOR
-                        Debug.Log("Player has the flag and reached the base!");
-                    #endif
-                    GameManager.instance.UpdateFlagCount(+1);
-                    flag.ResetFlag();
-                }           
+    //            if(flag != null && flag.IsCarriedBy(transform))
+    //            {
+    //                #if UNITY_EDITOR
+    //                    Debug.Log("Player has the flag and reached the base!");
+    //                #endif
+    //                GameManager.instance.UpdateFlagCount(+1);
+    //                flag.ResetFlag();
+    //            }           
                 
                 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     
 }

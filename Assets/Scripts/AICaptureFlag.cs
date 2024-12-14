@@ -108,7 +108,7 @@ public class AICaptureFlag : MonoBehaviour
                 {
                     flag.ResetFlag();
 
-                    GameManager.instance.UpdateFlagCount(-1); // reduce flag counts for enemy
+                    //GameManager.instance.UpdateFlagCount(-1); // reduce flag counts for enemy
 
                     //Flag successfully reset after delivery
                     currentState = AIState.MovingToFlag;
