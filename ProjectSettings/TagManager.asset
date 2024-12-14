@@ -10,6 +10,9 @@ TagManager:
   - Enemy
   - Flag
   - Damage
+  - RedBase
+  - trap_door
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX
@@ -20,7 +23,7 @@ TagManager:
   - Enemy
   - Player Bullet
   - Enemy Bullet
-  - 
+  - MovingPlatform
   - 
   - 
   - 

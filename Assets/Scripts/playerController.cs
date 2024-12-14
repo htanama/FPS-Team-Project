@@ -18,70 +18,105 @@
 
         Edited: Erik Segura
             - Added HP Bar functionality
+            - Added audio to movement, gun firing, jump
 */
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.TextCore.Text;
 using UnityEngine;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
-public class playerController : MonoBehaviour, IDamage
+public class playerController : MonoBehaviour, IDamage, IOpen
 {
 
     [Header("      COMPONENTS      ")]
     [SerializeField] Renderer model;
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
+    
+    [Header("      STATS      ")]
+    [SerializeField][Range(1, 10)] public int HP; /// turn into Get/Setter
+
+    [SerializeField][Range(1,  10)] int speed;      //Range adds a slider
+    [SerializeField][Range(2,  5)]  int sprintMod;
+    [SerializeField][Range(1,  5)]  int jumpMax;
+    [SerializeField][Range(5,  30)] int jumpSpeed;
+    [SerializeField][Range(10, 60)] int gravity;
+
+    // Crouching //
+    //[SerializeField][Range(1, 20)] int uncrouchSpeed; //Fixing later
+    [SerializeField][Range(0.1f, 1.0f)] float crouchWalkSpeed;
+    [SerializeField][Range(0.01f, 1.0f)] float crouchHeight;
+
+    // Crouching variables
+    private int currentSpeed;     //To avoid bugs by modifying speed directly
+    private float originalHeight; //When releasing crouch
+    //private float targetHeight;
+    private Vector3 originalCenter;
+
+    //private float originalScaleY; //For use when crouching
+    //private Vector3 originalScale; //Used when releasing crouch
+    //private Vector3 targetScale; //For use when releasing crouch
 
     [Header("      WEAPONS      ")]
-    //[SerializeField] weaponType; weaponEquipped; ammoCount;
+    // notes - weaponType; weaponEquipped; ammoCount; bool isReloading; isEquipping;
+    // jammie will add gun list from lecture
+    // jammie will add gun model from lecture
+    [SerializeField] GameObject bullet;
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
+    [SerializeField] GameObject gunModel;
+    [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
+    int gunListpos; 
 
-    [Header("      STATS      ")]
-    [SerializeField][Range(1, 10)] int speed;      //Range adds a slider
-    [SerializeField][Range(2, 5)] int sprintMod;
-    [SerializeField][Range(1, 5)] int jumpMax;
-    [SerializeField][Range(5, 30)] int jumpSpeed;
-    [SerializeField][Range(10, 60)] int gravity;
-    [SerializeField][Range(1, 10)] public int HP; // turn into Get/Setter
+    [SerializeField] Transform shootPos;
 
-    [SerializeField][Range(1, 20)] int uncrouchSpeed;
-    [SerializeField][Range(0.1f, 1.0f)] float crouchWalkSpeed;
-    [SerializeField][Range(0.1f, 1.0f)] float crouchHeight;
+    [Header("      Player Audio      ")]
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip[] audJump;
+    [SerializeField] [Range (0, 1)] float audJumpVol;
+    [SerializeField] AudioClip[] audStep;
+    [SerializeField] [Range(0, 1)] float audStepVol;
+    [SerializeField] AudioClip[] audDamage;
+    [SerializeField] [Range(0, 10)] float audDamageVol;
+    [SerializeField] AudioClip[] audShootSound;
+    [SerializeField] [Range(0, 1)] float audShootSoundVol;
 
+    // Vectors //
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
+
+    // Tracking //
     Color colorOrig;
 
     int jumpCount;
     int HPOrig;
-
-    bool isSprinting;
-    bool isScaling;                 //To allow to modify crouch speed
+    // jammie add list pos
 
     bool isShooting;
+    bool isSprinting;
+    bool isPlayingStep;
+    bool isCrouching;
+    //bool isCrouchLerping;                 //To allow to modify crouch speed
+
     RaycastHit contact;
-    //bool isReloading; isEquipping;
-
-    private int currentSpeed;     //To avoid bugs by modifying speed directly
-
-    private float originalScaleY; //For use when crouching
-    private Vector3 originalScale; //Used when releasing crouch
-    private Vector3 targetScale; //For use when releasing crouch
+    
 
     // Start is called before the first frame update
     void Start()
     {
         currentSpeed = speed;
-        originalScaleY = controller.transform.localScale.y;
-        originalScale = controller.transform.localScale;
+        originalHeight = controller.height;
+        originalCenter = controller.center;
+        //originalScaleY = controller.transform.localScale.y;
+        //originalScale = controller.transform.localScale;
+
         HPOrig = HP;
         updatePlayerUI();
-
     }
-
-
 
     // Update is called once per frame
     void Update()
@@ -89,28 +124,39 @@ public class playerController : MonoBehaviour, IDamage
         //draw ray
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDistance, Color.red);
 
-        //always checking for these
-        movement();
-        sprint();
-        crouch();
+        //if game is not paused
+        if(!GameManager.instance.IsPaused)
+        {
+            //always checking for these
+            movement();
+            // jammie add gun select method
 
-        UpdateCrosshair();
+        }
+
+        sprint(); //Outside of condition to prevent infinite sprint glitch
+        crouch();      
     }
 
+    // Player Movement
     void movement()
     {
         //Resets number of jumps once player is on the ground
         if (controller.isGrounded)
         {
-            jumpCount = 0;
+            if (moveDirection.magnitude > 0.3f && !isPlayingStep) // check for step movement.
+            {
+                StartCoroutine(playStep());
+            }
 
+            jumpCount = 0;
+            // falling/ledge
             horizontalVelocity = Vector3.zero;
         }
 
-        moveDirection = transform.right * Input.GetAxis("Horizontal") +
-                  transform.forward * Input.GetAxis("Vertical");    //Normalized to handle diagonal movement
-        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
-
+        //tie movement to camera 
+        moveDirection = (transform.right * Input.GetAxis("Horizontal")) +
+                        (transform.forward * Input.GetAxis("Vertical"));    //Normalized to handle diagonal movement
+        controller.Move(moveDirection * speed * Time.deltaTime);
 
         jump();
 
@@ -119,7 +165,13 @@ public class playerController : MonoBehaviour, IDamage
         //start pulling down immediately after the jump
         horizontalVelocity.y -= gravity * Time.deltaTime;
 
-        // Weapons Add //
+        //physics fix, under object
+        if ((controller.collisionFlags & CollisionFlags.Above) != 0)
+        {
+            horizontalVelocity.y = Vector3.zero.y; // horizontal velocity is lecture player velocity?
+        }
+
+        
         if (Input.GetButton("Fire1") && !isShooting)
         {
             StartCoroutine(Shoot());
@@ -132,121 +184,152 @@ public class playerController : MonoBehaviour, IDamage
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
             jumpCount++;
-
             horizontalVelocity.y = jumpSpeed;
-
+            aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
         }
     }
 
     void sprint()
     {
-        if (Input.GetButtonDown("Sprint"))
+        if (Input.GetButtonDown("Sprint") && !isCrouching)  //Won't sprint if crouching
         {
-
             speed *= sprintMod;
-
-            currentSpeed = speed * sprintMod;
-
+            currentSpeed = speed * sprintMod; // *nice catches here for powerup
             isSprinting = true;
         }
-        else if (Input.GetButtonUp("Sprint"))
+        else if (Input.GetButtonUp("Sprint"))               //Potential bug with crouching
         {
-
             speed /= sprintMod;
-
             currentSpeed = speed;
-
             isSprinting = false;
         }
     }
 
-
-    private void OnTriggerEnter(Collider other)
-    {
-        // Check if the trigger is the sphere
-        if (other.CompareTag("Damage-Ball"))
-        {
-#if UNITY_EDITOR
-            Debug.Log("Player hit by ball");
-#endif
-
-
-            // Get the direction vector from the ball (sphere) to the player
-            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
-
-            // Define the push distance
-            float pushDistance = 11.0f;
-
-            // Use CharacterController to move the player
-            controller.Move(pushDirection * pushDistance);
-        }
-    }
-
-
-    //IEnumerator shoot()     //needs a yield
     void crouch()
     {
         if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
         {
-            isScaling = true;
+            isCrouching = true;
             currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
 
-            targetScale = new Vector3(transform.localScale.x, originalScaleY * crouchHeight, transform.localScale.z);  //Change scale to crouch scale
-            // talk to 
+            //Change height when crouching
+            controller.height = originalHeight * crouchHeight;
+            controller.center = new Vector3(0, controller.height / 2, 0);
+
+            //isCrouchLerping = true;
         }
         else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
         {
-            isScaling = true;
+            isCrouching = false;
             currentSpeed = speed; //Restore speed
 
-            targetScale = new Vector3(transform.localScale.x, originalScaleY, transform.localScale.z); //Restore original scale
+            //Restore height when releasing crouch button
+            controller.height = originalHeight;
+            controller.center = originalCenter;
 
+            //isCrouchLerping = true;
         }
-        //Bool check to prevent incorrect scaling
-        if (isScaling)
-            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
-        //Note: The line above is here and not in the if statement b/e of the nature in which Unity checks for button presses,
-        //      the line would only execute about half way or so
+        //Adjust speed at which player crouches/uncrouches
+        //if (isCrouchLerping)
+        //{
+        //    controller.height = Mathf.Lerp(controller.height, targetHeight, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
 
+        //    isCrouchLerping = false;
+        //}
+        //Note: The line above is here and not in the if statement b/c of the nature in which Unity checks for button presses,
+        //      the line would only execute about half way or so
     }
 
-    // Weapons //
+    // Player UI //
+    public void updatePlayerUI()
+    {
+        GameManager.instance.PlayerHPBar.fillAmount = (float)HP / HPOrig;
+        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
+        GameManager.instance.UpdateLives(); //Show lives on the UI
+    }
+
+
+    // Player Damage and Weapons //   
     public void takeDamage(int amount)
     {
         HP -= amount;
-        updatePlayerUI();        
+
+        updatePlayerUI();
+        StartCoroutine(screenFlashRed());
+        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
 
         if (HP <= 0)
         {
-            //death/lose screen
-            GameManager.instance.LoseGame();
+            //death/lose screen in Respawn() method
+            GameManager.instance.Respawn();
         }
     }
 
-    public void updatePlayerUI()
+    public void GetGunStats(weaponStats gun)
     {
-        GameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+        gunList.Add(gun);
+        shootDamage = gun.damage;
+        shootDistance = gun.weaponRange;
+        shootRate = gun.shootRate;
+        gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
+    // somewhere around this section
+    // jammie add get gun stats
+    // jammie add select gun scroll wheel (want to do a radial menu eventually)
+    // jammie add change gun
+
+    IEnumerator screenFlashRed()
+    {   
+        GameManager.instance.PlayerDamageScreen.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        GameManager.instance.PlayerDamageScreen.SetActive(false);
     }
     
     IEnumerator Shoot()
     {
         //turn on
         isShooting = true;
-        
-        //RaycastHit hit;
-        //shoot code
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
-        {         
+        aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
 
-            Debug.Log(contact.collider.name); //being overridden
-
+        //shoot code        
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
+        {
+            Debug.Log(contact.collider.name);                   
+         
             IDamage dmg = contact.collider.GetComponent<IDamage>();
 
             if (dmg != null)
             {
-               dmg.takeDamage(shootDamage);
+                dmg.takeDamage(shootDamage);
             }
+            
+            // jammie add gunlist if statement
+
         }
+
+        //**************To be added when pickup is implemented******************
+
+        //if (gunList[gunListPos].explosionRadius > 0)      //Check if gun has AoE damage
+        //{
+        //    //Find all colliders in the area of effect (in weaopon stats)
+        //    Collider[] affectedObjects = Physics.OverlapSphere(hit.point, gunList[gunListPos].explosionRadius);
+              //Loop through each object in the radius
+        //    foreach (Collider obj in affectedObjects)
+        //    {
+                  //Gets IDamage component in case child is hit but not parent
+        //        IDamage dmg = obj.GetComponentInParent<IDamage>();
+                  //Checks for IDamage
+        //        if (dmg != null)
+        //        {
+                      //Applies splash damage
+        //            dmg.takeDamage(gunList[gunListPos].splashDamage);
+        //        }
+        //    }
+        //}
+
+        //**************To be added when pickup is implemented******************
 
         yield return new WaitForSeconds(shootRate);
         
@@ -254,26 +337,44 @@ public class playerController : MonoBehaviour, IDamage
         isShooting = false;
     }
 
+    // code for walking audio
 
-    public void UpdateCrosshair()
+    IEnumerator playStep()
     {
-        Crosshair crosshair = FindObjectOfType<Crosshair>();
-        int crossDefault = crosshair.GetDefaultValue();
+        isPlayingStep = true;
+        aud.PlayOneShot(audStep[Random.Range(0, audStep.Length)], audStepVol);
 
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance))
+        if (!isSprinting)
         {
-            crosshair.SetDefaultValue(crosshair.GetTargetValue());
+            yield return new WaitForSeconds(0.5f);
         }
         else
         {
-            crosshair.SetDefaultValue(crossDefault);
+            yield return new WaitForSeconds(0.3f);
         }
+        isPlayingStep = false;
     }
 
-    IEnumerator flashRed()
-    {
-        model.material.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
-        model.material.color = colorOrig;
-    }
+    // Triggers //
+    // Paint ball gun effect implementation
+    //    private void OnTriggerEnter(Collider other)
+    //    {
+    //        // Check if the trigger is the sphere
+    //        if (other.CompareTag("Damage-Ball"))
+    //        {
+    //#if UNITY_EDITOR
+    //            //Debug.Log("Player hit by ball");
+    //#endif
+
+    //            // Get the direction vector from the ball (sphere) to the player
+    //            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
+
+    //            // Define the push distance
+    //            float pushDistance = 13.0f; // knock player backward.
+
+    //            // Use CharacterController to move the player
+    //            controller.Move(pushDirection * pushDistance);
+    //        }
+    //        // is there an exit? ontriggerenter ontriggerexit?
+    //    }
 }

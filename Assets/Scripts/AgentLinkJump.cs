@@ -48,7 +48,7 @@ public class AgentLinkJump : MonoBehaviour
             endPos = hit.point + Vector3.up * agent.baseOffset;
     
             #if UNITY_EDITOR
-               Debug.Log($"Landing position adjusted to: {endPos}");
+               //Debug.Log($"Landing position adjusted to: {endPos}");
             #endif
 
         }
