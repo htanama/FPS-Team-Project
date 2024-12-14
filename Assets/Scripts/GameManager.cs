@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
         flag = GameObject.FindWithTag("Flag");
-        flagScript = flag.GetComponent<flagManager>();
+        flagScript = player.GetComponent<flagManager>();    //Attached flag manager to player
         //goalCount = playerScript.GetHP();
     }
 
@@ -154,7 +154,9 @@ public class GameManager : MonoBehaviour
             }
 
             //move player to spawn point (don't destroy)
-            player.transform.position = spawnPoint.position;
+            CharacterController controller = player.GetComponent<CharacterController>();
+            //Moves the player the distance needed to be back at spawn
+            controller.Move(spawnPoint.position - player.transform.position);
 
             //change life counter
             playerLives--;
@@ -163,6 +165,10 @@ public class GameManager : MonoBehaviour
 
             //Update lives shown in the UI
             UpdateLives();
+        }
+        else
+        {
+            LoseGame();     //Dead: Out of Lives
         }
 
     }

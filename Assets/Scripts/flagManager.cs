@@ -11,12 +11,12 @@ using UnityEngine;
 public class flagManager : MonoBehaviour
 {
     [Header("     Flag Options     ")]
-    [SerializeField] private GameObject flag;
-    [SerializeField] private GameObject flagStartBase;
-    [SerializeField] private GameObject flagGoalBase;
-    [SerializeField][Range(0.1f, 4.0f)] float captureDistance;
+    [SerializeField] private Transform flagStartBase;
+    [SerializeField] private Transform flagGoalBase;
+    [SerializeField][Range(2.0f, 5.0f)] float captureDistance;
     [SerializeField][Range(0.1f, 4.0f)] float goalDistance;     //How close to get to the goal
 
+    private GameObject flag;
     private Transform playerTransform;
     private bool isHoldingFlag = false;
     private Vector3 flagOffset = new Vector3(0, 2.9f, 0); //Adjust flag to not clip the ground
@@ -30,7 +30,7 @@ public class flagManager : MonoBehaviour
         set => flag = value;
     }
 
-    public GameObject FlagStartBase
+    public Transform FlagStartBase
     { 
         get => flagStartBase;
         set => flagStartBase = value;
@@ -46,6 +46,7 @@ public class flagManager : MonoBehaviour
     void Start()
     {
         playerTransform = GameManager.instance.Player.transform;
+        flag = GameManager.instance.Flag;
         //Flag setup
         ResetFlag();
     }
@@ -53,7 +54,7 @@ public class flagManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isHoldingFlag)
+        if (isHoldingFlag)
         {
             if (Vector3.Distance(playerTransform.position, flagGoalBase.transform.position) < goalDistance)
             {
@@ -61,9 +62,11 @@ public class flagManager : MonoBehaviour
                 //FlagCaptured();
             }
         }
-        else if (Vector3.Distance(playerTransform.position, flagStartBase.transform.position) < captureDistance)
+        else
         {
-            PickupFlag();
+            //If not holding flag check if close enough to pick it up
+            if (Vector3.Distance(playerTransform.position, flag.transform.position) < captureDistance)
+                PickupFlag();
         }
     }
 
