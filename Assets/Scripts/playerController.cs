@@ -85,13 +85,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] AudioClip[] audShootSound;
     [SerializeField] [Range(0, 1)] float audShootSoundVol;
 
-
-    //[Header("      CAPTURE THE FLAG      ")]
-    //[SerializeField] private Transform captureFlagBasePosition; // Position of the base
-    //[SerializeField] private GameObject flagPole;  // this is the flagPole object. 
-    //private Flag flag; // flag logic that control when to drop the flag at the base. 
-    //private Transform flagOriginalPosition;
-
     // Vectors //
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
@@ -123,9 +116,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         HPOrig = HP;
         updatePlayerUI();
-        
-        //flag = flagPole.GetComponent<Flag>(); //put all the components of the flagPole from the inspector to the flag object(has info who carry the flag)
-        //flagOriginalPosition = flag.GetComponentInParent<Transform>(); // store original position of the flag
     }
 
     // Update is called once per frame
@@ -144,12 +134,10 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
 
         sprint(); //Outside of condition to prevent infinite sprint glitch
-        crouch();
-
-        //ReachToBase();        
+        crouch();      
     }
 
-    // Player Movement //
+    // Player Movement
     void movement()
     {
         //Resets number of jumps once player is on the ground
@@ -165,7 +153,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             horizontalVelocity = Vector3.zero;
         }
 
-        // tie movement to camera 
+        //tie movement to camera 
         moveDirection = (transform.right * Input.GetAxis("Horizontal")) +
                         (transform.forward * Input.GetAxis("Vertical"));    //Normalized to handle diagonal movement
         controller.Move(moveDirection * speed * Time.deltaTime);
@@ -183,7 +171,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             horizontalVelocity.y = Vector3.zero.y; // horizontal velocity is lecture player velocity?
         }
 
-        // Shoot Add //
+        
         if (Input.GetButton("Fire1") && !isShooting)
         {
             StartCoroutine(Shoot());
@@ -256,6 +244,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     public void updatePlayerUI()
     {
         GameManager.instance.PlayerHPBar.fillAmount = (float)HP / HPOrig;
+        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
+        GameManager.instance.UpdateLives(); //Show lives on the UI
     }
 
 
@@ -270,9 +260,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         if (HP <= 0)
         {
-            //death/lose screen
+            //death/lose screen in Respawn() method
             GameManager.instance.Respawn();
-            //GameManager.instance.LoseGame();
         }
     }
 
@@ -388,36 +377,4 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     //        }
     //        // is there an exit? ontriggerenter ontriggerexit?
     //    }
-
-    // Capture the Flag //
-
-    // For capture the flag only
-    // checking if player reach to base with the flag and score
-//    private void ReachToBase()
-//    {
-
-//        if (captureFlagBasePosition != null)
-//        {
-//            // Check if Player has reached the base
-//            if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
-//            {
-//                #if UNITY_EDITOR    
-//                    Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
-//                #endif
-
-//                if (flag != null && flag.IsCarriedBy(transform))
-//                {
-//                    #if UNITY_EDITOR
-//                        Debug.Log("Player has the flag and reached the base!");
-//                    #endif
-//                    GameManager.instance.UpdateFlagCount(+1);
-//                    flag.ResetFlag();
-//                }
-
-
-//            }
-//        }
-//    }
-
-
 }

@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuWin, menuLose;
 
     [Header("Goal Settings")]
-    [SerializeField] TMP_Text goalCountText;
+    [SerializeField] TMP_Text playerLivesText;
     [SerializeField] TMP_Text flagCaptureText;
     [SerializeField] GameObject timerGoal;
     [SerializeField] Transform spawnPoint;
@@ -56,9 +56,8 @@ public class GameManager : MonoBehaviour
         set => isPaused = value;
     }
 
-    float timeScaleOrig;    
-    int goalCount, flagCount;
-    //int numberFlags;
+    float timeScaleOrig;    //For pausing/resume
+    //int goalCount
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -108,43 +107,22 @@ public class GameManager : MonoBehaviour
         menuActive = null;
     }
 
-    public void UpdateCaptures(int amount)
+    public void UpdateCaptures(int amount)      //Game goal
     {
-        //goalCount += amount;
-       
+       //show flag captures on UI
         flagCaptureText.text = amount.ToString("F0");
         
-
-        //if (goalCount <= 0)// character will respawn when HP hits zero
-        //{
-        //    StatePause();
-        //    menuActive = menuWin;
-        //    menuActive.SetActive(true);
-        //}
-    }
-
-    public void UpdateFlagCount(int amount)
-    {
-        flagCount += amount;
-        flagCaptureText.text = flagCount.ToString("F0");
-
-        if (flagCount >= 3)
+        //win condition
+        if(FlagScript.CaptureCount >= 3)
         {
-            StatePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
-        }
-        else if (flagCount <= -3)
-        {
-            StatePause();
-            menuActive = menuLose;
-            menuActive.SetActive(true);
+            WinGame();
         }
 
     }
 
     public void Respawn()
     {
+        //respawn while player has lives
         if (playerLives > 0)
         {
             //drop flag
@@ -173,12 +151,19 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void UpdateLives()
+    public void UpdateLives()
     {
-
+        //code to update lives on the UI
+        playerLivesText.text = playerLives.ToString("F0");
     }
 
-    public void LoseGame()
+    public void WinGame()       //Win menu
+    {
+        StatePause();
+        menuActive = menuWin;
+        menuActive.SetActive(true);
+    }
+    public void LoseGame()      //Lose menu
     {
         StatePause();
         menuActive = menuLose;
@@ -186,18 +171,11 @@ public class GameManager : MonoBehaviour
     }
     
     // Times is up-- you Lose
-    void TimeUp()
-    {
-        // Handle what happens when the timer reaches zero
-        StatePause();
-        menuActive = menuLose; // Show the lose menu when time is up
-        menuActive.SetActive(true);
-    }
-
-    void HowManyFlagsCapture(int amount)
-    {
-        //numberFlags += amount;
-    }
-
-
+    //void TimeUp()
+    //{
+    //    // Handle what happens when the timer reaches zero
+    //    StatePause();
+    //    menuActive = menuLose; // Show the lose menu when time is up
+    //    menuActive.SetActive(true);
+    //}
 }
