@@ -27,8 +27,8 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     [SerializeField] int roamTimer; // how long to wait before move again
 
     [Header("      ANIMATION      ")]
-    //[SerializeField] Animator animator;
-    //[SerializeField] int animSpeedTransition;
+    [SerializeField] Animator animator;
+    [SerializeField] int animSpeedTransition;
 
     [Header("      DMG STATS      ")]
     Color colorOrig;
@@ -62,8 +62,8 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     {
         // animation
         float agentSpeed = agent.velocity.normalized.magnitude;
-        //float animationSpeed = animator.GetFloat("Speed");
-       // animator.SetFloat("Speed", Mathf.MoveTowards(animationSpeed, agentSpeed, Time.deltaTime * animSpeedTransition));
+        float animationSpeed = animator.GetFloat("Speed");
+        animator.SetFloat("Speed", Mathf.MoveTowards(animationSpeed, agentSpeed, Time.deltaTime * animSpeedTransition));
 
         //if player in range but can't see
         if (playerInRange && !canSeePlayer())
