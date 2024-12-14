@@ -296,7 +296,29 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             
             // jammie add gunlist if statement
 
-        }        
+        }
+
+        //**************To be added when pickup is implemented******************
+
+        //if (gunList[gunListPos].explosionRadius > 0)      //Check if gun has AoE damage
+        //{
+        //    //Find all colliders in the area of effect (in weaopon stats)
+        //    Collider[] affectedObjects = Physics.OverlapSphere(hit.point, gunList[gunListPos].explosionRadius);
+              //Loop through each object in the radius
+        //    foreach (Collider obj in affectedObjects)
+        //    {
+                  //Gets IDamage component in case child is hit but not parent
+        //        IDamage dmg = obj.GetComponentInParent<IDamage>();
+                  //Checks for IDamage
+        //        if (dmg != null)
+        //        {
+                      //Applies splash damage
+        //            dmg.takeDamage(gunList[gunListPos].splashDamage);
+        //        }
+        //    }
+        //}
+
+        //**************To be added when pickup is implemented******************
 
         yield return new WaitForSeconds(shootRate);
         
