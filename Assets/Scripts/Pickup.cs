@@ -9,6 +9,8 @@ public class Pickup : MonoBehaviour
     //power?
     //inventory? (hold more than one flag?)
     
+    [SerializeField] flagStats flag;
+
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +19,9 @@ public class Pickup : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
-    {        
+    {
+        if (other.isTrigger) return; // ignore trigger colliding with other triggers. 
+        
 
         if (other.CompareTag("Player"))
         {
@@ -29,7 +33,7 @@ public class Pickup : MonoBehaviour
             if (other.CompareTag("Player"))
             {
                 Debug.Log("pickup");
-                
+                GameManager.instance.playerScript.getFlagStatus(flag);
                 Destroy(gameObject);
             }
             Destroy(gameObject);
