@@ -104,6 +104,18 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     RaycastHit contact;
     
+    //getters and setters (used to calculate stun enemy speed)
+    public int Speed
+    {
+        get => speed;
+        set => speed = value;
+    }
+
+    public int SprintMod
+    {
+        get => sprintMod;
+        set => sprintMod = value;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -194,7 +206,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (Input.GetButtonDown("Sprint") && !isCrouching)  //Won't sprint if crouching
         {
             speed *= sprintMod;
-            currentSpeed = speed * sprintMod; // *nice catches here for powerup
+            currentSpeed = speed; // *nice catches here for powerup
             isSprinting = true;
         }
         else if (Input.GetButtonUp("Sprint"))               //Potential bug with crouching
