@@ -272,10 +272,10 @@ MonoBehaviour:
   gravity: 30
   crouchWalkSpeed: 0.5
   crouchHeight: 0.5
-  bullet: {fileID: 4898961823348458642, guid: 918a2814a70cef8418ef7bf26a4bdaa7, type: 3}
-  shootDamage: 1
-  shootDistance: 20
-  shootRate: 0.5
+  bullet: {fileID: 0}
+  shootDamage: 0
+  shootDistance: 0
+  shootRate: 0
   gunModel: {fileID: 6561337698220942167}
   gunList: []
   shootPos: {fileID: 0}

@@ -64,15 +64,14 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // notes - weaponType; weaponEquipped; ammoCount; bool isReloading; isEquipping;
     // jammie will add gun list from lecture
     // jammie will add gun model from lecture
-    [SerializeField] GameObject bullet;
+    // [SerializeField] GameObject bullet;
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
     [SerializeField] GameObject gunModel;
     [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
     int gunListpos; 
-
-    [SerializeField] Transform shootPos;
+    
 
     [Header("      Player Audio      ")]
     [SerializeField] AudioSource aud;
@@ -82,8 +81,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] [Range(0, 1)] float audStepVol;
     [SerializeField] AudioClip[] audDamage;
     [SerializeField] [Range(0, 10)] float audDamageVol;
-    [SerializeField] AudioClip[] audShootSound;
-    [SerializeField] [Range(0, 1)] float audShootSoundVol;
+    // we are getting the gun sound inside the weapon stats
+    //[SerializeField] AudioClip[] audShootSound;
+    //[SerializeField] [Range(0, 1)] float audShootSoundVol;
 
     // Vectors //
     Vector3 moveDirection;
@@ -94,7 +94,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     int jumpCount;
     int HPOrig;
-    // jammie add list pos
+    int gunListPos;    
 
     bool isShooting;
     bool isSprinting;
@@ -141,7 +141,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         {
             //always checking for these
             movement();
-            // jammie add gun select method
+            selectGun();
 
         }
 
@@ -184,7 +184,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
 
         
-        if (Input.GetButton("Fire1") && !isShooting)
+        if (Input.GetButton("Fire1") && gunList.Count > 0 && !isShooting)
         {
             StartCoroutine(Shoot());
         }
@@ -263,11 +263,38 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     public void GetGunStats(weaponStats gun)
     {
         gunList.Add(gun);
+        gunListPos = gunList.Count - 1;
+
         shootDamage = gun.damage;
         shootDistance = gun.weaponRange;
         shootRate = gun.shootRate;
+
         gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
+    void selectGun()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListPos < gunList.Count - 1)
+        {
+            gunListPos++;
+            changegun();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListPos > 0)
+        {
+            gunListPos--;
+            changegun();
+        }
+    }
+
+    void changegun()
+    {
+        shootDamage = gunList[gunListPos].damage;
+        shootDistance = gunList[gunListPos].weaponRange;
+        shootRate = gunList[gunListPos].shootRate;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].model.GetComponent<MeshRenderer>().sharedMaterial;
     }
 
     // somewhere around this section
@@ -281,8 +308,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         HP -= amount;
 
         updatePlayerUI();
+
         StartCoroutine(screenFlashRed());
-        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
+        
 
         if (HP <= 0)
         {
@@ -322,8 +350,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {
         //turn on
         isShooting = true;
-        aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
-
+        // aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
+        aud.PlayOneShot(gunList[gunListPos].shootingSounds[Random.Range(0, gunList[gunListPos].shootingSounds.Length)], gunList[gunListPos].weaponSoundVolume);
+        
         //shoot code        
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
         {
@@ -335,8 +364,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             {
                 dmg.takeDamage(shootDamage);
             }
-            
-            // jammie add gunlist if statement
+
+            if (gunList[gunListPos].hitEffect != null)
+                Instantiate(gunList[gunListPos].hitEffect, contact.point, Quaternion.identity);            
 
         }
 
@@ -366,6 +396,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
         //turn off
         isShooting = false;
+        
     }
 
     // code for walking audio

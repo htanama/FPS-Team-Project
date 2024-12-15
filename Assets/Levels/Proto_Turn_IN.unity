@@ -4560,6 +4560,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2127601472997054975, guid: 2f62c6c0b90e20e45b103f414402a489, type: 3}
   m_PrefabInstance: {fileID: 1458838834}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1468243121 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3354363380647643823, guid: 7803ef00e31c7b44f9f1c744f572fda2, type: 3}
+  m_PrefabInstance: {fileID: 1894716706}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1473355960
 GameObject:
   m_ObjectHideFlags: 0
@@ -7137,6 +7142,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Enemy Count
       objectReference: {fileID: 0}
+    - target: {fileID: 1379214709039392183, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 1468243121}
     - target: {fileID: 1379214709039392183, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
       propertyPath: flagCaptureText
       value: 
