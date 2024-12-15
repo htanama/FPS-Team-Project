@@ -135,14 +135,15 @@ public class GameManager : MonoBehaviour
             CharacterController controller = player.GetComponent<CharacterController>();
             //Moves the player the distance needed to be back at spawn
             controller.Move(spawnPoint.position - player.transform.position);
+            playerScript.HP = playerScript.OrigHP;  //Refill HP
 
             //change life counter
             playerLives--;
 
             Debug.Log($"Player Respawned. Lives remaining: {playerLives}");
 
-            //Update lives shown in the UI
-            UpdateLives();
+            //Update lives and health shown in the UI
+            playerScript.updatePlayerUI();
         }
         else
         {
