@@ -41,6 +41,4 @@ public class platformMovement : MonoBehaviour
             transform.position = new Vector3(startPosition.x, startPosition.y + newY, startPosition.z);
         }
     }
-
-    
 }

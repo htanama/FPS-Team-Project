@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 111c584ca97bcc9489ab8685fc853bf5, type: 3}
+  m_Name: WW2-GunThompson
+  m_EditorClassIdentifier: 
+  model: {fileID: 0}
+  damage: 0
+  shootRate: 0
+  weaponRange: 0
+  ammoCurrent: 0
+  ammoMax: 0
+  areaOfEffectRadius: 0
+  splashDamage: 0
+  hitEffect: {fileID: 0}
+  shootingSounds: []
+  weaponSoundVolume: 0

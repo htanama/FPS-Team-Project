@@ -18,6 +18,8 @@ MonoBehaviour:
   weaponRange: 100
   ammoCurrent: 30
   ammoMax: 120
-  hitEffect: {fileID: 0}
+  areaOfEffectRadius: 0
+  splashDamage: 0
+  hitEffect: {fileID: 1301697207402410478, guid: 39f852c28f9c3fd45a427c24f3564ba7, type: 3}
   shootingSounds: []
-  weaponSoundVolume: 0
+  weaponSoundVolume: 0.6
