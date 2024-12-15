@@ -3079,6 +3079,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 625072755}
   m_SourcePrefab: {fileID: 100100000, guid: c303a18f1cbdd4156b139b9e5b35d6a9, type: 3}
+--- !u!4 &1248722839 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3354363380647643823, guid: 7803ef00e31c7b44f9f1c744f572fda2, type: 3}
+  m_PrefabInstance: {fileID: 685887265}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1249415218
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3912,6 +3917,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1192857566752964012, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
   m_PrefabInstance: {fileID: 1995602257}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1557528556 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 335863640549332769, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
+  m_PrefabInstance: {fileID: 1995602257}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &1618485173 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5537889187698844268, guid: a39c36ddb67d2ad4dbd07e8cacb48134, type: 3}
@@ -4902,6 +4918,14 @@ PrefabInstance:
       propertyPath: timerGoal
       value: 
       objectReference: {fileID: 1522680071}
+    - target: {fileID: 1379214709039392183, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 1248722839}
+    - target: {fileID: 1379214709039392183, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
+      propertyPath: playerLivesText
+      value: 
+      objectReference: {fileID: 1557528556}
     - target: {fileID: 2698927081496391686, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
       propertyPath: TimeLeft
       value: 3
