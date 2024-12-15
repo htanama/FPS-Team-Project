@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 111c584ca97bcc9489ab8685fc853bf5, type: 3}
-  m_Name: Gun - Pistol
+  m_Name: New Weapon Stats
   m_EditorClassIdentifier: 
-  model: {fileID: 4965438261709640327, guid: a35b8c32acba1334b9b31dfe8cdbc9be, type: 3}
-  damage: 15
-  shootRate: 0.3
-  weaponRange: 50
-  ammoCurrent: 12
-  ammoMax: 60
+  model: {fileID: 2917525367603071680, guid: ba72adb44a1e010498ef6d5f958324c5, type: 3}
+  damage: 50
+  shootRate: 1
+  weaponRange: 200
+  ammoCurrent: 5
+  ammoMax: 25
   areaOfEffectRadius: 0
   splashDamage: 0
   hitEffect: {fileID: 1301697207402410478, guid: 7817e738d8cd8a145bc2559f42300060, type: 3}
-  shootingSounds: []
+  shootingSounds:
+  - {fileID: 8300000, guid: 16aca2265729b44428cf48de6daca525, type: 3}
   weaponSoundVolume: 0.6
