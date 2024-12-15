@@ -313,8 +313,10 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         yield return new WaitForSeconds(duration);
         //enableMovement();
         GetComponent<playerController>().enabled = true;
-
+        
         Debug.Log("Stun ended!");
+
+        //I
     }
 
     IEnumerator screenFlashRed()
