@@ -142,8 +142,8 @@ public class GameManager : MonoBehaviour
 
             Debug.Log($"Player Respawned. Lives remaining: {playerLives}");
 
-            //Update lives shown in the UI
-            UpdateLives();
+            //Update lives and health shown in the UI
+            playerScript.updatePlayerUI();
         }
         else
         {
