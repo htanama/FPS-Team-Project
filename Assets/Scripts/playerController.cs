@@ -51,7 +51,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField][Range(0.01f, 1.0f)] float crouchHeight;
 
     // Crouching variables
-    private int currentSpeed;     //To avoid bugs by modifying speed directly
+    private int currentSpeed;     //To avoid bugs by modifying enemySpeedMult directly
     private float originalHeight; //When releasing crouch
     //private float targetHeight;
     private Vector3 originalCenter;
@@ -100,7 +100,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     bool isSprinting;
     bool isPlayingStep;
     bool isCrouching;
-    //bool isCrouchLerping;                 //To allow to modify crouch speed
+    //bool isCrouchLerping;                 //To allow to modify crouch enemySpeedMult
 
     RaycastHit contact;
     
@@ -160,7 +160,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         jump();
 
-        //gives jump speed (y) a value
+        //gives jump enemySpeedMult (y) a value
         controller.Move(horizontalVelocity * Time.deltaTime);
         //start pulling down immediately after the jump
         horizontalVelocity.y -= gravity * Time.deltaTime;
@@ -210,7 +210,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
         {
             isCrouching = true;
-            currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
+            currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce enemySpeedMult
 
             //Change height when crouching
             controller.height = originalHeight * crouchHeight;
@@ -221,7 +221,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
         {
             isCrouching = false;
-            currentSpeed = speed; //Restore speed
+            currentSpeed = speed; //Restore enemySpeedMult
 
             //Restore height when releasing crouch button
             controller.height = originalHeight;
@@ -229,7 +229,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
             //isCrouchLerping = true;
         }
-        //Adjust speed at which player crouches/uncrouches
+        //Adjust enemySpeedMult at which player crouches/uncrouches
         //if (isCrouchLerping)
         //{
         //    controller.height = Mathf.Lerp(controller.height, targetHeight, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
@@ -248,6 +248,20 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         GameManager.instance.UpdateLives(); //Show lives on the UI
     }
 
+    public void GetGunStats(weaponStats gun)
+    {
+        gunList.Add(gun);
+        shootDamage = gun.damage;
+        shootDistance = gun.weaponRange;
+        shootRate = gun.shootRate;
+        gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
+    // somewhere around this section
+    // jammie add get gun stats
+    // jammie add select gun scroll wheel (want to do a radial menu eventually)
+    // jammie add change gun
 
     // Player Damage and Weapons //   
     public void takeDamage(int amount)
@@ -265,20 +279,18 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
     }
 
-    public void GetGunStats(weaponStats gun)
+    //When the player is stunned this is called
+    public void stun(float duration)
     {
-        gunList.Add(gun);
-        shootDamage = gun.damage;
-        shootDistance = gun.weaponRange;
-        shootRate = gun.shootRate;
-        gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+        StartCoroutine(StunCoroutine(duration));        //In it's own method for simplification
     }
 
-    // somewhere around this section
-    // jammie add get gun stats
-    // jammie add select gun scroll wheel (want to do a radial menu eventually)
-    // jammie add change gun
+    IEnumerator StunCoroutine(float duration)
+    {
+        //disableMovement();
+        yield return new WaitForSeconds(duration);
+        //enableMovement();
+    }
 
     IEnumerator screenFlashRed()
     {   

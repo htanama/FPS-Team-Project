@@ -132,7 +132,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         // create bullet
         Instantiate(bullet, shootPos.position, transform.rotation);
 
-        // speed
+        // enemySpeedMult
         yield return new WaitForSeconds(shootRate);
         
         // turn off
@@ -212,7 +212,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         //temp for smooth turn
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDirection.x, 0, playerDirection.z));
 
-        //Lerp it, change it over time; first param is what you're lerping, second is destination, last is time with turn speed multiplier
+        //Lerp it, change it over time; first param is what you're lerping, second is destination, last is time with turn enemySpeedMult multiplier
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 

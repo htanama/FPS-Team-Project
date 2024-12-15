@@ -126,4 +126,21 @@ public class flagManager : MonoBehaviour
         flag.transform.position = flagStartBase.transform.position + flagOffset;
         flag.GetComponent<Collider>().enabled = true;
     }
+
+    //called when enemy takes flag from player
+    public void takeFlag(Transform enemyTransform)
+    {
+        if(isHoldingFlag)
+        {
+            //separate flag from player model
+            isHoldingFlag= false;
+            flag.transform.SetParent(null);
+
+            //attach flag to enemy
+            flag.transform.position = enemyTransform.position;
+            flag.GetComponent<Collider>().enabled = true;
+
+            Debug.Log("Flag taken by enemy");
+        }
+    }
 }
