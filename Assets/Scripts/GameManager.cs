@@ -135,6 +135,7 @@ public class GameManager : MonoBehaviour
             CharacterController controller = player.GetComponent<CharacterController>();
             //Moves the player the distance needed to be back at spawn
             controller.Move(spawnPoint.position - player.transform.position);
+            playerScript.HP = playerScript.OrigHP;  //Refill HP
 
             //change life counter
             playerLives--;

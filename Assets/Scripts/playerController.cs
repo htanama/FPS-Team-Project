@@ -93,7 +93,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     Color colorOrig;
 
     int jumpCount;
-    int HPOrig;
+    int origHP;
     // jammie add list pos
 
     bool isShooting;
@@ -117,6 +117,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         set => sprintMod = value;
     }
 
+    public int OrigHP
+    {
+        get => origHP;
+        set => origHP = value;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -126,7 +132,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //originalScaleY = controller.transform.localScale.y;
         //originalScale = controller.transform.localScale;
 
-        HPOrig = HP;
+        origHP = HP;
         updatePlayerUI();
     }
 
@@ -255,7 +261,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Player UI //
     public void updatePlayerUI()
     {
-        GameManager.instance.PlayerHPBar.fillAmount = (float)HP / HPOrig;
+        GameManager.instance.PlayerHPBar.fillAmount = (float)HP / origHP;
         GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
         GameManager.instance.UpdateLives(); //Show lives on the UI
     }
