@@ -1,6 +1,6 @@
 /*
   Code Author: Juan Contreras
-  Date: 12/06/2024
+  Date: 12/13/2024
   Class: DEV2
 */
 
@@ -13,15 +13,14 @@ public class flagManager : MonoBehaviour
     [Header("     Flag Options     ")]
     [SerializeField] private Transform flagStartBase;
     [SerializeField] private Transform flagGoalBase;
-    [SerializeField][Range(2.0f, 5.0f)] float captureDistance;
-    [SerializeField][Range(0.1f, 4.0f)] float goalDistance;     //How close to get to the goal
+    [SerializeField][Range(2.0f, 5.0f)] float flagPickupDistance;   //How close to get to the flag to pick it up
+    [SerializeField][Range(2.0f, 10.0f)] float goalAreaSize;     //How close to get to the goal
 
     private GameObject flag;
     private Transform playerTransform;
     private bool isHoldingFlag = false;
     private Vector3 flagOffset = new Vector3(0, 2.9f, 0); //Adjust flag to not clip the ground
-
-    int captureCount = 0;   //To keep track of score
+    private int captureCount = 0;   //To keep track of score
 
     //Getters and setters
     public GameObject Flag
@@ -34,6 +33,12 @@ public class flagManager : MonoBehaviour
     { 
         get => flagStartBase;
         set => flagStartBase = value;
+    }
+
+    public int CaptureCount
+    {
+        get => captureCount;
+        set => captureCount = value;
     }
 
     public bool IsHoldingFlag
@@ -56,16 +61,17 @@ public class flagManager : MonoBehaviour
     {
         if (isHoldingFlag)
         {
-            if (Vector3.Distance(playerTransform.position, flagGoalBase.transform.position) < goalDistance)
+            if (Vector3.Distance(playerTransform.position, flagGoalBase.transform.position) < goalAreaSize)
             {
 
-                //FlagCaptured();
+                FlagCaptured();
+                GameManager.instance.UpdateCaptures(captureCount); //Update capture count to the UI
             }
         }
         else
         {
             //If not holding flag check if close enough to pick it up
-            if (Vector3.Distance(playerTransform.position, flag.transform.position) < captureDistance)
+            if (Vector3.Distance(playerTransform.position, flag.transform.position) < flagPickupDistance)
                 PickupFlag();
         }
     }
@@ -82,21 +88,24 @@ public class flagManager : MonoBehaviour
 
     void PickupFlag()
     {
-        //pick up the flag
-        isHoldingFlag = true;
-        //playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        flag.transform.SetParent(playerTransform);  //Flag attaches to the player
-        flag.transform.localPosition = new Vector3(0, 1, 0); //Set flag position on player
-        flag.GetComponent<Collider>().enabled = false; //Turn off flag collider
+        if (flag.transform.parent == null)
+        {
+            //pick up the flag
+            isHoldingFlag = true;
+            //playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            flag.transform.SetParent(playerTransform);  //Flag attaches to the player
+            flag.transform.localPosition = new Vector3(0, 1, 0); //Set flag position on player
+            flag.GetComponent<Collider>().enabled = false; //Turn off flag collider
+        }
     }
 
-    public void DropFlag()
+    public void DropFlag(Transform objectTransform)
     {
-        if (isHoldingFlag)
+        if (flag.transform.parent != null)
         {
             isHoldingFlag = false;
             flag.transform.SetParent(null);     //Detach flag from carrier
-            flag.transform.position = playerTransform.position; //Drop flag at carrier's location
+            flag.transform.position = objectTransform.position; //Drop flag at carrier's location
             flag.GetComponent<Collider>().enabled = true;   //Enable flag collider for pickup
 
             Debug.Log("Flag Dropped");
@@ -119,5 +128,23 @@ public class flagManager : MonoBehaviour
         //flag is reset to base if not held
         flag.transform.position = flagStartBase.transform.position + flagOffset;
         flag.GetComponent<Collider>().enabled = true;
+    }
+
+    //called when enemy takes flag from player
+    public void takeFlag(Transform enemyTransform)
+    {
+        if(isHoldingFlag)
+        {
+            //separate flag from player model
+            isHoldingFlag= false;
+            flag.transform.SetParent(null);
+
+            //attach flag to enemy
+            flag.transform.SetParent(enemyTransform);
+            flag.transform.localPosition = new Vector3(0, 1, 0);    //Set location on enemy
+            flag.GetComponent<Collider>().enabled = false;     //Can't take flag from enemy
+
+            Debug.Log("Flag taken by enemy");
+        }
     }
 }

@@ -51,7 +51,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField][Range(0.01f, 1.0f)] float crouchHeight;
 
     // Crouching variables
-    private int currentSpeed;     //To avoid bugs by modifying speed directly
+    private int currentSpeed;     //To avoid bugs by modifying enemySpeedMult directly
     private float originalHeight; //When releasing crouch
     //private float targetHeight;
     private Vector3 originalCenter;
@@ -85,13 +85,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] AudioClip[] audShootSound;
     [SerializeField] [Range(0, 1)] float audShootSoundVol;
 
-
-    //[Header("      CAPTURE THE FLAG      ")]
-    //[SerializeField] private Transform captureFlagBasePosition; // Position of the base
-    //[SerializeField] private GameObject flagPole;  // this is the flagPole object. 
-    //private Flag flag; // flag logic that control when to drop the flag at the base. 
-    //private Transform flagOriginalPosition;
-
     // Vectors //
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
@@ -107,10 +100,22 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     bool isSprinting;
     bool isPlayingStep;
     bool isCrouching;
-    //bool isCrouchLerping;                 //To allow to modify crouch speed
+    //bool isCrouchLerping;                 //To allow to modify crouch enemySpeedMult
 
     RaycastHit contact;
     
+    //getters and setters (used to calculate stun enemy speed)
+    public int Speed
+    {
+        get => speed;
+        set => speed = value;
+    }
+
+    public int SprintMod
+    {
+        get => sprintMod;
+        set => sprintMod = value;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -123,9 +128,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         HPOrig = HP;
         updatePlayerUI();
-        
-        //flag = flagPole.GetComponent<Flag>(); //put all the components of the flagPole from the inspector to the flag object(has info who carry the flag)
-        //flagOriginalPosition = flag.GetComponentInParent<Transform>(); // store original position of the flag
     }
 
     // Update is called once per frame
@@ -144,12 +146,10 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
 
         sprint(); //Outside of condition to prevent infinite sprint glitch
-        crouch();
-
-        //ReachToBase();        
+        crouch();      
     }
 
-    // Player Movement //
+    // Player Movement
     void movement()
     {
         //Resets number of jumps once player is on the ground
@@ -165,14 +165,14 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             horizontalVelocity = Vector3.zero;
         }
 
-        // tie movement to camera 
+        //tie movement to camera 
         moveDirection = (transform.right * Input.GetAxis("Horizontal")) +
                         (transform.forward * Input.GetAxis("Vertical"));    //Normalized to handle diagonal movement
         controller.Move(moveDirection * speed * Time.deltaTime);
 
         jump();
 
-        //gives jump speed (y) a value
+        //gives jump enemySpeedMult (y) a value
         controller.Move(horizontalVelocity * Time.deltaTime);
         //start pulling down immediately after the jump
         horizontalVelocity.y -= gravity * Time.deltaTime;
@@ -183,7 +183,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             horizontalVelocity.y = Vector3.zero.y; // horizontal velocity is lecture player velocity?
         }
 
-        // Shoot Add //
+        
         if (Input.GetButton("Fire1") && !isShooting)
         {
             StartCoroutine(Shoot());
@@ -206,7 +206,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (Input.GetButtonDown("Sprint") && !isCrouching)  //Won't sprint if crouching
         {
             speed *= sprintMod;
-            currentSpeed = speed * sprintMod; // *nice catches here for powerup
+            currentSpeed = speed; // *nice catches here for powerup
             isSprinting = true;
         }
         else if (Input.GetButtonUp("Sprint"))               //Potential bug with crouching
@@ -222,7 +222,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
         {
             isCrouching = true;
-            currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
+            currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce enemySpeedMult
 
             //Change height when crouching
             controller.height = originalHeight * crouchHeight;
@@ -233,7 +233,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
         {
             isCrouching = false;
-            currentSpeed = speed; //Restore speed
+            currentSpeed = speed; //Restore enemySpeedMult
 
             //Restore height when releasing crouch button
             controller.height = originalHeight;
@@ -241,7 +241,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
             //isCrouchLerping = true;
         }
-        //Adjust speed at which player crouches/uncrouches
+        //Adjust enemySpeedMult at which player crouches/uncrouches
         //if (isCrouchLerping)
         //{
         //    controller.height = Mathf.Lerp(controller.height, targetHeight, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
@@ -256,24 +256,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     public void updatePlayerUI()
     {
         GameManager.instance.PlayerHPBar.fillAmount = (float)HP / HPOrig;
-    }
-
-
-    // Player Damage and Weapons //   
-    public void takeDamage(int amount)
-    {
-        HP -= amount;
-
-        updatePlayerUI();
-        StartCoroutine(screenFlashRed());
-        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
-
-        if (HP <= 0)
-        {
-            //death/lose screen
-            GameManager.instance.Respawn();
-            //GameManager.instance.LoseGame();
-        }
+        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
+        GameManager.instance.UpdateLives(); //Show lives on the UI
     }
 
     public void GetGunStats(weaponStats gun)
@@ -290,6 +274,42 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // jammie add get gun stats
     // jammie add select gun scroll wheel (want to do a radial menu eventually)
     // jammie add change gun
+
+    // Player Damage and Weapons //   
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+
+        updatePlayerUI();
+        StartCoroutine(screenFlashRed());
+        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
+
+        if (HP <= 0)
+        {
+            //death/lose screen in Respawn() method
+            GameManager.instance.Respawn();
+        }
+    }
+
+    //When the player is stunned this is called
+    public void stun(float duration)
+    {
+        StartCoroutine(StunCoroutine(duration));        //In it's own method for simplification
+    }
+
+    IEnumerator StunCoroutine(float duration)
+    {
+        Debug.Log("Stun started!");
+
+        //disable movement
+        GetComponent<playerController>().enabled = false;
+        //stun duration
+        yield return new WaitForSeconds(duration);
+        //enableMovement();
+        GetComponent<playerController>().enabled = true;
+
+        Debug.Log("Stun ended!");
+    }
 
     IEnumerator screenFlashRed()
     {   
@@ -388,36 +408,4 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     //        }
     //        // is there an exit? ontriggerenter ontriggerexit?
     //    }
-
-    // Capture the Flag //
-
-    // For capture the flag only
-    // checking if player reach to base with the flag and score
-//    private void ReachToBase()
-//    {
-
-//        if (captureFlagBasePosition != null)
-//        {
-//            // Check if Player has reached the base
-//            if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
-//            {
-//                #if UNITY_EDITOR    
-//                    Debug.Log($"Player Touch Based, isCarriedBy {flag.IsCarriedBy(transform)}");
-//                #endif
-
-//                if (flag != null && flag.IsCarriedBy(transform))
-//                {
-//                    #if UNITY_EDITOR
-//                        Debug.Log("Player has the flag and reached the base!");
-//                    #endif
-//                    GameManager.instance.UpdateFlagCount(+1);
-//                    flag.ResetFlag();
-//                }
-
-
-//            }
-//        }
-//    }
-
-
 }
