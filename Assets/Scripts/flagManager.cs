@@ -88,21 +88,24 @@ public class flagManager : MonoBehaviour
 
     void PickupFlag()
     {
-        //pick up the flag
-        isHoldingFlag = true;
-        //playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        flag.transform.SetParent(playerTransform);  //Flag attaches to the player
-        flag.transform.localPosition = new Vector3(0, 1, 0); //Set flag position on player
-        flag.GetComponent<Collider>().enabled = false; //Turn off flag collider
+        if (flag.transform.parent == null)
+        {
+            //pick up the flag
+            isHoldingFlag = true;
+            //playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            flag.transform.SetParent(playerTransform);  //Flag attaches to the player
+            flag.transform.localPosition = new Vector3(0, 1, 0); //Set flag position on player
+            flag.GetComponent<Collider>().enabled = false; //Turn off flag collider
+        }
     }
 
-    public void DropFlag()
+    public void DropFlag(Transform objectTransform)
     {
-        if (isHoldingFlag)
+        if (flag.transform.parent != null)
         {
             isHoldingFlag = false;
             flag.transform.SetParent(null);     //Detach flag from carrier
-            flag.transform.position = playerTransform.position; //Drop flag at carrier's location
+            flag.transform.position = objectTransform.position; //Drop flag at carrier's location
             flag.GetComponent<Collider>().enabled = true;   //Enable flag collider for pickup
 
             Debug.Log("Flag Dropped");
@@ -137,8 +140,9 @@ public class flagManager : MonoBehaviour
             flag.transform.SetParent(null);
 
             //attach flag to enemy
-            flag.transform.position = enemyTransform.position;
-            flag.GetComponent<Collider>().enabled = true;
+            flag.transform.SetParent(enemyTransform);
+            flag.transform.localPosition = new Vector3(0, 1, 0);    //Set location on enemy
+            flag.GetComponent<Collider>().enabled = false;     //Can't take flag from enemy
 
             Debug.Log("Flag taken by enemy");
         }

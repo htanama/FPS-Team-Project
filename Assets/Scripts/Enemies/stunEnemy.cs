@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class stunEnemy : baseEnemy
@@ -20,7 +21,16 @@ public class stunEnemy : baseEnemy
     // Update is called once per frame
     void Update()
     {
-        Behavior();
+        Behavior();     //the way the enemy acts around the player
+    }
+
+    public override void takeDamage(int amount)
+    {
+        //drop flag right before dying
+        if (HP - amount <= 0)
+        { GameManager.instance.FlagScript.DropFlag(transform); }
+        //calling base method for damage handling
+        base.takeDamage(amount);
     }
 
     protected override void Behavior()

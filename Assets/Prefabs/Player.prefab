@@ -159,8 +159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flagStartBase: {fileID: 0}
   flagGoalBase: {fileID: 0}
-  captureDistance: 2
-  goalDistance: 0.1
+  flagPickupDistance: 2
+  goalAreaSize: 2
 --- !u!114 &6356846819945205257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +190,8 @@ MonoBehaviour:
   shootDamage: 1
   shootDistance: 20
   shootRate: 0.5
+  gunModel: {fileID: 0}
+  gunList: []
   shootPos: {fileID: 0}
   aud: {fileID: 8460878790130062194}
   audJump:

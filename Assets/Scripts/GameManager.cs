@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
             //drop flag
             if (FlagScript.IsHoldingFlag)
             {
-                FlagScript.DropFlag();
+                FlagScript.DropFlag(player.transform);
             }
 
             //move player to spawn point (don't destroy)
