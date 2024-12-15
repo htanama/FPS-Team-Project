@@ -50,7 +50,7 @@ public class stunEnemy : baseEnemy
     {
         playerController player = GameManager.instance.Player.GetComponent<playerController>();
         //stun player for set duration
-        if(player != null)
+        if(player != null && GameManager.instance.FlagScript.IsHoldingFlag)
         {
             player.stun(stunDuration);
         }

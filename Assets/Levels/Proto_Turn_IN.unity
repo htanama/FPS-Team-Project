@@ -8283,7 +8283,7 @@ MonoBehaviour:
   model: {fileID: 0}
   animator: {fileID: 0}
   HP: 0
-  stunDuration: 5
+  stunDuration: 3
   enemyHP: 2
   enemySpeedMult: 2
 --- !u!4 &1792663053

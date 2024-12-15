@@ -287,9 +287,16 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     IEnumerator StunCoroutine(float duration)
     {
-        //disableMovement();
+        Debug.Log("Stun started!");
+
+        //disable movement
+        GetComponent<playerController>().enabled = false;
+        //stun duration
         yield return new WaitForSeconds(duration);
         //enableMovement();
+        GetComponent<playerController>().enabled = true;
+
+        Debug.Log("Stun ended!");
     }
 
     IEnumerator screenFlashRed()
