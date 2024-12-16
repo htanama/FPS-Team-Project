@@ -76,9 +76,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] [Range(0, 1)] float audStepVol;
     [SerializeField] AudioClip[] audDamage;
     [SerializeField] [Range(0, 10)] float audDamageVol;
-    [SerializeField] AudioClip[] audShootSound;
-    [SerializeField] [Range(0, 1)] float audShootSoundVol;
-
+    
     // Vectors //
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
