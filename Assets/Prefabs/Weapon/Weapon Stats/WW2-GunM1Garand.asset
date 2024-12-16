@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 111c584ca97bcc9489ab8685fc853bf5, type: 3}
-  m_Name: WW2-GunThompson
+  m_Name: WW2-GunM1Garand
   m_EditorClassIdentifier: 
-  model: {fileID: 4978226738953645687, guid: 8bfcc31a85e218841add0738f8008212, type: 3}
-  damage: 1
-  shootRate: 0.1
-  weaponRange: 80
-  ammoCurrent: 20
-  ammoMax: 60
+  model: {fileID: 2917525367603071680, guid: ba72adb44a1e010498ef6d5f958324c5, type: 3}
+  damage: 10
+  shootRate: 1
+  weaponRange: 100
+  ammoCurrent: 5
+  ammoMax: 30
   areaOfEffectRadius: 0
   splashDamage: 0
   hitEffect: {fileID: 1301697207402410478, guid: 3d79c7ab0e4f98949af0e14d9479714e, type: 3}
   shootingSounds:
   - {fileID: 8300000, guid: 16aca2265729b44428cf48de6daca525, type: 3}
-  weaponSoundVolume: 0
+  weaponSoundVolume: 0.5

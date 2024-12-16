@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: WW2-GunM1918Bar
   m_EditorClassIdentifier: 
   model: {fileID: 5571641588984482722, guid: c303a18f1cbdd4156b139b9e5b35d6a9, type: 3}
-  damage: 25
-  shootRate: 0.1
-  weaponRange: 100
+  damage: 2
+  shootRate: 0.6
+  weaponRange: 90
   ammoCurrent: 30
   ammoMax: 120
   areaOfEffectRadius: 0

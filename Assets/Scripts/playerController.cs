@@ -23,8 +23,9 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Principal;
 using Unity.VisualScripting;
-using UnityEditor.TextCore.Text;
+//using UnityEditor.TextCore.Text;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
@@ -147,7 +148,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         {
             //always checking for these
             movement();
-            // jammie add gun select method
+            selectGun();
 
         }
 
@@ -268,10 +269,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     public void GetGunStats(weaponStats gun)
     {
-        gunList.Add(gun);
+        gunList.Add(gun);        
+
         shootDamage = gun.damage;
         shootDistance = gun.weaponRange;
         shootRate = gun.shootRate;
+
         gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
     }
@@ -280,6 +283,30 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // jammie add get gun stats
     // jammie add select gun scroll wheel (want to do a radial menu eventually)
     // jammie add change gun
+
+    void selectGun()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListpos < gunList.Count - 1)
+        {
+            gunListpos++;
+            changeGun();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListpos > 0)
+        {
+            gunListpos--;
+            changeGun();
+        }
+
+    }
+    void changeGun()
+    {
+        shootDamage = gunList[gunListpos].damage;
+        shootDistance = gunList[gunListpos].weaponRange;
+        shootRate = gunList[gunListpos].shootRate;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListpos].model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListpos].model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
 
     // Player Damage and Weapons //   
     public void takeDamage(int amount)
@@ -343,9 +370,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             {
                 dmg.takeDamage(shootDamage);
             }
-            
-            // jammie add gunlist if statement
 
+            if (gunList[gunListpos].hitEffect != null) 
+            {
+                Instantiate(gunList[gunListpos].hitEffect, contact.point, Quaternion.identity);
+            }
+            
         }
 
         //**************To be added when pickup is implemented******************
@@ -374,6 +404,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
         //turn off
         isShooting = false;
+        
     }
 
     // code for walking audio
