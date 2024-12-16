@@ -264,7 +264,7 @@ MonoBehaviour:
   ignoreMask:
     serializedVersion: 2
     m_Bits: 8
-  HP: 1
+  _HP: 1
   speed: 7
   sprintMod: 3
   jumpMax: 2
@@ -294,9 +294,6 @@ MonoBehaviour:
   audDamage:
   - {fileID: 8300000, guid: fbce1e3480f368142a6f362531ac50ac, type: 3}
   audDamageVol: 0.5
-  audShootSound:
-  - {fileID: 8300000, guid: cd9a92dedfe874f4b84017da6f195ccb, type: 3}
-  audShootSoundVol: 0.5
 --- !u!143 &8080740952714025900
 CharacterController:
   m_ObjectHideFlags: 0
