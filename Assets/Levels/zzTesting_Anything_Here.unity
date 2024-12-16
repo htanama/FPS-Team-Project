@@ -121,7 +121,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 25c797422692c584e9cf405b5b9ec9cd, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 3da4168258334094ea7fce454bcc24b4, type: 2}
 --- !u!1 &73133780
 GameObject:
   m_ObjectHideFlags: 0
@@ -5010,7 +5010,7 @@ PrefabInstance:
     - target: {fileID: 1379214709039392183, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
       propertyPath: playerLivesText
       value: 
-      objectReference: {fileID: 1995602258}
+      objectReference: {fileID: 0}
     - target: {fileID: 2698927081496391686, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
       propertyPath: TimeLeft
       value: 3
@@ -5126,17 +5126,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1347725896}
   m_SourcePrefab: {fileID: 100100000, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
---- !u!114 &1995602258 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 335863640549332769, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
-  m_PrefabInstance: {fileID: 1995602257}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1997863801
 GameObject:
   m_ObjectHideFlags: 0
