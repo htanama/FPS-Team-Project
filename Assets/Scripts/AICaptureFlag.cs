@@ -141,9 +141,9 @@ public class AICaptureFlag : MonoBehaviour
     {
         // Code by Jammie Parks 
 
-        HP -= damage;
+        _HP -= damage;
         // Needs the part about Shooting and gets damage
-        if (HP <= 0)
+        if (_HP <= 0)
         {
             Destroy(gameObject);           
         }

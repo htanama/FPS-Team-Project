@@ -219,7 +219,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     // Enemy Takes Damage //
     public void takeDamage(int amount)
     {   
-        // decrease HP
+        // decrease _HP
         HP -= amount;
 
         // update UI/health bar....in progress
@@ -234,7 +234,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         //run toward player's last known position
         agent.SetDestination(GameManager.instance.Player.transform.position);
 
-        // no HP left
+        // no _HP left
         if (HP <= 0)
         {
            /// this is only if the goal is killing enemies, want to make -1 to enemycount    

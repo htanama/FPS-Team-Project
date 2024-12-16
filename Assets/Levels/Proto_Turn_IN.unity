@@ -790,6 +790,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6356846819945205257, guid: e6c1720e613fc284bad15be53d06df9b, type: 3}
+      propertyPath: _HP
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356846819945205257, guid: e6c1720e613fc284bad15be53d06df9b, type: 3}
+      propertyPath: mHP
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356846819945205257, guid: e6c1720e613fc284bad15be53d06df9b, type: 3}
       propertyPath: flagPole
       value: 
       objectReference: {fileID: 0}
@@ -2320,10 +2328,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3106215746343534485, guid: 796a4e34e97be5a449fc320105925c4d, type: 3}
-      insertIndex: 4
+      insertIndex: -1
       addedObject: {fileID: 2037645893}
     - targetCorrespondingSourceObject: {fileID: 3106215746343534485, guid: 796a4e34e97be5a449fc320105925c4d, type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 2037645897}
     - targetCorrespondingSourceObject: {fileID: 3106215746343534485, guid: 796a4e34e97be5a449fc320105925c4d, type: 3}
       insertIndex: -1
