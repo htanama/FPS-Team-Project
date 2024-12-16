@@ -71,9 +71,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] float shootRate;
     [SerializeField] GameObject gunModel;
     [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
-    int gunListpos; 
-
-    [SerializeField] Transform shootPos;
+    int gunListpos;     
 
     [Header("      Player Audio      ")]
     [SerializeField] AudioSource aud;
