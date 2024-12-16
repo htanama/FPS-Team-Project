@@ -191,7 +191,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
 
         
-        if (Input.GetButton("Fire1") && !isShooting)
+        if (Input.GetButton("Fire1") && gunList.Count > 0 && !isShooting)
         {
             StartCoroutine(Shoot());
         }
@@ -357,7 +357,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {
         //turn on
         isShooting = true;
-        aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
+        //aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
+        aud.PlayOneShot(gunList[gunListpos].shootingSounds[Random.Range(0, gunList[gunListpos].shootingSounds.Length)], gunList[gunListpos].weaponSoundVolume);
 
         //shoot code        
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))

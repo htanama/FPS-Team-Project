@@ -422,7 +422,7 @@ GameObject:
   - component: {fileID: 3466203801428221098}
   - component: {fileID: 5537889187698844268}
   - component: {fileID: 7913611551153750875}
-  - component: {fileID: 898350122022174733}
+  - component: {fileID: 7096959978162056075}
   - component: {fileID: 6411150428570927943}
   - component: {fileID: 7562236484793834751}
   - component: {fileID: 2891173972568663895}
@@ -488,12 +488,17 @@ MonoBehaviour:
   agent: {fileID: 2891173972568663895}
   shootPos: {fileID: 5046654393891388483}
   headPos: {fileID: 1754485730654401960}
+  healthBarPos: {fileID: 0}
   HP: 5
   faceTargetSpeed: 10
   FOV: 90
+  roamDist: 20
+  roamTimer: 1
+  animator: {fileID: 5537889187698844268}
+  animSpeedTransition: 0
   bullet: {fileID: 5144485743538677400, guid: d7f9ac83b76ff0743a1b6ed48e870843, type: 3}
   shootRate: 0.5
---- !u!114 &898350122022174733
+--- !u!114 &7096959978162056075
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -502,12 +507,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5468243852594982904}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95f99fbfb07fce8469e4e78935a270ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 27c35335584d01a42a4fd8417296440d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flagPosition: {fileID: 0}
-  basePosition: {fileID: 0}
-  agent: {fileID: 0}
+  flagStartBase: {fileID: 0}
+  flagGoalBase: {fileID: 0}
+  flagPickupDistance: 2
+  goalAreaSize: 2
 --- !u!114 &6411150428570927943
 MonoBehaviour:
   m_ObjectHideFlags: 0
