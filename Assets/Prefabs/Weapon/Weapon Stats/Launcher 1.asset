@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 111c584ca97bcc9489ab8685fc853bf5, type: 3}
+  m_Name: Launcher 1
+  m_EditorClassIdentifier: 
+  model: {fileID: 8471061941194257971, guid: c2a696ffe4cc7cc42a96347439822364, type: 3}
+  damage: 20
+  shootRate: 1
+  weaponRange: 80
+  ammoCurrent: 1
+  ammoMax: 5
+  areaOfEffectRadius: 0
+  splashDamage: 0
+  hitEffect: {fileID: 1301697207402410478, guid: 39f852c28f9c3fd45a427c24f3564ba7, type: 3}
+  shootingSounds: []
+  weaponSoundVolume: 0.6
