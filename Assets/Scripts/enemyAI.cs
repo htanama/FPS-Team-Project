@@ -51,7 +51,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
 
     void Start()
     {
-        GameManager.instance.UpdateGame(1);
+        //GameManager.instance.UpdateGame(1);
         colorOrig = model.material.color; // for flash red
         startingPos = transform.position; // to remember the starting position for roaming
         stoppingDistOrig = agent.stoppingDistance; // remember for roam/idle reset
@@ -132,7 +132,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         // create bullet
         Instantiate(bullet, shootPos.position, transform.rotation);
 
-        // speed
+        // enemySpeedMult
         yield return new WaitForSeconds(shootRate);
         
         // turn off
@@ -212,7 +212,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         //temp for smooth turn
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDirection.x, 0, playerDirection.z));
 
-        //Lerp it, change it over time; first param is what you're lerping, second is destination, last is time with turn speed multiplier
+        //Lerp it, change it over time; first param is what you're lerping, second is destination, last is time with turn enemySpeedMult multiplier
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 
@@ -238,7 +238,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         if (HP <= 0)
         {
            /// this is only if the goal is killing enemies, want to make -1 to enemycount    
-            GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
+           // GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
            
             // I am dead
             Destroy(gameObject);            

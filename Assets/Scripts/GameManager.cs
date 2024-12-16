@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance;
+    public AudioSource aud;
 
     [Header("Game Menus")]
     [SerializeField] GameObject menuActive;
@@ -15,9 +16,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuWin, menuLose;
 
     [Header("Goal Settings")]
-    [SerializeField] TMP_Text goalCountText;
+    [SerializeField] TMP_Text playerLivesText;
     [SerializeField] TMP_Text flagCaptureText;
     [SerializeField] GameObject timerGoal;
+    [SerializeField] Transform spawnPoint;
+    [SerializeField] int playerLives = 3;
 
     private GameObject player;
     private GameObject flag;
@@ -53,9 +56,8 @@ public class GameManager : MonoBehaviour
         set => isPaused = value;
     }
 
-    float timeScaleOrig;    
-    int goalCount, flagCount;
-    //int numberFlags;
+    float timeScaleOrig;    //For pausing/resume
+    //int goalCount
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -65,7 +67,7 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
         flag = GameObject.FindWithTag("Flag");
-        flagScript = flag.GetComponent<flagManager>();
+        flagScript = player.GetComponent<flagManager>();    //Attached flag manager to player
         //goalCount = playerScript.GetHP();
     }
 
@@ -105,51 +107,64 @@ public class GameManager : MonoBehaviour
         menuActive = null;
     }
 
-    public void UpdateGame(int amount)
+    public void UpdateCaptures(int amount)      //Game goal
     {
-        goalCount += amount;
-       
-        goalCountText.text = goalCount.ToString("F0");
+       //show flag captures on UI
+        flagCaptureText.text = amount.ToString("F0");
         
-
-        if (goalCount <= 0)// character will respawn when HP hits zero
+        //win condition
+        if(FlagScript.CaptureCount >= 3)
         {
-            StatePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
-        }
-    }
-
-    public void UpdateFlagCount(int amount)
-    {
-        flagCount += amount;
-        flagCaptureText.text = flagCount.ToString("F0");
-
-        if (flagCount >= 3)
-        {
-            StatePause();
-            menuActive = menuWin;
-            menuActive.SetActive(true);
-        }
-        else if (flagCount <= -3)
-        {
-            StatePause();
-            menuActive = menuLose;
-            menuActive.SetActive(true);
+            WinGame();
         }
 
     }
 
     public void Respawn()
     {
-        //drop flag
+        //respawn while player has lives
+        if (playerLives > 0)
+        {
+            //drop flag
+            if (FlagScript.IsHoldingFlag)
+            {
+                FlagScript.DropFlag(player.transform);
+            }
 
-        //move player to spawn point (don't destroy)
+            //move player to spawn point (don't destroy)
+            CharacterController controller = player.GetComponent<CharacterController>();
+            //Moves the player the distance needed to be back at spawn
+            controller.Move(spawnPoint.position - player.transform.position);
+            playerScript.HP = playerScript.OrigHP;  //Refill HP
 
-        //change life counter
+            //change life counter
+            playerLives--;
+
+            Debug.Log($"Player Respawned. Lives remaining: {playerLives}");
+
+            //Update lives and health shown in the UI
+            playerScript.updatePlayerUI();
+        }
+        else
+        {
+            LoseGame();     //Dead: Out of Lives
+        }
+
     }
 
-    public void LoseGame()
+    public void UpdateLives()
+    {
+        //code to update lives on the UI
+        playerLivesText.text = playerLives.ToString("F0");
+    }
+
+    public void WinGame()       //Win menu
+    {
+        StatePause();
+        menuActive = menuWin;
+        menuActive.SetActive(true);
+    }
+    public void LoseGame()      //Lose menu
     {
         StatePause();
         menuActive = menuLose;
@@ -157,18 +172,11 @@ public class GameManager : MonoBehaviour
     }
     
     // Times is up-- you Lose
-    void TimeUp()
-    {
-        // Handle what happens when the timer reaches zero
-        StatePause();
-        menuActive = menuLose; // Show the lose menu when time is up
-        menuActive.SetActive(true);
-    }
-
-    void HowManyFlagsCapture(int amount)
-    {
-        //numberFlags += amount;
-    }
-
-
+    //void TimeUp()
+    //{
+    //    // Handle what happens when the timer reaches zero
+    //    StatePause();
+    //    menuActive = menuLose; // Show the lose menu when time is up
+    //    menuActive.SetActive(true);
+    //}
 }

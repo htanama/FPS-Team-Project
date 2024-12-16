@@ -18,10 +18,14 @@
 
         Edited: Erik Segura
             - Added HP Bar functionality
+            - Added audio to movement, gun firing, jump
 */
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Principal;
+using Unity.VisualScripting;
+//using UnityEditor.TextCore.Text;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
@@ -48,7 +52,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField][Range(0.01f, 1.0f)] float crouchHeight;
 
     // Crouching variables
-    private int currentSpeed;     //To avoid bugs by modifying speed directly
+    private int currentSpeed;     //To avoid bugs by modifying enemySpeedMult directly
     private float originalHeight; //When releasing crouch
     //private float targetHeight;
     private Vector3 originalCenter;
@@ -65,14 +69,22 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
+    [SerializeField] GameObject gunModel;
+    [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
+    int gunListpos; 
 
     [SerializeField] Transform shootPos;
-    
-    [Header("      CAPTURE THE FLAG      ")]
-    [SerializeField] private Transform captureFlagBasePosition; // Position of the base
-    [SerializeField] private GameObject flagPole;  // this is the flagPole object. 
-    private Flag flag; // flag logic that control when to drop the flag at the base. 
-    private Transform flagOriginalPosition;
+
+    [Header("      Player Audio      ")]
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip[] audJump;
+    [SerializeField] [Range (0, 1)] float audJumpVol;
+    [SerializeField] AudioClip[] audStep;
+    [SerializeField] [Range(0, 1)] float audStepVol;
+    [SerializeField] AudioClip[] audDamage;
+    [SerializeField] [Range(0, 10)] float audDamageVol;
+    [SerializeField] AudioClip[] audShootSound;
+    [SerializeField] [Range(0, 1)] float audShootSoundVol;
 
     // Vectors //
     Vector3 moveDirection;
@@ -82,16 +94,35 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     Color colorOrig;
 
     int jumpCount;
-    int HPOrig;
+    int origHP;
     // jammie add list pos
 
     bool isShooting;
     bool isSprinting;
+    bool isPlayingStep;
     bool isCrouching;
-    //bool isCrouchLerping;                 //To allow to modify crouch speed
+    //bool isCrouchLerping;                 //To allow to modify crouch enemySpeedMult
 
     RaycastHit contact;
     
+    //getters and setters (used to calculate stun enemy speed)
+    public int Speed
+    {
+        get => speed;
+        set => speed = value;
+    }
+
+    public int SprintMod
+    {
+        get => sprintMod;
+        set => sprintMod = value;
+    }
+
+    public int OrigHP
+    {
+        get => origHP;
+        set => origHP = value;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -102,27 +133,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //originalScaleY = controller.transform.localScale.y;
         //originalScale = controller.transform.localScale;
 
-        HPOrig = HP;
+        origHP = HP;
         updatePlayerUI();
-        
-        flag = flagPole.GetComponent<Flag>(); //put all the components of the flagPole from the inspector to the flag object(has info who carry the flag)
-        flagOriginalPosition = flag.GetComponentInParent<Transform>(); // store original position of the flag
     }
-
-    //Player moves with platform they're on
-    //void OnControllerColliderHit(ControllerColliderHit hit)
-    //{
-    //    Debug.Log("Collided with: " + hit.collider.name);
-    //    //Check if the player is standing on a moving platform
-    //    if (hit.collider.CompareTag("MovingPlatform"))
-    //    {
-    //        transform.parent = hit.collider.transform; //Attach player to the platform
-    //    }
-    //    else
-    //    {
-    //        transform.parent = null; //Detach player from the platform
-    //    }
-    //}
 
     // Update is called once per frame
     void Update()
@@ -135,35 +148,38 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         {
             //always checking for these
             movement();
-            // jammie add gun select method
+            selectGun();
 
         }
 
-        sprint(); //lecture puts outside of if
-        crouch();
-
-        ReachToBase();        
+        sprint(); //Outside of condition to prevent infinite sprint glitch
+        crouch();      
     }
 
-    // Player Movement //
+    // Player Movement
     void movement()
     {
         //Resets number of jumps once player is on the ground
         if (controller.isGrounded)
         {
+            if (moveDirection.magnitude > 0.3f && !isPlayingStep) // check for step movement.
+            {
+                StartCoroutine(playStep());
+            }
+
             jumpCount = 0;
             // falling/ledge
             horizontalVelocity = Vector3.zero;
         }
 
-        // tie movement to camera 
+        //tie movement to camera 
         moveDirection = (transform.right * Input.GetAxis("Horizontal")) +
                         (transform.forward * Input.GetAxis("Vertical"));    //Normalized to handle diagonal movement
         controller.Move(moveDirection * speed * Time.deltaTime);
 
         jump();
 
-        //gives jump speed (y) a value
+        //gives jump enemySpeedMult (y) a value
         controller.Move(horizontalVelocity * Time.deltaTime);
         //start pulling down immediately after the jump
         horizontalVelocity.y -= gravity * Time.deltaTime;
@@ -174,7 +190,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             horizontalVelocity.y = Vector3.zero.y; // horizontal velocity is lecture player velocity?
         }
 
-        // Shoot Add //
+        
         if (Input.GetButton("Fire1") && !isShooting)
         {
             StartCoroutine(Shoot());
@@ -188,7 +204,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         {
             jumpCount++;
             horizontalVelocity.y = jumpSpeed;
-
+            aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
         }
     }
 
@@ -197,7 +213,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (Input.GetButtonDown("Sprint") && !isCrouching)  //Won't sprint if crouching
         {
             speed *= sprintMod;
-            currentSpeed = speed * sprintMod; // *nice catches here for powerup
+            currentSpeed = speed; // *nice catches here for powerup
             isSprinting = true;
         }
         else if (Input.GetButtonUp("Sprint"))               //Potential bug with crouching
@@ -213,7 +229,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
         {
             isCrouching = true;
-            currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
+            currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce enemySpeedMult
 
             //Change height when crouching
             controller.height = originalHeight * crouchHeight;
@@ -224,7 +240,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
         {
             isCrouching = false;
-            currentSpeed = speed; //Restore speed
+            currentSpeed = speed; //Restore enemySpeedMult
 
             //Restore height when releasing crouch button
             controller.height = originalHeight;
@@ -232,23 +248,65 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
             //isCrouchLerping = true;
         }
-        //Adjust speed at which player crouches/uncrouches
+        //Adjust enemySpeedMult at which player crouches/uncrouches
         //if (isCrouchLerping)
         //{
         //    controller.height = Mathf.Lerp(controller.height, targetHeight, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
 
         //    isCrouchLerping = false;
         //}
-        //Note: The line above is here and not in the if statement b/e of the nature in which Unity checks for button presses,
+        //Note: The line above is here and not in the if statement b/c of the nature in which Unity checks for button presses,
         //      the line would only execute about half way or so
     }
 
     // Player UI //
     public void updatePlayerUI()
     {
-        GameManager.instance.PlayerHPBar.fillAmount = (float)HP / HPOrig;
+        GameManager.instance.PlayerHPBar.fillAmount = (float)HP / origHP;
+        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
+        GameManager.instance.UpdateLives(); //Show lives on the UI
     }
 
+    public void GetGunStats(weaponStats gun)
+    {
+        gunList.Add(gun);        
+
+        shootDamage = gun.damage;
+        shootDistance = gun.weaponRange;
+        shootRate = gun.shootRate;
+
+        gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
+    // somewhere around this section
+    // jammie add get gun stats
+    // jammie add select gun scroll wheel (want to do a radial menu eventually)
+    // jammie add change gun
+
+    void selectGun()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListpos < gunList.Count - 1)
+        {
+            gunListpos++;
+            changeGun();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListpos > 0)
+        {
+            gunListpos--;
+            changeGun();
+        }
+
+    }
+    void changeGun()
+    {
+        shootDamage = gunList[gunListpos].damage;
+        shootDistance = gunList[gunListpos].weaponRange;
+        shootRate = gunList[gunListpos].shootRate;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListpos].model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListpos].model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
 
     // Player Damage and Weapons //   
     public void takeDamage(int amount)
@@ -257,19 +315,36 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         updatePlayerUI();
         StartCoroutine(screenFlashRed());
+        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
 
         if (HP <= 0)
         {
-            //death/lose screen
-            GameManager.instance.FlagScript.DropFlag();
-            //GameManager.instance.LoseGame();
+            //death/lose screen in Respawn() method
+            GameManager.instance.Respawn();
         }
     }
 
-    // somewhere around this section
-    // jammie add get gun stats
-    // jammie add select gun scroll wheel (want to do a radial menu eventually)
-    // jammie add change gun
+    //When the player is stunned this is called
+    public void stun(float duration)
+    {
+        StartCoroutine(StunCoroutine(duration));        //In it's own method for simplification
+    }
+
+    IEnumerator StunCoroutine(float duration)
+    {
+        Debug.Log("Stun started!");
+
+        //disable movement
+        GetComponent<playerController>().enabled = false;
+        //stun duration
+        yield return new WaitForSeconds(duration);
+        //enableMovement();
+        GetComponent<playerController>().enabled = true;
+        
+        Debug.Log("Stun ended!");
+
+        //I
+    }
 
     IEnumerator screenFlashRed()
     {   
@@ -282,6 +357,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {
         //turn on
         isShooting = true;
+        aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
 
         //shoot code        
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
@@ -294,9 +370,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             {
                 dmg.takeDamage(shootDamage);
             }
-            
-            // jammie add gunlist if statement
 
+            if (gunList[gunListpos].hitEffect != null) 
+            {
+                Instantiate(gunList[gunListpos].hitEffect, contact.point, Quaternion.identity);
+            }
+            
         }
 
         //**************To be added when pickup is implemented******************
@@ -325,67 +404,47 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
         //turn off
         isShooting = false;
+        
+    }
+
+    // code for walking audio
+
+    IEnumerator playStep()
+    {
+        isPlayingStep = true;
+        aud.PlayOneShot(audStep[Random.Range(0, audStep.Length)], audStepVol);
+
+        if (!isSprinting)
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.3f);
+        }
+        isPlayingStep = false;
     }
 
     // Triggers //
     // Paint ball gun effect implementation
-//    private void OnTriggerEnter(Collider other)
-//    {
-//        // Check if the trigger is the sphere
-//        if (other.CompareTag("Damage-Ball"))
-//        {
-//#if UNITY_EDITOR
-//            //Debug.Log("Player hit by ball");
-//#endif
+    //    private void OnTriggerEnter(Collider other)
+    //    {
+    //        // Check if the trigger is the sphere
+    //        if (other.CompareTag("Damage-Ball"))
+    //        {
+    //#if UNITY_EDITOR
+    //            //Debug.Log("Player hit by ball");
+    //#endif
 
-//            // Get the direction vector from the ball (sphere) to the player
-//            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
+    //            // Get the direction vector from the ball (sphere) to the player
+    //            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
 
-//            // Define the push distance
-//            float pushDistance = 13.0f; // knock player backward.
+    //            // Define the push distance
+    //            float pushDistance = 13.0f; // knock player backward.
 
-//            // Use CharacterController to move the player
-//            controller.Move(pushDirection * pushDistance);
-//        }
-//        // is there an exit? ontriggerenter ontriggerexit?
-//    }
-
-    // Capture the Flag //
-
-    // For capture the flag only
-    // checking if player reach to base with the flag and score
-    private void ReachToBase()
-    {    
-     
-        if (captureFlagBasePosition != null)
-        {
-            // Check if Player has reached the base
-            if (Vector3.Distance(transform.position, captureFlagBasePosition.position) < 2.0f)
-            {
-                #if UNITY_EDITOR
-                    Debug.Log($"Player Touch Based");
-                #endif
-                
-                if(flag != null && flag.IsCarriedBy(transform))
-                {
-                    #if UNITY_EDITOR
-                        Debug.Log("Player has the flag and reached the base!");
-                    #endif
-                    GameManager.instance.UpdateFlagCount(+1);
-                    flag.ResetFlag();
-                }           
-                
-                
-            }
-        }
-    }
-
-     public void getFlagStatus(flagStats flag)
-    {
-        //flagPole is the flag object on the scene.  
-        flagPole.GetComponent<MeshFilter>().sharedMesh = flag.model.GetComponent<MeshFilter>().sharedMesh;
-        flagPole.GetComponent<MeshRenderer>().sharedMaterial = flag.model.GetComponent<MeshRenderer>().sharedMaterial;
-        
-        flag.model.GetComponent<Transform>().position = flagPole.GetComponent<Transform>().position; // put the flag in the correct position of the player
-    }
+    //            // Use CharacterController to move the player
+    //            controller.Move(pushDirection * pushDistance);
+    //        }
+    //        // is there an exit? ontriggerenter ontriggerexit?
+    //    }
 }
