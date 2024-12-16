@@ -19,10 +19,8 @@ public class pickup : MonoBehaviour
         {
 
             GameManager.instance.PlayerScript.GetGunStats(gun);
-                Destroy(gameObject);
+            Destroy(gameObject);
 
         }
     }
-   
-
 }

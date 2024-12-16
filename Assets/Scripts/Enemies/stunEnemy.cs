@@ -7,7 +7,7 @@ public class stunEnemy : baseEnemy
 {
     [Header("     Stun Enemy Stats     ")]
     [SerializeField] private float stunDuration;
-    [SerializeField] private int enemyHP;
+    [SerializeField] private float enemyHP;
     [SerializeField] private float enemySpeedMult;      //Speed multiplier
     [SerializeField] private int fleeDistance = 2;
 
@@ -29,7 +29,7 @@ public class stunEnemy : baseEnemy
         Behavior();     //the way the enemy acts around the player
     }
 
-    public override void takeDamage(int amount)
+    public override void takeDamage(float amount)
     {
         //drop flag right before dying
         if (HP - amount <= 0)

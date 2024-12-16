@@ -2,14 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Unity.VisualScripting;
-using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
+using UnityEngine.UI;
 
+<<<<<<< Updated upstream:Assets/Scripts/enemyAI.cs
 public class enemyAI : MonoBehaviour, IDamage, IOpen
 {
     [Header("      ENEMY      ")]
     [SerializeField] Renderer model;
     [SerializeField] NavMeshAgent agent;
+=======
+public class enemyController : MonoBehaviour, IDamage, IOpen
+{
+    [Header("      ENEMY      ")]
+    [SerializeField] NavMeshAgent agent;      //Components shared between all/most enemy types
+    [SerializeField] Renderer model;
+    [SerializeField] Animator animator;
+>>>>>>> Stashed changes:Assets/Scripts/Enemies/enemyController.cs
 
     [Header("      TRANSFORMS/POSITIONS      ")]
     [SerializeField] Transform shootPos;
@@ -17,10 +25,23 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     [SerializeField] Transform healthBarPos;
 
     [Header("      ENEMY STATS      ")]
+<<<<<<< Updated upstream:Assets/Scripts/enemyAI.cs
     int HPOrig;
     float angleToPlayer;
     float stoppingDistOrig;
     [SerializeField] int HP;
+=======
+    float angleToPlayer;
+    float stoppingDistOrig;
+
+    [SerializeField] float maxHealth;
+    [SerializeField] float currentHealth;
+    [SerializeField] private HealthBars enemyHealthBar;
+
+    private float fillSpeed;
+    private Gradient colorGradient;
+
+>>>>>>> Stashed changes:Assets/Scripts/Enemies/enemyController.cs
     [SerializeField] int faceTargetSpeed;
     [SerializeField] int FOV;
     [SerializeField] int roamDist;  // sphere distance of roaming
@@ -35,59 +56,87 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     [SerializeField] GameObject bullet;
     [SerializeField] float shootRate;
 
-    
+
     // Flags/Bools //
     bool playerInRange;
     bool isShooting;
     bool isRoaming;
 
     // Stop Roam Temp //
-    Coroutine coroutine;
+    Coroutine co;
 
     // Vectors //
+<<<<<<< Updated upstream:Assets/Scripts/enemyAI.cs
+=======
+
+>>>>>>> Stashed changes:Assets/Scripts/Enemies/enemyController.cs
     Vector3 playerDirection;
     Vector3 startingPos;
     Vector3 lastPlatformPosition;
 
+    public float CurrentHealth
+    {
+        get { return currentHealth; }
+        set { currentHealth = value; }
+    }
+    public float MaxHealth
+    {
+        get { return maxHealth; }
+        set { maxHealth = value; }
+    }
+
+
+
+    // Start is called before the first frame update
     void Start()
     {
-        //GameManager.instance.UpdateGame(1);
+        currentHealth = maxHealth;
+        UpdateEnemyHealthBar();
+
         colorOrig = model.material.color; // for flash red
-        startingPos = transform.position; // to remember the starting position for roaming
+        startingPos = agent.transform.position; // to remember the starting position for roaming
         stoppingDistOrig = agent.stoppingDistance; // remember for roam/idle reset
     }
 
     // Update is called once per frame
     void Update()
     {
+<<<<<<< Updated upstream:Assets/Scripts/enemyAI.cs
         // animation
+=======
+        //Behavior();
+>>>>>>> Stashed changes:Assets/Scripts/Enemies/enemyController.cs
         float agentSpeed = agent.velocity.normalized.magnitude;
         float animationSpeed = animator.GetFloat("Speed");
+
         animator.SetFloat("Speed", Mathf.MoveTowards(animationSpeed, agentSpeed, Time.deltaTime * animSpeedTransition));
 
-        //if player in range but can't see
+        //gets animation to work
+        //animator.SetFloat("Speed", agent.velocity.normalized.magnitude);
+
         if (playerInRange && !canSeePlayer())
         {
-            // check the timer && check distance if it is closer to the distance by 0.01f
-            if (!isRoaming && agent.remainingDistance < 0.01f)
+            //timer or close
+            if (!isRoaming && agent.remainingDistance < 0.001f)
             {
-                // start to roam
-                coroutine = StartCoroutine(roam());
+                co = StartCoroutine(roam());
             }
         }
-        // if player not in range
         else if (!playerInRange)
         {
-            // not currently roaming and almost to position (running towards last known player position)
-            if (!isRoaming && agent.remainingDistance < 0.01f)
+            //timer or close
+            if (!isRoaming && agent.remainingDistance < 0.001f)
             {
-                //start roam
-                coroutine = StartCoroutine(roam());
+                co = StartCoroutine(roam());
             }
         }
     }
+<<<<<<< Updated upstream:Assets/Scripts/enemyAI.cs
     
     // Enemy Roaming //
+=======
+
+>>>>>>> Stashed changes:Assets/Scripts/Enemies/enemyController.cs
     IEnumerator roam()
     {
         // turn on 
@@ -100,7 +149,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         agent.stoppingDistance = 0;
 
         // how big is our roaming distance 
-        Vector3 randomPos = Random.insideUnitSphere * roamDist;        
+        Vector3 randomPos = Random.insideUnitSphere * roamDist;
         randomPos += startingPos;
 
         // Enemy is Hit by Player //
@@ -111,7 +160,6 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         // turn off
         isRoaming = false;
     }
-    
     // Enemy Damage Feedback //
     IEnumerator flashRed()
     {
@@ -130,11 +178,11 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         animator.SetTrigger("Shoot");
 
         // create bullet
-        Instantiate(bullet, shootPos.position, transform.rotation);
+        Instantiate(bullet, shootPos.position, agent.transform.rotation);
 
         // enemySpeedMult
         yield return new WaitForSeconds(shootRate);
-        
+
         // turn off
         isShooting = false;
     }
@@ -144,12 +192,12 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     {
         // this is the head position of the enemy
         playerDirection = GameManager.instance.Player.transform.position - headPos.position;
-        angleToPlayer = Vector3.Angle(playerDirection, transform.forward);
+        angleToPlayer = Vector3.Angle(playerDirection, agent.transform.forward);
 
         // To know the location of the player by using raycasting, do we hit the player
         RaycastHit hit;
         // Player inside the sphere range and in FOV.
-        if (Physics.Raycast(headPos.position, playerDirection, out hit) && angleToPlayer <= FOV) 
+        if (Physics.Raycast(headPos.position, playerDirection, out hit) && angleToPlayer <= FOV)
         {
             // reset stopping distance
             agent.stoppingDistance = stoppingDistOrig;
@@ -173,24 +221,24 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
                 }
                 // true = can see
                 return true;
-            }            
+            }
         }
         // reset to roam distance
         agent.stoppingDistance = 0;
 
         // do not see the player, raycast did not hit the player
-        return false; 
+        return false;
     }
 
-  
+
     // Triggers //
     // Player Enters Sphere //
     private void OnTriggerEnter(Collider other)
-    {        
+    {
 
         if (other.CompareTag("Player"))
         {
-            playerInRange = true;     
+            playerInRange = true;
         }
 
     }
@@ -213,10 +261,11 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         Quaternion rot = Quaternion.LookRotation(new Vector3(playerDirection.x, 0, playerDirection.z));
 
         //Lerp it, change it over time; first param is what you're lerping, second is destination, last is time with turn enemySpeedMult multiplier
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
+        agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 
     // Enemy Takes Damage //
+<<<<<<< Updated upstream:Assets/Scripts/enemyAI.cs
     public void takeDamage(int amount)
     {   
         // decrease HP
@@ -242,6 +291,36 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
            
             // I am dead
             Destroy(gameObject);            
+=======
+    public void takeDamage(float amount)
+    {
+        // decrease _HP
+        currentHealth -= amount;
+
+        if (currentHealth > 0)
+        {
+            StopCoroutine(co);
+            isRoaming = false;
+            StartCoroutine(flashRed());
+            agent.SetDestination(GameManager.instance.Player.transform.position);
+            UpdateHealth(-amount);
         }
+        else
+        {
+            Destroy(gameObject);
+>>>>>>> Stashed changes:Assets/Scripts/Enemies/enemyController.cs
+        }
+    }
+
+    // Health //
+    public void UpdateHealth(float amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        UpdateEnemyHealthBar();
+    }
+    private void UpdateEnemyHealthBar()
+    {
+        enemyHealthBar.UpdateHealthBar(currentHealth, maxHealth);
     }
 }

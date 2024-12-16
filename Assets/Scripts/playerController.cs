@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.TextCore.Text;
 using UnityEngine;
+using UnityEngine.UI;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class playerController : MonoBehaviour, IDamage, IOpen
@@ -37,7 +38,13 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
     
     [Header("      STATS      ")]
+<<<<<<< Updated upstream
     [SerializeField][Range(1, 10)] public int HP; /// turn into Get/Setter
+=======
+    [SerializeField][Range(0, 20)] private float playerMaxHealth;
+    [SerializeField][Range(0, 20)] private float playerCurrentHealth;
+    [SerializeField] private HealthBars playerHealthBar;
+>>>>>>> Stashed changes
 
     [SerializeField][Range(1,  10)] int speed;      //Range adds a slider
     [SerializeField][Range(2,  5)]  int sprintMod;
@@ -104,6 +111,19 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     RaycastHit contact;
     
+    // Properties //
+    // Health //
+    public float PlayerMaxHealth
+    {
+        get { return playerMaxHealth; }
+        set { playerMaxHealth = value; }
+    }
+    public float PlayerCurrentHealth
+    {
+        get { return playerCurrentHealth; }
+        set { playerCurrentHealth = value; }
+    }
+
     //getters and setters (used to calculate stun enemy speed)
     public int Speed
     {
@@ -117,6 +137,11 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         set => sprintMod = value;
     }
 
+<<<<<<< Updated upstream
+=======
+
+    // Unity Methods //
+>>>>>>> Stashed changes
     // Start is called before the first frame update
     void Start()
     {
@@ -126,7 +151,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //originalScaleY = controller.transform.localScale.y;
         //originalScale = controller.transform.localScale;
 
+<<<<<<< Updated upstream
         HPOrig = HP;
+=======
+        // Health and Health Bar //
+        playerCurrentHealth = playerMaxHealth;
+>>>>>>> Stashed changes
         updatePlayerUI();
     }
 
@@ -149,6 +179,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         crouch();      
     }
 
+    //Custom Methods //
     // Player Movement
     void movement()
     {
@@ -252,6 +283,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //      the line would only execute about half way or so
     }
 
+<<<<<<< Updated upstream
     // Player UI //
     public void updatePlayerUI()
     {
@@ -259,6 +291,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
         GameManager.instance.UpdateLives(); //Show lives on the UI
     }
+=======
+  
+>>>>>>> Stashed changes
 
     public void GetGunStats(weaponStats gun)
     {
@@ -275,19 +310,65 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // jammie add select gun scroll wheel (want to do a radial menu eventually)
     // jammie add change gun
 
+<<<<<<< Updated upstream
     // Player Damage and Weapons //   
     public void takeDamage(int amount)
+=======
+    void selectGun()
     {
-        HP -= amount;
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListpos < gunList.Count - 1)
+        {
+            gunListpos++;
+            changeGun();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListpos > 0)
+        {
+            gunListpos--;
+            changeGun();
+        }
+
+    }
+    void changeGun()
+    {
+        shootDamage = gunList[gunListpos].damage;
+        shootDistance = gunList[gunListpos].weaponRange;
+        shootRate = gunList[gunListpos].shootRate;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListpos].model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListpos].model.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
+    // Player UI //
+    public void updatePlayerUI()
+>>>>>>> Stashed changes
+    {
+        playerHealthBar.UpdateHealthBar(playerCurrentHealth, playerMaxHealth);
+        GameManager.instance.UpdateLivesUI();
+
+        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
+       
+    }
+    public void takeDamage(float damage)
+    {
+        playerCurrentHealth -= damage;
+        playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, playerMaxHealth);
 
         updatePlayerUI();
         StartCoroutine(screenFlashRed());
         aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
 
-        if (HP <= 0)
+
+        if (playerCurrentHealth <= 0)
         {
-            //death/lose screen in Respawn() method
-            GameManager.instance.Respawn();
+            if (GameManager.instance.PlayerLives > 0)
+            {
+                //death/lose screen in Respawn() method
+                GameManager.instance.Respawn();
+            }
+            else
+            {
+                GameManager.instance.LoseGame();
+            }
         }
     }
 
