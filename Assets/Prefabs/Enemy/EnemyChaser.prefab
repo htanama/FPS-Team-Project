@@ -492,7 +492,7 @@ MonoBehaviour:
   HP: 5
   faceTargetSpeed: 10
   FOV: 90
-  roamDist: 20
+  roamDist: 100
   roamTimer: 1
   animator: {fileID: 5537889187698844268}
   animSpeedTransition: 0
