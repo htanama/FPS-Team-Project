@@ -68,6 +68,9 @@ public class GameManager : MonoBehaviour
         playerScript = player.GetComponent<playerController>();
         flag = GameObject.FindWithTag("Flag");
         flagScript = player.GetComponent<flagManager>();    //Attached flag manager to player
+        //find flag goal locations
+        flagScript.FlagStartBase = GameObject.FindWithTag("FlagBase").transform;
+        flagScript.FlagGoalBase = GameObject.FindWithTag("FlagGoal").transform;
         //goalCount = playerScript.GetHP();
     }
 
