@@ -35,6 +35,12 @@ public class flagManager : MonoBehaviour
         set => flagStartBase = value;
     }
 
+    public Transform FlagGoalBase
+    {
+        get => flagGoalBase;
+        set => flagGoalBase = value;
+    }
+
     public int CaptureCount
     {
         get => captureCount;

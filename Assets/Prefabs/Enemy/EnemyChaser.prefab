@@ -493,9 +493,9 @@ MonoBehaviour:
   healthBarPos: {fileID: 0}
   faceTargetSpeed: 10
   FOV: 90
-  roamDist: 50
-  roamTimer: 1
-  animSpeedTransition: 0
+  roamDist: 30
+  roamTimer: 3
+  animSpeedTransition: 8
   bullet: {fileID: 5144485743538677400, guid: d7f9ac83b76ff0743a1b6ed48e870843, type: 3}
   shootRate: 0.5
 --- !u!114 &7096959978162056075
