@@ -5,7 +5,7 @@
 
   Edited by: Lemons (Weapons)
             - Added fields shoot damage, distance, rate
-            - Also field HP
+            - Also field _HP
             - uncommented layer mask
             - Added bool/flag isShooting
             - update, added draw ray (raycast)
@@ -17,7 +17,7 @@
             - workin on a feedback crosshair
 
         Edited: Erik Segura
-            - Added HP Bar functionality
+            - Added _HP Bar functionality
             - Added audio to movement, gun firing, jump
 */
 
@@ -38,8 +38,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
     
     [Header("      STATS      ")]
-    [SerializeField][Range(1, 10)] public int HP; /// turn into Get/Setter
-
+    [SerializeField][Range(1, 10)] int _HP; /// turn into Get/Setter
     [SerializeField][Range(1,  10)] int speed;      //Range adds a slider
     [SerializeField][Range(2,  5)]  int sprintMod;
     [SerializeField][Range(1,  5)]  int jumpMax;
@@ -52,14 +51,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField][Range(0.01f, 1.0f)] float crouchHeight;
 
     // Crouching variables
-    private int currentSpeed;     //To avoid bugs by modifying enemySpeedMult directly
+    private int currentSpeed;     //To avoid bugs by modifying speed directly
     private float originalHeight; //When releasing crouch
-    //private float targetHeight;
     private Vector3 originalCenter;
-
-    //private float originalScaleY; //For use when crouching
-    //private Vector3 originalScale; //Used when releasing crouch
-    //private Vector3 targetScale; //For use when releasing crouch
 
     [Header("      WEAPONS      ")]
     // notes - weaponType; weaponEquipped; ammoCount; bool isReloading; isEquipping;
@@ -71,7 +65,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] float shootRate;
     [SerializeField] GameObject gunModel;
     [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
-    int gunListpos;     
+    [SerializeField] Transform shootPos;
+
 
     [Header("      Player Audio      ")]
     [SerializeField] AudioSource aud;
@@ -93,13 +88,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     int jumpCount;
     int origHP;
-    // jammie add list pos
+    int gunListpos;
 
     bool isShooting;
     bool isSprinting;
     bool isPlayingStep;
     bool isCrouching;
-    //bool isCrouchLerping;                 //To allow to modify crouch enemySpeedMult
 
     RaycastHit contact;
     
@@ -116,6 +110,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         set => sprintMod = value;
     }
 
+    public int HP
+    {
+        get => HP;
+        set => HP = value;
+    }
+
     public int OrigHP
     {
         get => origHP;
@@ -128,8 +128,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         currentSpeed = speed;
         originalHeight = controller.height;
         originalCenter = controller.center;
-        //originalScaleY = controller.transform.localScale.y;
-        //originalScale = controller.transform.localScale;
 
         origHP = HP;
         updatePlayerUI();
@@ -147,11 +145,10 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             //always checking for these
             movement();
             selectGun();
-
+            crouch();  
         }
 
         sprint(); //Outside of condition to prevent infinite sprint glitch
-        crouch();      
     }
 
     // Player Movement
@@ -226,35 +223,24 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {
         if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
         {
-            isCrouching = true;
-            currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce enemySpeedMult
+            isCrouching = !isCrouching;
+        }
+        if(isCrouching)
+        {
+            currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
 
             //Change height when crouching
             controller.height = originalHeight * crouchHeight;
             controller.center = new Vector3(0, controller.height / 2, 0);
-
-            //isCrouchLerping = true;
         }
-        else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
+        else if (!isCrouching) //When the crouch key is released
         {
-            isCrouching = false;
-            currentSpeed = speed; //Restore enemySpeedMult
+            currentSpeed = speed; //Restore speed
 
             //Restore height when releasing crouch button
             controller.height = originalHeight;
             controller.center = originalCenter;
-
-            //isCrouchLerping = true;
         }
-        //Adjust enemySpeedMult at which player crouches/uncrouches
-        //if (isCrouchLerping)
-        //{
-        //    controller.height = Mathf.Lerp(controller.height, targetHeight, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
-
-        //    isCrouchLerping = false;
-        //}
-        //Note: The line above is here and not in the if statement b/c of the nature in which Unity checks for button presses,
-        //      the line would only execute about half way or so
     }
 
     // Player UI //
@@ -340,8 +326,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         GetComponent<playerController>().enabled = true;
         
         Debug.Log("Stun ended!");
-
-        //I
     }
 
     IEnumerator screenFlashRed()
@@ -423,27 +407,4 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
         isPlayingStep = false;
     }
-
-    // Triggers //
-    // Paint ball gun effect implementation
-    //    private void OnTriggerEnter(Collider other)
-    //    {
-    //        // Check if the trigger is the sphere
-    //        if (other.CompareTag("Damage-Ball"))
-    //        {
-    //#if UNITY_EDITOR
-    //            //Debug.Log("Player hit by ball");
-    //#endif
-
-    //            // Get the direction vector from the ball (sphere) to the player
-    //            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
-
-    //            // Define the push distance
-    //            float pushDistance = 13.0f; // knock player backward.
-
-    //            // Use CharacterController to move the player
-    //            controller.Move(pushDirection * pushDistance);
-    //        }
-    //        // is there an exit? ontriggerenter ontriggerexit?
-    //    }
 }
