@@ -5,11 +5,11 @@ using UnityEngine.AI;
 using Unity.VisualScripting;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
-public class enemyAI : MonoBehaviour, IDamage, IOpen
+public class enemyAI : baseEnemy, IOpen
 {
-    [Header("      ENEMY      ")]
-    [SerializeField] Renderer model;
-    [SerializeField] NavMeshAgent agent;
+    //[Header("      ENEMY      ")]
+    //[SerializeField] Renderer model;
+    //[SerializeField] NavMeshAgent agent;
 
     [Header("      TRANSFORMS/POSITIONS      ")]
     [SerializeField] Transform shootPos;
@@ -17,7 +17,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     [SerializeField] Transform healthBarPos;
 
     [Header("      ENEMY STATS      ")]
-    int HPOrig;
+    //int HPOrig;
     float angleToPlayer;
     float stoppingDistOrig;
     [SerializeField] int HP;
@@ -27,7 +27,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     [SerializeField] int roamTimer; // how long to wait before move again
 
     [Header("      ANIMATION      ")]
-    [SerializeField] Animator animator;
+    //[SerializeField] Animator animator;
     [SerializeField] int animSpeedTransition;
 
     [Header("      DMG STATS      ")]
@@ -45,9 +45,9 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     Coroutine coroutine;
 
     // Vectors //
-    Vector3 playerDirection;
+    //Vector3 playerDirection;
     Vector3 startingPos;
-    Vector3 lastPlatformPosition;
+    //Vector3 lastPlatformPosition;
 
     void Start()
     {
@@ -59,6 +59,11 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
 
     // Update is called once per frame
     void Update()
+    {
+        Behavior();
+    }
+
+    protected override void Behavior()
     {
         // animation
         float agentSpeed = agent.velocity.normalized.magnitude;
@@ -86,7 +91,6 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
             }
         }
     }
-    
     // Enemy Roaming //
     IEnumerator roam()
     {
@@ -217,31 +221,44 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     }
 
     // Enemy Takes Damage //
-    public void takeDamage(int amount)
-    {   
-        // decrease _HP
-        HP -= amount;
+    //public void takeDamage(int amount)
+    //{   
+    //    // decrease _HP
+    //    HP -= amount;
 
-        // update UI/health bar....in progress
+    //    // update UI/health bar....in progress
 
-        // stop Roaming
-        StopCoroutine(coroutine);
-        isRoaming = false;
+    //    // stop Roaming
+    //    StopCoroutine(coroutine);
+    //    isRoaming = false;
         
-        // visual feedback flash red
-        StartCoroutine(flashRed());
+    //    // visual feedback flash red
+    //    StartCoroutine(flashRed());
         
-        //run toward player's last known position
-        agent.SetDestination(GameManager.instance.Player.transform.position);
+    //    //run toward player's last known position
+    //    agent.SetDestination(GameManager.instance.Player.transform.position);
 
-        // no _HP left
-        if (HP <= 0)
-        {
-           /// this is only if the goal is killing enemies, want to make -1 to enemycount    
-           // GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
+    //    // no _HP left
+    //    if (HP <= 0)
+    //    {
+    //       /// this is only if the goal is killing enemies, want to make -1 to enemycount    
+    //       // GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
            
-            // I am dead
-            Destroy(gameObject);            
+    //        // I am dead
+    //        Destroy(gameObject);            
+    //    }
+    //}
+
+    public override void takeDamage(int amount)
+    {
+        base.takeDamage(amount);    //Calling base class method
+
+        if(HP > 0)
+        {
+            StopCoroutine(coroutine);
+            isRoaming = false;
+            StartCoroutine(flashRed());
+            agent.SetDestination(GameManager.instance.Player.transform.position);
         }
     }
 }
