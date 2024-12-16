@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 111c584ca97bcc9489ab8685fc853bf5, type: 3}
-  m_Name: WW2-GunM1918Bar
+  m_Name: Assult Rifel 4
   m_EditorClassIdentifier: 
-  model: {fileID: 5571641588984482722, guid: c303a18f1cbdd4156b139b9e5b35d6a9, type: 3}
-  damage: 2
-  shootRate: 0.6
-  weaponRange: 90
+  model: {fileID: 3368331593303936535, guid: 7aac2d89d5917204584d58bd46604c2e, type: 3}
+  damage: 5
+  shootRate: 0.3
+  weaponRange: 100
   ammoCurrent: 30
   ammoMax: 120
   areaOfEffectRadius: 0
@@ -23,4 +23,4 @@ MonoBehaviour:
   hitEffect: {fileID: 1301697207402410478, guid: 39f852c28f9c3fd45a427c24f3564ba7, type: 3}
   shootingSounds:
   - {fileID: 8300000, guid: 16aca2265729b44428cf48de6daca525, type: 3}
-  weaponSoundVolume: 0.2
+  weaponSoundVolume: 0.6

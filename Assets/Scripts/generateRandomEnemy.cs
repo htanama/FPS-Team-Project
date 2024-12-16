@@ -5,7 +5,7 @@ using UnityEngine;
 public class generateRandomEnemy : MonoBehaviour
 {
     [SerializeField] public GameObject typeOfEnemy;
-    [SerializeField] private GameObject whoToChase;
+    //[SerializeField] private GameObject whoToChase;
 
     [Header("Randomize Enemy Positions")]
     [SerializeField] private float xMin = -20f;
