@@ -20,7 +20,6 @@ public class enemyAI : baseEnemy, IOpen
     //int HPOrig;
     float angleToPlayer;
     float stoppingDistOrig;
-    [SerializeField] int HP;
     [SerializeField] int faceTargetSpeed;
     [SerializeField] int FOV;
     [SerializeField] int roamDist;  // sphere distance of roaming

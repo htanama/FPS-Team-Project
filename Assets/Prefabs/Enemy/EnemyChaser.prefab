@@ -484,17 +484,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f44b8d7e3b78f544b166e472763a03b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 6792750619603409624}
   agent: {fileID: 2891173972568663895}
+  model: {fileID: 6792750619603409624}
+  animator: {fileID: 5537889187698844268}
+  HP: 5
   shootPos: {fileID: 5046654393891388483}
   headPos: {fileID: 1754485730654401960}
   healthBarPos: {fileID: 0}
-  HP: 5
   faceTargetSpeed: 10
   FOV: 90
-  roamDist: 100
+  roamDist: 50
   roamTimer: 1
-  animator: {fileID: 0}
   animSpeedTransition: 0
   bullet: {fileID: 5144485743538677400, guid: d7f9ac83b76ff0743a1b6ed48e870843, type: 3}
   shootRate: 0.5
