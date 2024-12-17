@@ -257,7 +257,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
         //playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
 
-        GameManager.instance.UpdateCaptures(GameManager.instance.OrbScript.OrbsCollected);  //Show orb captures on UI
+        GameManager.instance.UpdateOrbsCollected(GameManager.instance.OrbScripts.OrbsCollected);  //Show orb captures on UI
         GameManager.instance.UpdateLivesUI(); //Show lives on the UI
     }
 

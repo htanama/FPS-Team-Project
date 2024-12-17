@@ -23,14 +23,12 @@ public class GameManager : MonoBehaviour
     public Image playerHpBar; // from lecture
 
     private GameObject player;
-    private GameObject orb;
     private playerController playerScript;
-    private orbManager orbScript;
+    private List<orbManager> orbScripts;
 
     public GameObject Player => player;     //Read-only getter
-    public GameObject Orb => orb;
     public playerController PlayerScript => playerScript;
-    public orbManager OrbScript => orbScript;
+    public List<orbManager> OrbScripts => orbScripts;
 
     [SerializeField] public GameObject playerDamageScreen;      // *****
     [SerializeField] TMP_Text playerLivesText;
@@ -67,15 +65,16 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         timeScaleOrig = Time.timeScale;
+        //find and set player reference
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
 
-        orb = GameObject.FindWithTag("Flag");   //replace with
-        orbScript = player.GetComponent<orbManager>();    //Attached orb manager to player
-        //find orb goal locations
-        orbScript.OrbSpawnPoint = GameObject.FindWithTag("FlagBase").transform;
-        orbScript.OrbGoalPoint = GameObject.FindWithTag("FlagGoal").transform;
-        //goalCount = playerScript.GetHP();
+        //find all orbs with orbManager scripts in the scene
+        orbScripts = new List<orbManager>(FindObjectsOfType<orbManager>());
+        if (orbScripts.Count == 0)
+        {
+            Debug.LogWarning("No orbManager instances found! Ensure orbs are placed in the scene.");
+        }
     }
 
     // Update is called once per frame
@@ -127,33 +126,36 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
-    public void UpdateCaptures(int amount)      //Game goal
+    public void UpdateOrbsCollected(int amount)      //Game goal
     {
        //show orb captures on UI
         orbCaptureText.text = amount.ToString("F0");
         
         //win condition
-        if(OrbScript.OrbsCollected >= 3)
+        if(FindObjectsOfType<orbManager>().Length <= amount)        //auto updates based on number of orbs in level
         {
-            WinGame();
-        }
+            WinGame();              //Change to reach the end point rather than collect the orbs
+        }                           //or increase to final number to win the game
 
     }
-       public void UpdateLivesUI()
+    public void UpdateLivesUI()
     {
         //code to update lives on the UI
         playerLivesText.text = playerLives.ToString("F0");
     }
 
-    public void Respawn()
+    public void Respawn()       //called when player health reaches zero
     {
         //respawn while player has lives
         if (playerLives > 0)
         {
-            //drop orb
-            if (OrbScript.IsHoldingOrb)
+            //drop all orbs held
+            foreach (orbManager orb in orbScripts)
             {
-                OrbScript.DropOrb(player.transform);
+                if (orb.IsHoldingOrb)
+                {
+                    orb.DropOrb(player.transform);
+                }
             }
 
             //move player to spawn point (don't destroy)

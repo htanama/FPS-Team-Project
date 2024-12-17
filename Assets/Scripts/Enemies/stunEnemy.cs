@@ -33,7 +33,7 @@ public class stunEnemy : baseEnemy
     {
         //drop orb right before dying
         if (currentHealth - amount <= 0)
-        { GameManager.instance.OrbScript.DropOrb(transform); }
+        { GameManager.instance.OrbScripts.DropOrb(transform); }
         //calling base method for damage handling
         base.takeDamage(amount);
     }
@@ -54,7 +54,7 @@ public class stunEnemy : baseEnemy
     private void chasePlayer()
     {
         //move to player location anywhere on the scene when the player has the orb
-        if (GameManager.instance.OrbScript.IsHoldingOrb)
+        if (GameManager.instance.OrbScripts.IsHoldingOrb)
             agent.SetDestination(GameManager.instance.Player.transform.position);
 
         //stun and take orb from player
@@ -91,7 +91,7 @@ public class stunEnemy : baseEnemy
     {
         playerController player = GameManager.instance.Player.GetComponent<playerController>();
         //stun player for set duration
-        if(player != null && GameManager.instance.OrbScript.IsHoldingOrb)
+        if(player != null && GameManager.instance.OrbScripts.IsHoldingOrb)
         {
             player.stun(stunDuration);
         }
@@ -100,7 +100,7 @@ public class stunEnemy : baseEnemy
     private void takeOrbFromPlayer()
     {
         //accessing orb manager
-        orbManager OrbManager = GameManager.instance.OrbScript;
+        orbManager OrbManager = GameManager.instance.OrbScripts;
 
         //taking orb from player
         if(OrbManager != null)

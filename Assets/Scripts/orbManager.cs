@@ -57,7 +57,10 @@ public class orbManager : MonoBehaviour
     void Start()
     {
         playerTransform = GameManager.instance.Player.transform;
-        orb = GameManager.instance.Orb;
+        orb = gameObject;
+        //orb spawn and goal
+        orbSpawnPoint = GameObject.FindWithTag("OrbSpawn").transform;       //Might not need this if using spawner
+        orbGoalPoint = GameObject.FindWithTag("OrbGoal").transform;
         //Orb setup
         ResetOrb();
     }
@@ -69,9 +72,9 @@ public class orbManager : MonoBehaviour
         {
             if (Vector3.Distance(playerTransform.position, orbGoalPoint.transform.position) < orbAreaSize)
             {
-
+                //drop off the orb at the goal
                 OrbGoalReached();
-                GameManager.instance.UpdateCaptures(orbsCollected); //Update capture count to the UI
+                GameManager.instance.UpdateOrbsCollected(orbsCollected); //Update capture count to the UI
             }
         }
         else
@@ -84,8 +87,10 @@ public class orbManager : MonoBehaviour
 
     void OrbGoalReached()
     {
+        isHoldingOrb = false;
         orbsCollected++;
-        GameManager.instance.UpdateCaptures(orbsCollected);  //Update the number of captures on the UI
+
+        GameManager.instance.UpdateOrbsCollected(orbsCollected);  //Update the number of captures on the UI
 
         Debug.Log($"Orb collected! Total collected: {orbsCollected}");
 
@@ -131,7 +136,7 @@ public class orbManager : MonoBehaviour
 
     void ResetOrb()
     {
-        //orb is reset to base if not held
+        //orb is reset to starting point
         orb.transform.position = orbSpawnPoint.transform.position + orbOffset;
         orb.GetComponent<Collider>().enabled = true;
     }
