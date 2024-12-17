@@ -6,13 +6,12 @@ TagManager:
   tags:
   - HUD
   - Platform2
-  - Damage-Ball
   - Enemy
   - Flag
   - Damage
-  - RedBase
   - trap_door
-  - MovingPlatform
+  - FlagBase
+  - FlagGoal
   layers:
   - Default
   - TransparentFX

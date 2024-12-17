@@ -10,13 +10,31 @@ public abstract class baseEnemy : MonoBehaviour, IDamage
     [SerializeField] protected NavMeshAgent agent;      //Components shared between all/most enemy types
     [SerializeField] protected Renderer model;
     [SerializeField] protected Animator animator;
-    [SerializeField] protected int HP;
+    
+    [SerializeField] protected float maxHealth;
+    [SerializeField] protected float currentHealth;
+    [SerializeField] protected HealthBars enemyHealthBar;
+    private float fillSpeed;
+    private Gradient colorGradient;
+
     protected Vector3 playerDirection;
 
-    public virtual void takeDamage(int amount)      //All enemies take damage
+    public float CurrentHealth
     {
-        HP -= amount;
-        if(HP <= 0)
+        get { return currentHealth; }
+        set { currentHealth = value; }
+    }
+    public float MaxHealth
+    {
+        get { return maxHealth; }
+        set { maxHealth = value; }
+    }
+
+
+    public virtual void takeDamage(float amount)      //All enemies take damage
+    {
+        currentHealth -= amount;
+        if(currentHealth <= 0)
             Destroy(gameObject);        //Dead
     }
 
