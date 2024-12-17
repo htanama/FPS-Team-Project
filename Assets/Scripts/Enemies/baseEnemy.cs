@@ -12,9 +12,10 @@ public abstract class baseEnemy : MonoBehaviour, IDamage
     [SerializeField] protected Renderer model;
     [SerializeField] protected Animator animator;
     
+    [SerializeField] protected Image enemyHPBar;
     [SerializeField] protected float maxHealth;
     [SerializeField] protected float currentHealth;
-    [SerializeField] protected Image enemyHPFill;
+
     [SerializeField] protected float fillSpeed;
     [SerializeField] protected Gradient colorGradient;
 
@@ -31,10 +32,10 @@ public abstract class baseEnemy : MonoBehaviour, IDamage
         get { return maxHealth; }
         set { maxHealth = value; }
     }
-    public Image EnemyHPFill
+    public Image EnemyHPBar
     {
-        get { return enemyHPFill; }
-        set { enemyHPFill = value; }
+        get { return enemyHPBar; }
+        set { enemyHPBar = value; }
     }
     public float FillSpeed
     {
