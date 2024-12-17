@@ -31,36 +31,12 @@ public class GameManager : MonoBehaviour
     public playerController PlayerScript => playerScript;
     public flagManager FlagScript => flagScript;
 
-    [SerializeField] private HealthBars playerHPBar;
-    [SerializeField] private HealthBars enemyHPBar;
-    [SerializeField] private float fillSpeed;
-    [SerializeField] private Gradient colorGradient;
     [SerializeField] private GameObject playerDamageScreen;
     [SerializeField] TMP_Text playerLivesText;
 
     private bool isPaused;
 
     // Properties //
-    public HealthBars PlayerHealthBar
-    {
-        get { return playerHPBar; }
-        set { playerHPBar = value; }
-    }
-    public HealthBars EnemyHealthBar
-    {
-        get { return enemyHPBar; }
-        set { enemyHPBar = value; }
-    }
-    public float FillSpeed
-    {
-        get { return fillSpeed; }
-        set { fillSpeed = value; }
-    }
-    public Gradient ColorGradient
-    {
-        get { return colorGradient; }
-        set { colorGradient = value; }
-    }
     public GameObject PlayerDamageScreen
     {
         get { return playerDamageScreen; }
@@ -92,9 +68,6 @@ public class GameManager : MonoBehaviour
         timeScaleOrig = Time.timeScale;
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
-
-        playerHPBar.Initialize(fillSpeed, colorGradient);
-        enemyHPBar.Initialize(fillSpeed, colorGradient);
 
         flag = GameObject.FindWithTag("Flag");
         flagScript = player.GetComponent<flagManager>();    //Attached flag manager to player

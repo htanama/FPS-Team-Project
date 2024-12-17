@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 
 //There will be more enemies so Base Enemy is created for inheritance and reusability
@@ -13,9 +14,10 @@ public abstract class baseEnemy : MonoBehaviour, IDamage
     
     [SerializeField] protected float maxHealth;
     [SerializeField] protected float currentHealth;
-    [SerializeField] protected HealthBars enemyHealthBar;
-    private float fillSpeed;
-    private Gradient colorGradient;
+    [SerializeField] protected Image enemyHPFill;
+    [SerializeField] protected float fillSpeed;
+    [SerializeField] protected Gradient colorGradient;
+
 
     protected Vector3 playerDirection;
 
@@ -29,7 +31,21 @@ public abstract class baseEnemy : MonoBehaviour, IDamage
         get { return maxHealth; }
         set { maxHealth = value; }
     }
-
+    public Image EnemyHPFill
+    {
+        get { return enemyHPFill; }
+        set { enemyHPFill = value; }
+    }
+    public float FillSpeed
+    {
+        get { return fillSpeed; }
+        set { fillSpeed = value; }
+    }
+    public Gradient ColorGradient
+    {
+        get { return colorGradient; }
+        set { colorGradient = value; }
+    }
 
     public virtual void takeDamage(float amount)      //All enemies take damage
     {
