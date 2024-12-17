@@ -1513,6 +1513,10 @@ PrefabInstance:
       propertyPath: playerGameObject
       value: 
       objectReference: {fileID: 779670484}
+    - target: {fileID: 3290855523595643536, guid: f89a6756db558d746a06429529700e9a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d34e0692bd1de3b418d5aade0c893a44, type: 2}
     - target: {fileID: 4592150531866800161, guid: f89a6756db558d746a06429529700e9a, type: 3}
       propertyPath: m_Name
       value: Portal A
@@ -4268,6 +4272,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 628.497
       objectReference: {fileID: 0}
+    - target: {fileID: 507859395338135918, guid: 9a88db6bb0e82ef4faa53e80bf43c884, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cd1fc3a051e5212469bb835f5c4805f0, type: 2}
     - target: {fileID: 1457851388910576208, guid: 9a88db6bb0e82ef4faa53e80bf43c884, type: 3}
       propertyPath: Player
       value: 
@@ -5483,7 +5491,7 @@ SceneRoots:
   - {fileID: 4653841931886152101}
   - {fileID: 629312510}
   - {fileID: 1766305375}
+  - {fileID: 385084232}
+  - {fileID: 1276588606}
   - {fileID: 1139327818}
   - {fileID: 39992651}
-  - {fileID: 1276588606}
-  - {fileID: 385084232}
