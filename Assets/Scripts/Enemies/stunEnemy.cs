@@ -19,7 +19,7 @@ public class stunEnemy : baseEnemy
     void Start()
     {
         //Initializing stats
-        HP = enemyHP;
+        currentHealth = enemyHP;
         agent.speed *= enemySpeedMult;
     }
 
@@ -29,10 +29,10 @@ public class stunEnemy : baseEnemy
         Behavior();     //the way the enemy acts around the player
     }
 
-    public override void takeDamage(int amount)
+    public override void takeDamage(float amount)
     {
         //drop flag right before dying
-        if (HP - amount <= 0)
+        if (currentHealth - amount <= 0)
         { GameManager.instance.FlagScript.DropFlag(transform); }
         //calling base method for damage handling
         base.takeDamage(amount);

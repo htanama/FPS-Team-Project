@@ -21,6 +21,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
 
+    [Header("Health Options")]
+    [SerializeField] private HealthBars playerHPBar;
+    [SerializeField] private HealthBars enemyHPBar;
+    [SerializeField] private float fillSpeed;
+    [SerializeField] private Gradient colorGradient;
+    [SerializeField] private GameObject playerDamageScreen;
+    [SerializeField] TMP_Text playerLivesText;
+
     private GameObject player;
     private GameObject flag;
     private playerController playerScript;
@@ -30,13 +38,6 @@ public class GameManager : MonoBehaviour
     public GameObject Flag => flag;
     public playerController PlayerScript => playerScript;
     public flagManager FlagScript => flagScript;
-
-    [SerializeField] private HealthBars playerHPBar;
-    [SerializeField] private HealthBars enemyHPBar;
-    [SerializeField] private float fillSpeed;
-    [SerializeField] private Gradient colorGradient;
-    [SerializeField] private GameObject playerDamageScreen;
-    [SerializeField] TMP_Text playerLivesText;
 
     private bool isPaused;
 
@@ -93,15 +94,15 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
 
-        playerHPBar.Initialize(fillSpeed, colorGradient);
-        enemyHPBar.Initialize(fillSpeed, colorGradient);
-
         flag = GameObject.FindWithTag("Flag");
         flagScript = player.GetComponent<flagManager>();    //Attached flag manager to player
         //find flag goal locations
         flagScript.FlagStartBase = GameObject.FindWithTag("FlagBase").transform;
         flagScript.FlagGoalBase = GameObject.FindWithTag("FlagGoal").transform;
         //goalCount = playerScript.GetHP();
+
+        //playerHPBar.Initialize(fillSpeed, colorGradient);
+        //enemyHPBar.Initialize(fillSpeed, colorGradient);
     }
 
     // Update is called once per frame

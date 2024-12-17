@@ -249,7 +249,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Player UI //
     public void updatePlayerUI()
     {
-        playerHealthBar.UpdateHealthBar(playerCurrentHealth, playerMaxHealth);
+        //playerHealthBar.UpdateHealthBar(playerCurrentHealth, playerMaxHealth);
         GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
         GameManager.instance.UpdateLivesUI(); //Show lives on the UI
     }
