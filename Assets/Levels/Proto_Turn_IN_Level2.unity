@@ -1513,6 +1513,10 @@ PrefabInstance:
       propertyPath: playerGameObject
       value: 
       objectReference: {fileID: 779670484}
+    - target: {fileID: 3290855523595643536, guid: f89a6756db558d746a06429529700e9a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d34e0692bd1de3b418d5aade0c893a44, type: 2}
     - target: {fileID: 4592150531866800161, guid: f89a6756db558d746a06429529700e9a, type: 3}
       propertyPath: m_Name
       value: Portal A
@@ -3756,6 +3760,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1379214709039392183, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
+      propertyPath: playerHpBar
+      value: 
+      objectReference: {fileID: 1973752629}
     - target: {fileID: 3546717311327904831, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
       propertyPath: m_Name
       value: UI
@@ -3853,6 +3861,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
+      propertyPath: fillSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
+      propertyPath: playerHealthBar
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
+      propertyPath: playerMaxHealth
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
+      propertyPath: playerCurrentHealth
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 3858927733294379704, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
       propertyPath: m_LocalPosition.x
       value: 96.25
@@ -4268,6 +4292,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 628.497
       objectReference: {fileID: 0}
+    - target: {fileID: 507859395338135918, guid: 9a88db6bb0e82ef4faa53e80bf43c884, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cd1fc3a051e5212469bb835f5c4805f0, type: 2}
     - target: {fileID: 1457851388910576208, guid: 9a88db6bb0e82ef4faa53e80bf43c884, type: 3}
       propertyPath: Player
       value: 
@@ -4622,6 +4650,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2022453003878922063, guid: 4ac8bca771deb724e860a771e5011175, type: 3}
   m_PrefabInstance: {fileID: 950580214}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1973752629 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5994127416610458143, guid: c0a30553fec08f94e8f83d2e02db676f, type: 3}
+  m_PrefabInstance: {fileID: 1610207707}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2013407253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5483,7 +5522,7 @@ SceneRoots:
   - {fileID: 4653841931886152101}
   - {fileID: 629312510}
   - {fileID: 1766305375}
+  - {fileID: 385084232}
+  - {fileID: 1276588606}
   - {fileID: 1139327818}
   - {fileID: 39992651}
-  - {fileID: 1276588606}
-  - {fileID: 385084232}

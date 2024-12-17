@@ -25,8 +25,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Principal;
 using Unity.VisualScripting;
-//using UnityEditor.TextCore.Text;
 using UnityEngine;
+using UnityEngine.UI;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class playerController : MonoBehaviour, IDamage, IOpen
@@ -36,9 +36,15 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] Renderer model;
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
-    
+
     [Header("      STATS      ")]
-    [SerializeField][Range(1, 10)] int _HP; /// turn into Get/Setter
+    [SerializeField][Range(0, 20)] private float playerMaxHealth;
+    [SerializeField][Range(0, 20)] private float playerCurrentHealth;
+    [SerializeField] Image playerHealthBar;
+    [SerializeField] float fillSpeed;
+    [SerializeField] Gradient colorGradient;
+
+
     [SerializeField][Range(1,  10)] int speed;      //Range adds a slider
     [SerializeField][Range(2,  5)]  int sprintMod;
     [SerializeField][Range(1,  5)]  int jumpMax;
@@ -85,7 +91,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     Color colorOrig;
 
     int jumpCount;
-    int origHP;
     int gunListpos;
 
     bool isShooting;
@@ -94,7 +99,20 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     bool isCrouching;
 
     RaycastHit contact;
-    
+
+    // Properties //
+    // Health //
+    public float PlayerMaxHealth
+    {
+        get { return playerMaxHealth; }
+        set { playerMaxHealth = value; }
+    }
+    public float PlayerCurrentHealth
+    {
+        get { return playerCurrentHealth; }
+        set { playerCurrentHealth = value; }
+    }
+
     //getters and setters (used to calculate stun enemy speed)
     public int Speed
     {
@@ -108,18 +126,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         set => sprintMod = value;
     }
 
-    public int HP
-    {
-        get => HP;
-        set => HP = value;
-    }
-
-    public int OrigHP
-    {
-        get => origHP;
-        set => origHP = value;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -127,7 +133,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         originalHeight = controller.height;
         originalCenter = controller.center;
 
-        origHP = HP;
+        // Health and Health Bar //
+        playerCurrentHealth = playerMaxHealth;
         updatePlayerUI();
     }
 
@@ -244,9 +251,14 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Player UI //
     public void updatePlayerUI()
     {
-        GameManager.instance.PlayerHPBar.fillAmount = (float)HP / origHP;
+        GameManager.instance.playerHpBar.fillAmount = playerCurrentHealth / playerMaxHealth;
+
+        //float targetFillAmount = playerCurrentHealth / playerMaxHealth;
+        //playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+        //playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
+
         GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
-        GameManager.instance.UpdateLives(); //Show lives on the UI
+        GameManager.instance.UpdateLivesUI(); //Show lives on the UI
     }
 
     public void GetGunStats(weaponStats gun)
@@ -291,19 +303,20 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     }
 
     // Player Damage and Weapons //   
-    public void takeDamage(int amount)
+    public void takeDamage(float amount)
     {
-        HP -= amount;
+        playerCurrentHealth -= amount;
+        playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, playerMaxHealth);
 
         updatePlayerUI();
         StartCoroutine(screenFlashRed());
         aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
 
-        if (HP <= 0)
+        if(playerCurrentHealth <= 0)
         {
-            //death/lose screen in Respawn() method
             GameManager.instance.Respawn();
         }
+
     }
 
     //When the player is stunned this is called
@@ -328,9 +341,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     IEnumerator screenFlashRed()
     {   
-        GameManager.instance.PlayerDamageScreen.SetActive(true);
+        GameManager.instance.playerDamageScreen.SetActive(true);
         yield return new WaitForSeconds(0.1f);
-        GameManager.instance.PlayerDamageScreen.SetActive(false);
+        GameManager.instance.playerDamageScreen.SetActive(false);
     }
     
     IEnumerator Shoot()
