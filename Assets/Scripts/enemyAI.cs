@@ -34,7 +34,7 @@ public class enemyAI : baseEnemy, IOpen
     [SerializeField] float shootRate;
 
     
-    // Flags/Bools //
+    // Flags/Bools
     bool playerInRange;
     bool isShooting;
     bool isRoaming;

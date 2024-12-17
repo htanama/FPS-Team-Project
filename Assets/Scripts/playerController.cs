@@ -7,7 +7,7 @@
             - Added fields shoot damage, distance, rate
             - Also field _HP
             - uncommented layer mask
-            - Added bool/flag isShooting
+            - Added bool/orb isShooting
             - update, added draw ray (raycast)
             - movement, added "fire"
             - added take damage 
@@ -257,7 +257,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
         //playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
 
-        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
+        GameManager.instance.UpdateCaptures(GameManager.instance.OrbScript.OrbsCollected);  //Show orb captures on UI
         GameManager.instance.UpdateLivesUI(); //Show lives on the UI
     }
 

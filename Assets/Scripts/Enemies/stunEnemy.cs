@@ -11,7 +11,7 @@ public class stunEnemy : baseEnemy
     [SerializeField] private float enemySpeedMult;      //Speed multiplier
     [SerializeField] private int fleeDistance = 2;
 
-    private enum EnemyState { Chasing, Fleeing }            //Behavior changes when taking flag
+    private enum EnemyState { Chasing, Fleeing }            //Behavior changes when taking orb
     private EnemyState currentState = EnemyState.Chasing;   //Starts by chasing the player
     bool isFleeing = false;     //Used to set speed once
 
@@ -31,9 +31,9 @@ public class stunEnemy : baseEnemy
 
     public override void takeDamage(float amount)
     {
-        //drop flag right before dying
+        //drop orb right before dying
         if (currentHealth - amount <= 0)
-        { GameManager.instance.FlagScript.DropFlag(transform); }
+        { GameManager.instance.OrbScript.DropOrb(transform); }
         //calling base method for damage handling
         base.takeDamage(amount);
     }
@@ -53,15 +53,15 @@ public class stunEnemy : baseEnemy
 
     private void chasePlayer()
     {
-        //move to player location anywhere on the scene when the player has the flag
-        if (GameManager.instance.FlagScript.IsHoldingFlag)
+        //move to player location anywhere on the scene when the player has the orb
+        if (GameManager.instance.OrbScript.IsHoldingOrb)
             agent.SetDestination(GameManager.instance.Player.transform.position);
 
-        //stun and take flag from player
+        //stun and take orb from player
         if (Vector3.Distance(transform.position, GameManager.instance.Player.transform.position) < agent.stoppingDistance)
         {
             stunPlayer();
-            takeFlagFromPlayer();
+            takeOrbFromPlayer();
         }
     }
 
@@ -91,22 +91,22 @@ public class stunEnemy : baseEnemy
     {
         playerController player = GameManager.instance.Player.GetComponent<playerController>();
         //stun player for set duration
-        if(player != null && GameManager.instance.FlagScript.IsHoldingFlag)
+        if(player != null && GameManager.instance.OrbScript.IsHoldingOrb)
         {
             player.stun(stunDuration);
         }
     }
 
-    private void takeFlagFromPlayer()
+    private void takeOrbFromPlayer()
     {
-        //accessing flag manager
-        flagManager FlagManager = GameManager.instance.FlagScript;
+        //accessing orb manager
+        orbManager OrbManager = GameManager.instance.OrbScript;
 
-        //taking flag from player
-        if(FlagManager != null)
+        //taking orb from player
+        if(OrbManager != null)
         {
-            FlagManager.takeFlag(transform);    //Passing enemy transform
-            currentState = EnemyState.Fleeing;  //Change enemy state when taking the flag
+            OrbManager.takeOrb(transform);    //Passing enemy transform
+            currentState = EnemyState.Fleeing;  //Change enemy state when taking the orb
         }
     }
 }

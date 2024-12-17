@@ -16,21 +16,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuWin, menuLose;
 
     [Header("Goal Settings")]   
-    [SerializeField] TMP_Text flagCaptureText;
+    [SerializeField] TMP_Text orbCaptureText;
     [SerializeField] GameObject timerGoal;
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
     public Image playerHpBar; // from lecture
 
     private GameObject player;
-    private GameObject flag;
+    private GameObject orb;
     private playerController playerScript;
-    private flagManager flagScript;
+    private orbManager orbScript;
 
     public GameObject Player => player;     //Read-only getter
-    public GameObject Flag => flag;
+    public GameObject Orb => orb;
     public playerController PlayerScript => playerScript;
-    public flagManager FlagScript => flagScript;
+    public orbManager OrbScript => orbScript;
 
     [SerializeField] public GameObject playerDamageScreen;      // *****
     [SerializeField] TMP_Text playerLivesText;
@@ -70,11 +70,11 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
 
-        flag = GameObject.FindWithTag("Flag");
-        flagScript = player.GetComponent<flagManager>();    //Attached flag manager to player
-        //find flag goal locations
-        flagScript.FlagStartBase = GameObject.FindWithTag("FlagBase").transform;
-        flagScript.FlagGoalBase = GameObject.FindWithTag("FlagGoal").transform;
+        orb = GameObject.FindWithTag("Flag");   //replace with
+        orbScript = player.GetComponent<orbManager>();    //Attached orb manager to player
+        //find orb goal locations
+        orbScript.OrbSpawnPoint = GameObject.FindWithTag("FlagBase").transform;
+        orbScript.OrbGoalPoint = GameObject.FindWithTag("FlagGoal").transform;
         //goalCount = playerScript.GetHP();
     }
 
@@ -129,11 +129,11 @@ public class GameManager : MonoBehaviour
 
     public void UpdateCaptures(int amount)      //Game goal
     {
-       //show flag captures on UI
-        flagCaptureText.text = amount.ToString("F0");
+       //show orb captures on UI
+        orbCaptureText.text = amount.ToString("F0");
         
         //win condition
-        if(FlagScript.CaptureCount >= 3)
+        if(OrbScript.OrbsCollected >= 3)
         {
             WinGame();
         }
@@ -150,10 +150,10 @@ public class GameManager : MonoBehaviour
         //respawn while player has lives
         if (playerLives > 0)
         {
-            //drop flag
-            if (FlagScript.IsHoldingFlag)
+            //drop orb
+            if (OrbScript.IsHoldingOrb')
             {
-                FlagScript.DropFlag(player.transform);
+                OrbScript.DropOrb(player.transform);
             }
 
             //move player to spawn point (don't destroy)

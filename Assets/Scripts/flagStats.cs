@@ -7,7 +7,7 @@ using UnityEngine;
 public class flagStats : ScriptableObject
 {
     public GameObject model;
-    public Transform carrier;  // Current object carrying the flag
-    public bool isCarried;    // Is the flag currently being carried? 
+    public Transform carrier;  // Current object carrying the orb
+    public bool isCarried;    // Is the orb currently being carried? 
 
 }

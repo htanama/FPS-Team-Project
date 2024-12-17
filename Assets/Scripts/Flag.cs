@@ -9,15 +9,15 @@ using UnityEngine;
 
 public class Flag : MonoBehaviour
 {
-    private Transform flagOppositePosition; // Position where the flag resets when delivered
-    private Transform carrier;         // Current object carrying the flag
-    private bool isCarried = false;    // Is the flag currently being carried?
+    private Transform flagOppositePosition; // Position where the orb resets when delivered
+    private Transform carrier;         // Current object carrying the orb
+    private bool isCarried = false;    // Is the orb currently being carried?
 
-    [SerializeField] private Vector3 flagOriginalPosition;  // Original spawn position of the flag
+    [SerializeField] private Vector3 flagOriginalPosition;  // Original spawn position of the orb
 
     void Start()
     {
-        // Save the original position of the flag
+        // Save the original position of the orb
         flagOriginalPosition = transform.position;
     }
 
@@ -25,7 +25,7 @@ public class Flag : MonoBehaviour
     {
         if (isCarried && carrier != null)
         {
-            // Update the flag's position to follow the carrier with an offset
+            // Update the orb's position to follow the carrier with an offset
             transform.position = carrier.position + new Vector3(0.0f, 0, 0.1f); // Adjust for visibility            
         }
     }
@@ -38,7 +38,7 @@ public class Flag : MonoBehaviour
             Debug.Log("The Flag collided with an Enemy!");
         }
 
-        // Handle flag pickup by Player or Enemy
+        // Handle orb pickup by Player or Enemy
         if (!isCarried)
         {
             OnTriggerPickUpFlag(other);
@@ -52,18 +52,18 @@ public class Flag : MonoBehaviour
         if ((other.CompareTag("Player") || other.CompareTag("Enemy")) && !isCarried)
         {
             carrier = other.transform; // Set the object as the carrier
-            isCarried = true; // Mark the flag as carried            
+            isCarried = true; // Mark the orb as carried            
 
             Debug.Log($"{carrier.name} picked up the flag!");
 
         }
     }
 
-    // Set the carrier of the flag
+    // Set the carrier of the orb
     public void SetCarrier(Transform newCarrier)
     {
         carrier = newCarrier; // Assign the new carrier
-        isCarried = true;     // Mark the flag as carried
+        isCarried = true;     // Mark the orb as carried
         
         #if UNITY_EDITOR
             Debug.Log($"{carrier.name} is now carrying the flag.");
@@ -75,7 +75,7 @@ public class Flag : MonoBehaviour
     {
         if (isCarried)
         {
-            // Detach the flag from the carrier
+            // Detach the orb from the carrier
             carrier = null;
             isCarried = false;
 
@@ -87,7 +87,7 @@ public class Flag : MonoBehaviour
 
     public void ResetFlag()
     {
-        // Reset the flag to its home position
+        // Reset the orb to its home position
         carrier = null;
         isCarried = false;
 
@@ -102,7 +102,7 @@ public class Flag : MonoBehaviour
             #if UNITY_EDITOR
                 Debug.Log($"{carrier.name} delivered the flag to the base!");
             #endif
-            // Reset the flag to its original position
+            // Reset the orb to its original position
             ResetFlag();
         }
     }
