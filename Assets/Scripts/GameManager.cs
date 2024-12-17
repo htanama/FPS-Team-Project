@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject timerGoal;
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
+    public Image playerHpBar; // from lecture
 
     public Image playerHpBar;
     private GameObject player;

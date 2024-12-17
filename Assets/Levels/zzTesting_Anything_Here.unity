@@ -4823,25 +4823,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: aud
-      value: 
-      objectReference: {fileID: 896106429}
-    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: fillSpeed
+    - target: {fileID: 1353709577269798006, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
+      propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: playerHealthBar
-      value: 
-      objectReference: {fileID: 1547046821}
-    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: playerMaxHealth
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: playerCurrentHealth
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3858927733294379704, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
       propertyPath: m_LocalPosition.x

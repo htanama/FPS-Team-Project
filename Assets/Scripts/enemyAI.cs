@@ -49,7 +49,7 @@ public class enemyAI : baseEnemy, IOpen
 
     void Start()
     {
-        CurrentHealth = MaxHealth;
+        currentHealth = maxHealth;
         UpdateEnemyHealthBar();
 
         colorOrig = model.material.color; // for flash red
