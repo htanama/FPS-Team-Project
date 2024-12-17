@@ -8,11 +8,11 @@ using UnityEngine.AI;
 
 public class AICaptureFlag : MonoBehaviour
 {
-    [SerializeField] private Transform flagPosition; // Position of the flag
+    [SerializeField] private Transform flagPosition; // Position of the orb
     [SerializeField] private Transform basePosition; // Position of the base    
     [SerializeField] private NavMeshAgent agent;    
 
-    private Flag flag; // Reference to the flag
+    private Flag flag; // Reference to the orb
     
     private AIState currentState;
 
@@ -29,7 +29,7 @@ public class AICaptureFlag : MonoBehaviour
         // Get the NavMeshAgent component
         agent = GetComponent<NavMeshAgent>();
 
-        //Searches the Entire Scene to looks for the first active GameObject that has a Flag component attached to it.
+        //Searches the Entire Scene to looks for the first active GameObject that has a Orb component attached to it.
         flag = FindObjectOfType<Flag>();
 
         currentState = AIState.MovingToFlag;
@@ -38,7 +38,7 @@ public class AICaptureFlag : MonoBehaviour
 
     void Update()
     {
-        // Check if the flag is carried by this enemy
+        // Check if the orb is carried by this enemy
         if (flag != null && flag.IsCarriedBy(transform))
         {
             MoveToBase();
@@ -46,7 +46,7 @@ public class AICaptureFlag : MonoBehaviour
         else
         {
             //#if UNITY_EDITOR
-            //Debug.Log("Cannot return to base without the flag!");
+            //Debug.Log("Cannot return to base without the orb!");
             //#endif            
         }
 
@@ -72,11 +72,11 @@ public class AICaptureFlag : MonoBehaviour
         {
             agent.SetDestination(flagPosition.position);
 
-            //Debug.Log("Move to find flag");
-            // Check if AI has reached the flag
+            //Debug.Log("Move to find orb");
+            // Check if AI has reached the orb
             if (Vector3.Distance(transform.position, flagPosition.position) < 0.5f)
             {
-                flag.SetCarrier(transform); // Attach the flag to the AI
+                flag.SetCarrier(transform); // Attach the orb to the AI
                 
                 #if UNITY_EDITOR
                     Debug.Log("Flag captured! Moving to base...");
@@ -101,16 +101,16 @@ public class AICaptureFlag : MonoBehaviour
             // Check if AI has reached the base
             if (Vector3.Distance(transform.position, basePosition.position) < 2.0f)
             {
-                //Flag delivered to base!
+                //Orb delivered to base!
 
-                // Reset the flag to its original position
+                // Reset the orb to its original position
                 if (flag != null && flag.IsCarriedBy(transform))
                 {
                     flag.ResetFlag();
 
-                    //GameManager.instance.UpdateFlagCount(-1); // reduce flag counts for enemy
+                    //GameManager.instance.UpdateFlagCount(-1); // reduce orb counts for enemy
 
-                    //Flag successfully reset after delivery
+                    //Orb successfully reset after delivery
                     currentState = AIState.MovingToFlag;
                 }
 

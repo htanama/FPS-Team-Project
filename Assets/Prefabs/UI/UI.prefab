@@ -261,13 +261,13 @@ MonoBehaviour:
   menuPause: {fileID: 7692774851632705909}
   menuWin: {fileID: 244731334791458021}
   menuLose: {fileID: 3951031911439154009}
-  playerLivesText: {fileID: 2060255938274586508}
   flagCaptureText: {fileID: 64720342223692196}
   timerGoal: {fileID: 0}
   spawnPoint: {fileID: 0}
   playerLives: 3
-  playerHPBar: {fileID: 5994127416610458143}
+  playerHpBar: {fileID: 5994127416610458143}
   playerDamageScreen: {fileID: 6495108013737659754}
+  playerLivesText: {fileID: 2060255938274586508}
 --- !u!1 &1625516026860445870
 GameObject:
   m_ObjectHideFlags: 0

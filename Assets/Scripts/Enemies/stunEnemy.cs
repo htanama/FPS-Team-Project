@@ -1,3 +1,9 @@
+/*
+  Code Author: Juan Contreras
+  Date: 12/15/2024
+  Class: DEV2
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -11,7 +17,7 @@ public class stunEnemy : baseEnemy
     [SerializeField] private float enemySpeedMult;      //Speed multiplier
     [SerializeField] private int fleeDistance = 2;
 
-    private enum EnemyState { Chasing, Fleeing }            //Behavior changes when taking flag
+    private enum EnemyState { Chasing, Fleeing }            //Behavior changes when taking orb
     private EnemyState currentState = EnemyState.Chasing;   //Starts by chasing the player
     bool isFleeing = false;     //Used to set speed once
 
@@ -31,9 +37,17 @@ public class stunEnemy : baseEnemy
 
     public override void takeDamage(float amount)
     {
-        //drop flag right before dying
+        //drop orb right before dying
         if (currentHealth - amount <= 0)
-        { GameManager.instance.FlagScript.DropFlag(transform); }
+        {
+            foreach (orbManager orb in GameManager.instance.OrbScripts)
+            {
+                if (orb.IsHoldingOrb && orb.transform.parent == transform)
+                {
+                    orb.DropOrb(transform);     //drop orb at location of the parent
+                }
+            }
+        }
         //calling base method for damage handling
         base.takeDamage(amount);
     }
@@ -53,15 +67,27 @@ public class stunEnemy : baseEnemy
 
     private void chasePlayer()
     {
-        //move to player location anywhere on the scene when the player has the flag
-        if (GameManager.instance.FlagScript.IsHoldingFlag)
-            agent.SetDestination(GameManager.instance.Player.transform.position);
-
-        //stun and take flag from player
-        if (Vector3.Distance(transform.position, GameManager.instance.Player.transform.position) < agent.stoppingDistance)
+        bool playerHasOrb = false;
+        //checks if the player is holding an orb
+        foreach (orbManager orb in GameManager.instance.OrbScripts)
         {
-            stunPlayer();
-            takeFlagFromPlayer();
+            if (orb.IsHoldingOrb)
+            {
+                playerHasOrb = true;
+                break;
+            }
+        }
+
+        if (playerHasOrb)
+        {
+            //move to player location anywhere on the scene when the player has the orb
+            agent.SetDestination(GameManager.instance.Player.transform.position);
+            //stun and take orb from player
+            if (Vector3.Distance(transform.position, GameManager.instance.Player.transform.position) < agent.stoppingDistance)
+            {
+                stunPlayer();               //stuns the player
+                takeOrbFromPlayer();        //takes orb and flees
+            }
         }
     }
 
@@ -90,23 +116,31 @@ public class stunEnemy : baseEnemy
     private void stunPlayer()
     {
         playerController player = GameManager.instance.Player.GetComponent<playerController>();
-        //stun player for set duration
-        if(player != null && GameManager.instance.FlagScript.IsHoldingFlag)
+        //stun player for set duration if holding an orb
+        foreach (orbManager orb in GameManager.instance.OrbScripts)
         {
-            player.stun(stunDuration);
+            if (orb.IsHoldingOrb)
+            {
+                player.stun(stunDuration);
+                break;
+            }
         }
     }
 
-    private void takeFlagFromPlayer()
+    private void takeOrbFromPlayer()
     {
-        //accessing flag manager
-        flagManager FlagManager = GameManager.instance.FlagScript;
-
-        //taking flag from player
-        if(FlagManager != null)
+        //accessing orb manager
+        foreach (orbManager orb in GameManager.instance.OrbScripts)
         {
-            FlagManager.takeFlag(transform);    //Passing enemy transform
-            currentState = EnemyState.Fleeing;  //Change enemy state when taking the flag
+
+            //taking orb from player
+            if (orb.IsHoldingOrb)
+            {
+                //takes orb and attaches to the enemy
+                orb.takeOrb(transform);    //Passing enemy transform
+                currentState = EnemyState.Fleeing;  //Change enemy state when taking the orb
+                break;
+            }
         }
     }
 }

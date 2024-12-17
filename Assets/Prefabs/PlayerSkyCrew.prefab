@@ -92,7 +92,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3858927733294379704}
-  - component: {fileID: 181407650008767233}
   - component: {fileID: 3623263726600380458}
   - component: {fileID: 3953520239787682815}
   - component: {fileID: 5889756059583624259}
@@ -122,22 +121,6 @@ Transform:
   - {fileID: 9169877820377261127}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 34.302, z: 0}
---- !u!114 &181407650008767233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6419302545626054111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27c35335584d01a42a4fd8417296440d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flagStartBase: {fileID: 0}
-  flagGoalBase: {fileID: 0}
-  flagPickupDistance: 2
-  goalAreaSize: 2
 --- !u!114 &3623263726600380458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,7 +138,40 @@ MonoBehaviour:
   ignoreMask:
     serializedVersion: 2
     m_Bits: 8
-  _HP: 1
+  playerMaxHealth: 20
+  playerCurrentHealth: 20
+  playerHealthBar: {fileID: 0}
+  fillSpeed: 0
+  colorGradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
   speed: 7
   sprintMod: 3
   jumpMax: 2
