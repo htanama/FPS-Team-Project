@@ -68,6 +68,7 @@ public class orbManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //limits to hold one orb at a time
         if (isHoldingOrb)
         {
             if (Vector3.Distance(playerTransform.position, orbGoalPoint.transform.position) < orbAreaSize)

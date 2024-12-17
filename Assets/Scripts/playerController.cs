@@ -251,14 +251,20 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Player UI //
     public void updatePlayerUI()
     {
+        //update player health bar
         GameManager.instance.playerHpBar.fillAmount = playerCurrentHealth / playerMaxHealth;
 
         //float targetFillAmount = playerCurrentHealth / playerMaxHealth;
         //playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
         //playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
 
-        GameManager.instance.UpdateOrbsCollected(GameManager.instance.OrbScripts.OrbsCollected);  //Show orb captures on UI
-        GameManager.instance.UpdateLivesUI(); //Show lives on the UI
+        //variable to pass to game manager method total orbs collected from the list
+        int playerOrbsCollected = 0;
+        //counting orbs collected
+        foreach(orbManager orbScript in GameManager.instance.OrbScripts) { playerOrbsCollected += orbScript.OrbsCollected; }
+        //show counted orb captures to the UI
+        GameManager.instance.UpdateOrbsCollected(playerOrbsCollected);
+        GameManager.instance.UpdateLivesUI(); //Show currentn lives on the UI
     }
 
     public void GetGunStats(weaponStats gun)
