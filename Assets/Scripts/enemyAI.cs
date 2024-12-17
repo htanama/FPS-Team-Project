@@ -50,7 +50,7 @@ public class enemyAI : baseEnemy, IOpen
     void Start()
     {
         currentHealth = maxHealth;
-        UpdateEnemyHealthBar();
+        //UpdateEnemyHealthBar();
 
         colorOrig = model.material.color; // for flash red
         startingPos = transform.position; // to remember the starting position for roaming
@@ -230,20 +230,20 @@ public class enemyAI : baseEnemy, IOpen
             isRoaming = false;
             StartCoroutine(flashRed());
             agent.SetDestination(GameManager.instance.Player.transform.position);
-            UpdateHealth(-amount);
+            //UpdateHealth(-amount);                                                //*****
         }
     }
 
-    public void UpdateHealth(float amount)
-    {
-        currentHealth += amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        UpdateEnemyHealthBar();
-    }
-    private void UpdateEnemyHealthBar()
-    {
-        float targetFillAmount = currentHealth / maxHealth;
-        enemyHPFill.fillAmount = Mathf.Lerp(enemyHPFill.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
-        enemyHPFill.color = colorGradient.Evaluate(targetFillAmount);
-    }
+    //public void UpdateHealth(float amount)
+    //{
+    //    currentHealth += amount;
+    //    currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+    //    UpdateEnemyHealthBar();
+    //}
+//    private void UpdateEnemyHealthBar()
+//    {
+//        float targetFillAmount = currentHealth / maxHealth;
+//        enemyHPFill.fillAmount = Mathf.Lerp(enemyHPFill.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+//        enemyHPFill.color = colorGradient.Evaluate(targetFillAmount);
+//    }
 }

@@ -32,26 +32,26 @@ public class GameManager : MonoBehaviour
     public playerController PlayerScript => playerScript;
     public flagManager FlagScript => flagScript;
 
-    [SerializeField] private GameObject playerDamageScreen;
+    [SerializeField] public GameObject playerDamageScreen;      // *****
     [SerializeField] TMP_Text playerLivesText;
 
     private bool isPaused;
 
     // Properties //
-    public GameObject PlayerDamageScreen
-    {
-        get { return playerDamageScreen; }
-        set { playerDamageScreen = value; }
-    }
-    public int PlayerLives
-    {
-        get { return playerLives; }
-        set
-        {
-            playerLives = value;
-            UpdateLivesUI();
-        }
-    }
+    //public GameObject PlayerDamageScreen
+    //{
+    //    get { return playerDamageScreen; }
+    //    set { playerDamageScreen = value; }
+    //}
+    //public int PlayerLives
+    //{
+    //    get { return playerLives; }
+    //    set
+    //    {
+    //        playerLives = value;
+    //        UpdateLivesUI();
+    //    }
+    //}
 
     public bool IsPaused
     {
@@ -166,7 +166,9 @@ public class GameManager : MonoBehaviour
 
             //change life counter
             playerLives--;
-            UpdateLivesUI();
+
+            //UpdateLivesUI();          *****
+            
             //Update lives and health shown in the UI
             playerScript.updatePlayerUI();
 
