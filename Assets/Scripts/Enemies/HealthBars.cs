@@ -9,7 +9,7 @@ public class HealthBars : MonoBehaviour
     private float fillSpeed;
     private Gradient colorGradient;
 
-    public void Initialize(float speed, Gradient gradient)
+    public void GMInitialize(float speed, Gradient gradient)
     {
         fillSpeed = speed;
         colorGradient = gradient;
