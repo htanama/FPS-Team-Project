@@ -22,4 +22,3 @@ public class HealthBars : MonoBehaviour
         healthBarFill.color = colorGradient.Evaluate(targetFillAmount);
     }
 }
-
