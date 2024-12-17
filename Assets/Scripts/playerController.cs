@@ -117,7 +117,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     public int Speed
     {
         get { return Speed; }
-        set { HP = value; }
+        set { Speed = value; }
     }
 
     public int SprintMod
@@ -251,13 +251,14 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Player UI //
     public void updatePlayerUI()
     {
+        GameManager.instance.playerHpBar.fillAmount = playerCurrentHealth / playerMaxHealth;
 
-        float targetFillAmount = playerCurrentHealth / playerMaxHealth;
-        playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
-        playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
+        //float targetFillAmount = playerCurrentHealth / playerMaxHealth;
+        //playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+        //playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
 
-        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
-        GameManager.instance.UpdateLivesUI(); //Show lives on the UI
+        //GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
+        //GameManager.instance.UpdateLivesUI(); //Show lives on the UI
     }
 
     public void GetGunStats(weaponStats gun)
@@ -307,14 +308,18 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         playerCurrentHealth -= amount;
         playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, playerMaxHealth);
 
-        updatePlayerUI();
-        StartCoroutine(screenFlashRed());
-        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
+        StartCoroutine(screenFlashRed());               
 
-        if(playerCurrentHealth <= 0)
+        updatePlayerUI();
+
+        if (playerCurrentHealth <= 0)
         {
-            GameManager.instance.Respawn();
+            GameManager.instance.LoseGame();
         }
+
+        updatePlayerUI();
+        
+        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);              
 
     }
 
@@ -323,7 +328,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {
         StartCoroutine(StunCoroutine(duration));        //In it's own method for simplification
     }
-
+    
     IEnumerator StunCoroutine(float duration)
     {
         Debug.Log("Stun started!");

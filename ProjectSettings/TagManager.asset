@@ -12,6 +12,8 @@ TagManager:
   - trap_door
   - FlagBase
   - FlagGoal
+  - RedBase
+  - Damage-Ball
   layers:
   - Default
   - TransparentFX

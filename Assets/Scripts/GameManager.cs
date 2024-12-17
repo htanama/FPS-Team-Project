@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
 
+    public Image playerHpBar;
     private GameObject player;
     private GameObject flag;
     private playerController playerScript;
@@ -72,8 +73,8 @@ public class GameManager : MonoBehaviour
         flag = GameObject.FindWithTag("Flag");
         flagScript = player.GetComponent<flagManager>();    //Attached flag manager to player
         //find flag goal locations
-        flagScript.FlagStartBase = GameObject.FindWithTag("FlagBase").transform;
-        flagScript.FlagGoalBase = GameObject.FindWithTag("FlagGoal").transform;
+        //flagScript.FlagStartBase = GameObject.FindWithTag("FlagBase").transform;
+        //flagScript.FlagGoalBase = GameObject.FindWithTag("FlagGoal").transform;
         //goalCount = playerScript.GetHP();
     }
 

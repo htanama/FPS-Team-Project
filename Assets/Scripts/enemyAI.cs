@@ -153,7 +153,7 @@ public class enemyAI : baseEnemy, IOpen
         // To know the location of the player by using raycasting, do we hit the player
         RaycastHit hit;
         // Player inside the sphere range and in FOV.
-        if (Physics.Raycast(headPos.position, playerDirection, out hit) && angleToPlayer <= FOV) 
+        if (Physics.Raycast(headPos.position, playerDirection, out hit)) 
         {
             // reset stopping distance
             agent.stoppingDistance = stoppingDistOrig;
