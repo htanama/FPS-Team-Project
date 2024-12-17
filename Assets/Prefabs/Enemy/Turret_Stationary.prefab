@@ -723,17 +723,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f44b8d7e3b78f544b166e472763a03b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 7748544260741103767}
   agent: {fileID: 6905248413312160302}
+  model: {fileID: 7748544260741103767}
+  animator: {fileID: 0}
+  maxHealth: 0
+  currentHealth: 0
+  enemyHPFill: {fileID: 0}
+  fillSpeed: 0
+  colorGradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
   shootPos: {fileID: 1489819329415123171}
   headPos: {fileID: 1299757423617515860}
   healthBarPos: {fileID: 0}
-  HP: 10
   faceTargetSpeed: 100
   FOV: 90
   roamDist: 0
   roamTimer: 0
-  animator: {fileID: 0}
   animSpeedTransition: 0
   bullet: {fileID: 5144485743538677400, guid: d7f9ac83b76ff0743a1b6ed48e870843, type: 3}
   shootRate: 0.25
@@ -751,8 +784,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flagStartBase: {fileID: 0}
   flagGoalBase: {fileID: 0}
-  flagPickupDistance: 0
-  goalAreaSize: 0
+  flagPickupDistance: 2
+  goalAreaSize: 2
 --- !u!114 &7209346801636874420
 MonoBehaviour:
   m_ObjectHideFlags: 0

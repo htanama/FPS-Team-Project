@@ -251,13 +251,14 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Player UI //
     public void updatePlayerUI()
     {
+        GameManager.instance.playerHpBar.fillAmount = playerCurrentHealth / playerMaxHealth;
 
-        float targetFillAmount = playerCurrentHealth / playerMaxHealth;
-        playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
-        playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
+        //float targetFillAmount = playerCurrentHealth / playerMaxHealth;
+        //playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+        //playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
 
-        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
-        GameManager.instance.UpdateLivesUI(); //Show lives on the UI
+        //GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
+        //GameManager.instance.UpdateLivesUI(); //Show lives on the UI
     }
 
     public void GetGunStats(weaponStats gun)
