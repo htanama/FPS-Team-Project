@@ -94,30 +94,30 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     bool isCrouching;
 
     RaycastHit contact;
-    
+
     //getters and setters (used to calculate stun enemy speed)
     public int Speed
     {
-        get => speed;
-        set => speed = value;
+        get { return Speed; }
+        set { HP = value; }
     }
 
     public int SprintMod
     {
-        get => sprintMod;
-        set => sprintMod = value;
+        get { return SprintMod; }
+        set { SprintMod = value; }
     }
 
     public int HP
     {
-        get => HP;
-        set => HP = value;
+        get { return HP; }
+        set { HP = value; }
     }
 
     public int OrigHP
     {
-        get => origHP;
-        set => origHP = value;
+        get { return OrigHP; }
+        set { OrigHP = value; }
     }
 
     // Start is called before the first frame update
