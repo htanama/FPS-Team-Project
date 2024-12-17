@@ -15,8 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin, menuLose;
 
-    [Header("Goal Settings")]
-    [SerializeField] TMP_Text playerLivesText;
+    [Header("Goal Settings")]   
     [SerializeField] TMP_Text flagCaptureText;
     [SerializeField] GameObject timerGoal;
     [SerializeField] Transform spawnPoint;
@@ -32,22 +31,25 @@ public class GameManager : MonoBehaviour
     public playerController PlayerScript => playerScript;
     public flagManager FlagScript => flagScript;
 
-    [SerializeField] private Image playerHPBar;
     [SerializeField] private GameObject playerDamageScreen;
+    [SerializeField] TMP_Text playerLivesText;
 
     private bool isPaused;
 
-    //getters and setters
-    public Image PlayerHPBar
-    {
-        get => playerHPBar;
-        set => playerHPBar = value;
-    }
-
+    // Properties //
     public GameObject PlayerDamageScreen
     {
-        get => playerDamageScreen;
-        set => playerDamageScreen = value;
+        get { return playerDamageScreen; }
+        set { playerDamageScreen = value; }
+    }
+    public int PlayerLives
+    {
+        get { return playerLives; }
+        set
+        {
+            playerLives = value;
+            UpdateLivesUI();
+        }
     }
 
     public bool IsPaused
@@ -66,6 +68,7 @@ public class GameManager : MonoBehaviour
         timeScaleOrig = Time.timeScale;
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
+
         flag = GameObject.FindWithTag("Flag");
         flagScript = player.GetComponent<flagManager>();    //Attached flag manager to player
         //find flag goal locations
@@ -110,6 +113,19 @@ public class GameManager : MonoBehaviour
         menuActive = null;
     }
 
+    public void WinGame()       //Win menu
+    {
+        StatePause();
+        menuActive = menuWin;
+        menuActive.SetActive(true);
+    }
+    public void LoseGame()      //Lose menu
+    {
+        StatePause();
+        menuActive = menuLose;
+        menuActive.SetActive(true);
+    }
+
     public void UpdateCaptures(int amount)      //Game goal
     {
        //show flag captures on UI
@@ -121,6 +137,11 @@ public class GameManager : MonoBehaviour
             WinGame();
         }
 
+    }
+       public void UpdateLivesUI()
+    {
+        //code to update lives on the UI
+        playerLivesText.text = playerLives.ToString("F0");
     }
 
     public void Respawn()
@@ -138,15 +159,17 @@ public class GameManager : MonoBehaviour
             CharacterController controller = player.GetComponent<CharacterController>();
             //Moves the player the distance needed to be back at spawn
             controller.Move(spawnPoint.position - player.transform.position);
-            playerScript.HP = playerScript.OrigHP;  //Refill _HP
+
+            //reset Health
+            playerScript.PlayerCurrentHealth = playerScript.PlayerMaxHealth;
 
             //change life counter
             playerLives--;
-
-            Debug.Log($"Player Respawned. Lives remaining: {playerLives}");
-
+            UpdateLivesUI();
             //Update lives and health shown in the UI
             playerScript.updatePlayerUI();
+
+            Debug.Log($"Player Respawned. Lives remaining: {playerLives}");            
         }
         else
         {
@@ -155,25 +178,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void UpdateLives()
-    {
-        //code to update lives on the UI
-        playerLivesText.text = playerLives.ToString("F0");
-    }
-
-    public void WinGame()       //Win menu
-    {
-        StatePause();
-        menuActive = menuWin;
-        menuActive.SetActive(true);
-    }
-    public void LoseGame()      //Lose menu
-    {
-        StatePause();
-        menuActive = menuLose;
-        menuActive.SetActive(true);
-    }
-    
     // Times is up-- you Lose
     //void TimeUp()
     //{

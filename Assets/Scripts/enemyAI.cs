@@ -17,7 +17,6 @@ public class enemyAI : baseEnemy, IOpen
     [SerializeField] Transform healthBarPos;
 
     [Header("      ENEMY STATS      ")]
-    //int HPOrig;
     float angleToPlayer;
     float stoppingDistOrig;
     [SerializeField] int faceTargetSpeed;
@@ -50,7 +49,9 @@ public class enemyAI : baseEnemy, IOpen
 
     void Start()
     {
-        //GameManager.instance.UpdateGame(1);
+        CurrentHealth = MaxHealth;
+        UpdateEnemyHealthBar();
+
         colorOrig = model.material.color; // for flash red
         startingPos = transform.position; // to remember the starting position for roaming
         stoppingDistOrig = agent.stoppingDistance; // remember for roam/idle reset
@@ -219,45 +220,30 @@ public class enemyAI : baseEnemy, IOpen
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 
-    // Enemy Takes Damage //
-    //public void takeDamage(int amount)
-    //{   
-    //    // decrease _HP
-    //    HP -= amount;
-
-    //    // update UI/health bar....in progress
-
-    //    // stop Roaming
-    //    StopCoroutine(coroutine);
-    //    isRoaming = false;
-        
-    //    // visual feedback flash red
-    //    StartCoroutine(flashRed());
-        
-    //    //run toward player's last known position
-    //    agent.SetDestination(GameManager.instance.Player.transform.position);
-
-    //    // no _HP left
-    //    if (HP <= 0)
-    //    {
-    //       /// this is only if the goal is killing enemies, want to make -1 to enemycount    
-    //       // GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
-           
-    //        // I am dead
-    //        Destroy(gameObject);            
-    //    }
-    //}
-
-    public override void takeDamage(int amount)
+    public override void takeDamage(float amount)
     {
         base.takeDamage(amount);    //Calling base class method
-
-        if(HP > 0)
+        
+        if(currentHealth > 0)
         {
             StopCoroutine(coroutine);
             isRoaming = false;
             StartCoroutine(flashRed());
             agent.SetDestination(GameManager.instance.Player.transform.position);
+            UpdateHealth(-amount);
         }
+    }
+
+    public void UpdateHealth(float amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        UpdateEnemyHealthBar();
+    }
+    private void UpdateEnemyHealthBar()
+    {
+        float targetFillAmount = currentHealth / maxHealth;
+        enemyHPFill.fillAmount = Mathf.Lerp(enemyHPFill.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+        enemyHPFill.color = colorGradient.Evaluate(targetFillAmount);
     }
 }
