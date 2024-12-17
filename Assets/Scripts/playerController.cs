@@ -38,7 +38,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
     
     [Header("      STATS      ")]
-    [SerializeField][Range(1, 10)] int _HP; /// turn into Get/Setter
+    [SerializeField][Range(1, 10)] public int HP; /// turn into Get/Setter
     [SerializeField][Range(1,  10)] int speed;      //Range adds a slider
     [SerializeField][Range(2,  5)]  int sprintMod;
     [SerializeField][Range(1,  5)]  int jumpMax;
@@ -108,11 +108,11 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         set => sprintMod = value;
     }
 
-    public int HP
-    {
-        get => HP;
-        set => HP = value;
-    }
+    //public int HP
+    //{
+    //    get => HP;
+    //    set => HP = value;
+    //}
 
     public int OrigHP
     {
