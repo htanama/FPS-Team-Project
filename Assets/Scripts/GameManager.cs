@@ -151,7 +151,7 @@ public class GameManager : MonoBehaviour
         if (playerLives > 0)
         {
             //drop orb
-            if (OrbScript.IsHoldingOrb')
+            if (OrbScript.IsHoldingOrb)
             {
                 OrbScript.DropOrb(player.transform);
             }
