@@ -10,8 +10,8 @@ TagManager:
   - Flag
   - Damage
   - trap_door
-  - FlagBase
-  - FlagGoal
+  - OrbSpawn
+  - OrbGoal
   layers:
   - Default
   - TransparentFX

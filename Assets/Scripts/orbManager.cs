@@ -75,7 +75,7 @@ public class orbManager : MonoBehaviour
             {
                 //drop off the orb at the goal
                 OrbGoalReached();
-                GameManager.instance.UpdateOrbsCollected(orbsCollected); //Update capture count to the UI
+                //GameManager.instance.UpdateOrbsCollected(orbsCollected); //Update capture count to the UI
             }
         }
         else

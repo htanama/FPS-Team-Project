@@ -92,7 +92,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3858927733294379704}
-  - component: {fileID: 181407650008767233}
   - component: {fileID: 3623263726600380458}
   - component: {fileID: 3953520239787682815}
   - component: {fileID: 5889756059583624259}
@@ -122,22 +121,6 @@ Transform:
   - {fileID: 9169877820377261127}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 34.302, z: 0}
---- !u!114 &181407650008767233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6419302545626054111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27c35335584d01a42a4fd8417296440d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flagStartBase: {fileID: 0}
-  flagGoalBase: {fileID: 0}
-  flagPickupDistance: 2
-  goalAreaSize: 2
 --- !u!114 &3623263726600380458
 MonoBehaviour:
   m_ObjectHideFlags: 0
