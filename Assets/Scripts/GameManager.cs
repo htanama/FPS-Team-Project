@@ -82,8 +82,20 @@ public class GameManager : MonoBehaviour
                 StateUnPause();
             }
         }
-
-        orbsToWin = FindObjectsOfType<orbManager>().Length;
+        // press tab to open, leaving cancel on as well
+        else if (Input.GetButtonDown("Pause"))
+        {
+            if (menuActive == null)
+            {
+                StatePause();
+                menuActive = menuPause;
+                menuActive.SetActive(true);
+            }
+            else if (menuActive == menuPause)
+            {
+                StateUnPause();
+            }
+        }
     }
 
     public void StatePause()
