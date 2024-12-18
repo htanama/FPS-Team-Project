@@ -643,6 +643,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyChaser
       objectReference: {fileID: 0}
+    - target: {fileID: 7772242891113634299, guid: a39c36ddb67d2ad4dbd07e8cacb48134, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.39
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5796,9 +5800,9 @@ MonoBehaviour:
   agent: {fileID: 1792663051}
   model: {fileID: 0}
   animator: {fileID: 0}
+  enemyHPBar: {fileID: 0}
   maxHealth: 0
   currentHealth: 0
-  enemyHPFill: {fileID: 0}
   fillSpeed: 0
   colorGradient:
     serializedVersion: 2
