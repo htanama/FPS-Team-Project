@@ -16,42 +16,24 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuWin, menuLose;
 
     [Header("Goal Settings")]   
-    [SerializeField] TMP_Text flagCaptureText;
+    [SerializeField] TMP_Text orbCaptureText;
     [SerializeField] GameObject timerGoal;
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
     public Image playerHpBar; // from lecture
 
     private GameObject player;
-    private GameObject flag;
     private playerController playerScript;
-    private flagManager flagScript;
+    private List<orbManager> orbScripts;
 
     public GameObject Player => player;     //Read-only getter
-    public GameObject Flag => flag;
     public playerController PlayerScript => playerScript;
-    public flagManager FlagScript => flagScript;
+    public List<orbManager> OrbScripts => orbScripts;
 
     [SerializeField] public GameObject playerDamageScreen;      // *****
     [SerializeField] TMP_Text playerLivesText;
 
     private bool isPaused;
-
-    // Properties //
-    //public GameObject PlayerDamageScreen
-    //{
-    //    get { return playerDamageScreen; }
-    //    set { playerDamageScreen = value; }
-    //}
-    //public int PlayerLives
-    //{
-    //    get { return playerLives; }
-    //    set
-    //    {
-    //        playerLives = value;
-    //        UpdateLivesUI();
-    //    }
-    //}
 
     public bool IsPaused
     {
@@ -67,15 +49,16 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         timeScaleOrig = Time.timeScale;
+        //find and set player reference
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
 
-        flag = GameObject.FindWithTag("Flag");
-        flagScript = player.GetComponent<flagManager>();    //Attached flag manager to player
-        //find flag goal locations
-        flagScript.FlagStartBase = GameObject.FindWithTag("FlagBase").transform;
-        flagScript.FlagGoalBase = GameObject.FindWithTag("FlagGoal").transform;
-        //goalCount = playerScript.GetHP();
+        //find all orbs with orbManager scripts in the scene
+        orbScripts = new List<orbManager>(FindObjectsOfType<orbManager>());
+        if (orbScripts.Count == 0)
+        {
+            Debug.LogWarning("No orbManager instances found! Ensure orbs are placed in the scene.");
+        }
     }
 
     // Update is called once per frame
@@ -127,33 +110,36 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
-    public void UpdateCaptures(int amount)      //Game goal
+    public void UpdateOrbsCollected(int amount)      //Game goal
     {
-       //show flag captures on UI
-        flagCaptureText.text = amount.ToString("F0");
+       //show orb captures on UI
+        orbCaptureText.text = amount.ToString("F0");
         
         //win condition
-        if(FlagScript.CaptureCount >= 3)
+        if(FindObjectsOfType<orbManager>().Length <= amount)        //auto updates based on number of orbs in level
         {
-            WinGame();
-        }
+            WinGame();              //Change to reach the end point rather than collect the orbs
+        }                           //or increase to final number to win the game
 
     }
-       public void UpdateLivesUI()
+    public void UpdateLivesUI()
     {
         //code to update lives on the UI
         playerLivesText.text = playerLives.ToString("F0");
     }
 
-    public void Respawn()
+    public void Respawn()       //called when player health reaches zero
     {
         //respawn while player has lives
         if (playerLives > 0)
         {
-            //drop flag
-            if (FlagScript.IsHoldingFlag)
+            //drop all orbs held
+            foreach (orbManager orb in orbScripts)
             {
-                FlagScript.DropFlag(player.transform);
+                if (orb.IsHoldingOrb)
+                {
+                    orb.DropOrb(player.transform);
+                }
             }
 
             //move player to spawn point (don't destroy)
@@ -181,12 +167,4 @@ public class GameManager : MonoBehaviour
 
     }
 
-    // Times is up-- you Lose
-    //void TimeUp()
-    //{
-    //    // Handle what happens when the timer reaches zero
-    //    StatePause();
-    //    menuActive = menuLose; // Show the lose menu when time is up
-    //    menuActive.SetActive(true);
-    //}
 }

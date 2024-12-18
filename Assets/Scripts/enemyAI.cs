@@ -2,23 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using Unity.VisualScripting;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class enemyAI : baseEnemy, IOpen
 {
-    //[Header("      ENEMY      ")]
-    //[SerializeField] Renderer model;
-    //[SerializeField] NavMeshAgent agent;
-
     [Header("      TRANSFORMS/POSITIONS      ")]
     [SerializeField] Transform shootPos;
     [SerializeField] Transform headPos;
-    [SerializeField] Transform healthBarPos;
 
     [Header("      ENEMY STATS      ")]
     float angleToPlayer;
     float stoppingDistOrig;
+    
     [SerializeField] int faceTargetSpeed;
     [SerializeField] int FOV;
     [SerializeField] int roamDist;  // sphere distance of roaming
@@ -34,7 +31,7 @@ public class enemyAI : baseEnemy, IOpen
     [SerializeField] float shootRate;
 
     
-    // Flags/Bools //
+    // Flags/Bools
     bool playerInRange;
     bool isShooting;
     bool isRoaming;
@@ -45,13 +42,13 @@ public class enemyAI : baseEnemy, IOpen
     // Vectors //
     //Vector3 playerDirection;
     Vector3 startingPos;
-    //Vector3 lastPlatformPosition;
 
     void Start()
     {
         currentHealth = maxHealth;
-        //UpdateEnemyHealthBar();
+        UpdateEnemyUI();
 
+        currentHealth = MaxHealth;
         colorOrig = model.material.color; // for flash red
         startingPos = transform.position; // to remember the starting position for roaming
         stoppingDistOrig = agent.stoppingDistance; // remember for roam/idle reset
@@ -230,8 +227,14 @@ public class enemyAI : baseEnemy, IOpen
             isRoaming = false;
             StartCoroutine(flashRed());
             agent.SetDestination(GameManager.instance.Player.transform.position);
+            UpdateEnemyUI();
             //UpdateHealth(-amount);                                                //*****
         }
+    }
+
+    public void UpdateEnemyUI()
+    {
+        EnemyHPBar.fillAmount = currentHealth / maxHealth;
     }
 
     //public void UpdateHealth(float amount)
