@@ -225,8 +225,9 @@ public class enemyAI : baseEnemy, IOpen
         base.takeDamage(amount);    //Calling base class method
         
         if(currentHealth > 0)
-        {
-            StopCoroutine(coroutine);
+        { 
+            if(coroutine != null) StopCoroutine(coroutine);
+
             isRoaming = false;
             StartCoroutine(flashRed());
             agent.SetDestination(GameManager.instance.Player.transform.position);

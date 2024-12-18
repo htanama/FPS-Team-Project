@@ -28,4 +28,7 @@ public class weaponStats : ScriptableObject //Acts as data storage
     public ParticleSystem hitEffect;//Drag weapon hit effect here
     public AudioClip[] shootingSounds;  //As an array to choose different sounds
     public float weaponSoundVolume;
+    public AudioClip[] reloadSounds;
+    public AudioClip[] emptySounds;
+
 }
