@@ -317,12 +317,13 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // jammie add change gun
 
     void selectGun()
-    {
+    {     
+
         int prevGunPos = gunListpos;
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListpos < gunList.Count - 1)
-        {
-            gunListpos++;                       
+        {            
+            gunListpos++;
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListpos > 0)
         {
