@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Levels/Proto_Turn_IN.unity
     guid: 91e5939aaf34dd04086fe9287dfe56b8
   - enabled: 1
-    path: Assets/Levels/zzTesting_Anything_Here.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Levels/Tutorial.unity
-    guid: 46ac4521f585cbb4cb79179ec743ed92
+    path: Assets/Levels/Proto_Turn_IN_Level2.unity
+    guid: 3f8fb9caff961a341b9b8798c909d074
   m_configObjects: {}
