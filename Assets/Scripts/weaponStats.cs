@@ -19,6 +19,7 @@ public class weaponStats : ScriptableObject //Acts as data storage
     public int weaponRange;
     public int ammoCurrent;
     public int ammoMax;
+    public float reloadTime;
 
     [Header("Area Damage")]
     public float areaOfEffectRadius;

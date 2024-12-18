@@ -145,13 +145,13 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {        
         //draw ray
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDistance, Color.red);
-        selectGun();
+
         //if game is not paused
         if (!GameManager.instance.IsPaused)
         {
             //always checking for these
             movement();
-            
+            selectGun();
             crouch();              
         }
 
@@ -207,9 +207,11 @@ public class playerController : MonoBehaviour, IDamage, IOpen
             }
         }
 
-        if (Input.GetButton("Reload"))
-            StartCoroutine(Reaload());
-
+        if (Input.GetButton("Reload") && gunList.Count > 0 && !isReloading)
+        {
+            if (gunList[gunListpos].ammoCurrent < gunList[gunListpos].ammoMax)
+                StartCoroutine(Reload());
+        }
      
     }
 
@@ -400,9 +402,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     IEnumerator Shoot()
     {
         //turn on
-        isShooting = true;        
+        isShooting = true;
 
-        aud.PlayOneShot(gunList[gunListpos].shootingSounds[gunListpos], gunList[gunListpos].weaponSoundVolume);
+        aud.PlayOneShot(gunList[gunListpos].shootingSounds[Random.Range(0, gunList[gunListpos].shootingSounds.Length)], gunList[gunListpos].weaponSoundVolume);
                        
         if (gunList[gunListpos].ammoCurrent > 0)
         {
@@ -463,25 +465,26 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
     }
 
-    IEnumerator Reaload()
+    IEnumerator Reload()
     {
-        isReloading = true;
-        if (!isReloading)
-        {
-            aud.PlayOneShot(gunList[gunListpos].reloadSounds[gunListpos], gunList[gunListpos].weaponSoundVolume);
-        }
-        
-        //aud.clip = gunList[0].reloadSounds[0];
-        //aud.Play();
+        weaponStats gun = gunList[gunListpos];
 
-        gunList[gunListpos].ammoCurrent = gunList[gunListpos].ammoMax;
-        currentAmmo = gunList[gunListpos].ammoCurrent;
+        if (isReloading || gun.ammoCurrent == gun.ammoMax) yield break;
+
+        isReloading = true;
+
+        aud.PlayOneShot(gun.reloadSounds[gunListpos], gun.weaponSoundVolume);
+
+        yield return new WaitForSeconds(gun.reloadTime);       
+
+        gun.ammoCurrent = gun.ammoMax;
+
+        //gunList[gunListpos].ammoCurrent = gunList[gunListpos].ammoMax;
+        //currentAmmo = gunList[gunListpos].ammoCurrent;
 
         Debug.Log($"Reloading weapon: {gunList[gunListpos].model.name}. Ammo: {gunList[gunListpos].ammoCurrent}/{gunList[gunListpos].ammoMax}");
 
         // Simulate reload time
-        yield return new WaitForSeconds(2.0f);       
-
         isReloading = false;
     }
 
