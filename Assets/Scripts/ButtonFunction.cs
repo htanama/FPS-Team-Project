@@ -14,14 +14,31 @@ public class ButtonFunction : MonoBehaviour
         // Just reset the Time.timescale
         GameManager.instance.StateUnPause();
     }
+    public void PauseMenu()
+    {
+        
+    }
+    public void SettingsMenu()
+    {
+
+    }
+    public void ControlsMenu()
+    {
+
+    }
+    public void InventoryMenu()
+    {
+
+    }
+
 
     public void Quit()
     {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
     }
 
 

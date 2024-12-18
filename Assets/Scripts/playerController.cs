@@ -7,7 +7,7 @@
             - Added fields shoot damage, distance, rate
             - Also field _HP
             - uncommented layer mask
-            - Added bool/flag isShooting
+            - Added bool/orb isShooting
             - update, added draw ray (raycast)
             - movement, added "fire"
             - added take damage 
@@ -25,8 +25,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Principal;
 using Unity.VisualScripting;
-//using UnityEditor.TextCore.Text;
 using UnityEngine;
+using UnityEngine.UI;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class playerController : MonoBehaviour, IDamage, IOpen
@@ -36,9 +36,15 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] Renderer model;
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
-    
+
     [Header("      STATS      ")]
-    [SerializeField][Range(1, 10)] public int HP; /// turn into Get/Setter
+    [SerializeField][Range(0, 20)] private float playerMaxHealth;
+    [SerializeField][Range(0, 20)] private float playerCurrentHealth;
+    [SerializeField] Image playerHealthBar;
+    [SerializeField] float fillSpeed;
+    [SerializeField] Gradient colorGradient;
+
+
     [SerializeField][Range(1,  10)] int speed;      //Range adds a slider
     [SerializeField][Range(2,  5)]  int sprintMod;
     [SerializeField][Range(1,  5)]  int jumpMax;
@@ -59,14 +65,15 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // notes - weaponType; weaponEquipped; ammoCount; bool isReloading; isEquipping;
     // jammie will add gun list from lecture
     // jammie will add gun model from lecture
-    [SerializeField] GameObject bullet;
+    // [SerializeField] GameObject bullet; // not using the Damage bullet like the enemy
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
+    [SerializeField] int currentAmmo;
     [SerializeField] GameObject gunModel;
     [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
-    [SerializeField] Transform shootPos;
-
+    // [SerializeField] Transform shootPos; // not using this variable like the enemy 
+    
 
     [Header("      Player Audio      ")]
     [SerializeField] AudioSource aud;
@@ -85,39 +92,40 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     Color colorOrig;
 
     int jumpCount;
-    int origHP;
     int gunListpos;
 
     bool isShooting;
     bool isSprinting;
     bool isPlayingStep;
     bool isCrouching;
+    bool isReloading;
 
     RaycastHit contact;
-    
+
+    // Properties //
+    // Health //
+    public float PlayerMaxHealth
+    {
+        get { return playerMaxHealth; }
+        set { playerMaxHealth = value; }
+    }
+    public float PlayerCurrentHealth
+    {
+        get { return playerCurrentHealth; }
+        set { playerCurrentHealth = value; }
+    }
+
     //getters and setters (used to calculate stun enemy speed)
     public int Speed
     {
-        get => speed;
-        set => speed = value;
+        get { return Speed; }
+        set { Speed = value; }
     }
 
     public int SprintMod
     {
-        get => sprintMod;
-        set => sprintMod = value;
-    }
-
-    //public int HP
-    //{
-    //    get => HP;
-    //    set => HP = value;
-    //}
-
-    public int OrigHP
-    {
-        get => origHP;
-        set => origHP = value;
+        get { return SprintMod; }
+        set { SprintMod = value; }
     }
 
     // Start is called before the first frame update
@@ -126,27 +134,34 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         currentSpeed = speed;
         originalHeight = controller.height;
         originalCenter = controller.center;
-
-        origHP = HP;
+        
+        // Health and Health Bar //
+        playerCurrentHealth = playerMaxHealth;
         updatePlayerUI();
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {        
         //draw ray
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDistance, Color.red);
 
         //if game is not paused
-        if(!GameManager.instance.IsPaused)
+        if (!GameManager.instance.IsPaused)
         {
             //always checking for these
             movement();
             selectGun();
-            crouch();  
+            crouch();              
         }
 
         sprint(); //Outside of condition to prevent infinite sprint glitch
+
+
+        if(Input.GetButton("Gun Info"))
+        {
+            displayAllWeaponInfo();
+        }
     }
 
     // Player Movement
@@ -186,9 +201,18 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
         if (Input.GetButton("Fire1") && gunList.Count > 0 && !isShooting)
         {
-            StartCoroutine(Shoot());
+            if (gunList[gunListpos].ammoCurrent > 0) 
+            {
+                StartCoroutine(Shoot());                
+            }
         }
 
+        if (Input.GetButton("Reload") && gunList.Count > 0 && !isReloading)
+        {
+            if (gunList[gunListpos].ammoCurrent < gunList[gunListpos].ammoMax)
+                StartCoroutine(Reload());
+        }
+     
     }
 
     void jump()
@@ -244,9 +268,31 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Player UI //
     public void updatePlayerUI()
     {
-        GameManager.instance.PlayerHPBar.fillAmount = (float)HP / origHP;
-        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
-        GameManager.instance.UpdateLives(); //Show lives on the UI
+        //update player health bar
+        GameManager.instance.playerHpBar.fillAmount = playerCurrentHealth / playerMaxHealth;
+
+        //float targetFillAmount = playerCurrentHealth / playerMaxHealth;
+        //playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+        //playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
+
+        //variable to pass to game manager method total orbs collected from the list
+        int playerOrbsCollected = 0;
+        //counting orbs collected
+        foreach(orbManager orbScript in GameManager.instance.OrbScripts) { playerOrbsCollected += orbScript.OrbsCollected; }
+        //show counted orb captures to the UI
+        GameManager.instance.UpdateOrbsCollected(playerOrbsCollected);
+        GameManager.instance.UpdateLivesUI(); //Show currentn lives on the UI
+    }
+
+    public void displayAllWeaponInfo()
+    {
+        if (gunList.Count != 0)
+        {
+            for (int i = 0; i < gunList.Count - 1; i++)
+            {
+                Debug.Log($"GetGunStat weapon: {gunList[i].model.name} and Index= {gunListpos}");
+            }
+        }
     }
 
     public void GetGunStats(weaponStats gun)
@@ -256,9 +302,13 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         shootDamage = gun.damage;
         shootDistance = gun.weaponRange;
         shootRate = gun.shootRate;
+        currentAmmo = gun.ammoCurrent;
 
-        gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+
+        // name of the weapon when it is changing 
+        Debug.Log($"Add weapon: {gunList[gunListpos].model.name} and Index= {gunListpos} and length {gunList.Count}");
     }
 
     // somewhere around this section
@@ -267,43 +317,60 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // jammie add change gun
 
     void selectGun()
-    {
+    {     
+
+        int prevGunPos = gunListpos;
+
         if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListpos < gunList.Count - 1)
-        {
+        {            
             gunListpos++;
-            changeGun();
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListpos > 0)
         {
-            gunListpos--;
-            changeGun();
+            gunListpos--;         
         }
 
+        if(gunListpos != prevGunPos) changeGun();
+
+        Debug.Log($"gunListpos: {gunListpos}");           
     }
-    void changeGun()
+
+
+  void changeGun()
     {
         shootDamage = gunList[gunListpos].damage;
         shootDistance = gunList[gunListpos].weaponRange;
         shootRate = gunList[gunListpos].shootRate;
 
+        // keep track current ammo do not pull from the default weapon status. 
+        currentAmmo = gunList[gunListpos].ammoCurrent;
+
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListpos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListpos].model.GetComponent<MeshRenderer>().sharedMaterial;
+
+        // name of the weapon when it is changing 
+        Debug.Log($"Change weapon: {gunList[gunListpos].model.name} and Index= {gunListpos}");
     }
 
     // Player Damage and Weapons //   
-    public void takeDamage(int amount)
+    public void takeDamage(float amount)
     {
-        HP -= amount;
+        playerCurrentHealth -= amount;
+        playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, playerMaxHealth);
+
+        StartCoroutine(screenFlashRed());               
 
         updatePlayerUI();
-        StartCoroutine(screenFlashRed());
-        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
 
-        if (HP <= 0)
+        if (playerCurrentHealth <= 0)
         {
-            //death/lose screen in Respawn() method
-            GameManager.instance.Respawn();
+            GameManager.instance.LoseGame();
         }
+
+        updatePlayerUI();
+        
+        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);              
+
     }
 
     //When the player is stunned this is called
@@ -311,7 +378,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {
         StartCoroutine(StunCoroutine(duration));        //In it's own method for simplification
     }
-
+    
     IEnumerator StunCoroutine(float duration)
     {
         Debug.Log("Stun started!");
@@ -328,35 +395,46 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     IEnumerator screenFlashRed()
     {   
-        GameManager.instance.PlayerDamageScreen.SetActive(true);
+        GameManager.instance.playerDamageScreen.SetActive(true);
         yield return new WaitForSeconds(0.1f);
-        GameManager.instance.PlayerDamageScreen.SetActive(false);
+        GameManager.instance.playerDamageScreen.SetActive(false);
     }
     
     IEnumerator Shoot()
     {
         //turn on
         isShooting = true;
-        //aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
+
         aud.PlayOneShot(gunList[gunListpos].shootingSounds[Random.Range(0, gunList[gunListpos].shootingSounds.Length)], gunList[gunListpos].weaponSoundVolume);
-
-        //shoot code        
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
+                       
+        if (gunList[gunListpos].ammoCurrent > 0)
         {
-            Debug.Log(contact.collider.name);                   
-         
-            IDamage dmg = contact.collider.GetComponent<IDamage>();
+            gunList[gunListpos].ammoCurrent--;
+            Debug.Log($"Shooting weapon: {gunList[gunListpos].model.name}. Ammo left: {gunList[gunListpos].ammoCurrent}/{gunList[gunListpos].ammoMax}");
+            currentAmmo = gunList[gunListpos].ammoCurrent;
 
-            if (dmg != null)
+            //shoot code        
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
             {
-                dmg.takeDamage(shootDamage);
-            }
+                Debug.Log(contact.collider.name);
 
-            if (gunList[gunListpos].hitEffect != null) 
-            {
-                Instantiate(gunList[gunListpos].hitEffect, contact.point, Quaternion.identity);
+                IDamage dmg = contact.collider.GetComponent<IDamage>();
+
+                if (dmg != null)
+                {
+                    dmg.takeDamage(shootDamage);
+                }
+
+                if (gunList[gunListpos].hitEffect != null)
+                {
+                    Instantiate(gunList[gunListpos].hitEffect, contact.point, Quaternion.identity);
+                }
+
             }
-            
+        }
+        else
+        {
+            Debug.Log($"Out of ammo for {gunList[gunListpos].model.name}. Reload required.");
         }
 
         //**************To be added when pickup is implemented******************
@@ -388,8 +466,31 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
     }
 
-    // code for walking audio
+    IEnumerator Reload()
+    {
+        weaponStats gun = gunList[gunListpos];
 
+        if (isReloading || gun.ammoCurrent == gun.ammoMax) yield break;
+
+        isReloading = true;
+
+        aud.PlayOneShot(gun.reloadSounds[gunListpos], gun.weaponSoundVolume);
+
+        yield return new WaitForSeconds(gun.reloadTime);       
+
+        gun.ammoCurrent = gun.ammoMax;
+
+        //gunList[gunListpos].ammoCurrent = gunList[gunListpos].ammoMax;
+        //currentAmmo = gunList[gunListpos].ammoCurrent;
+
+        Debug.Log($"Reloading weapon: {gunList[gunListpos].model.name}. Ammo: {gunList[gunListpos].ammoCurrent}/{gunList[gunListpos].ammoMax}");
+
+        // Simulate reload time
+        isReloading = false;
+    }
+
+
+    // code for walking audio
     IEnumerator playStep()
     {
         isPlayingStep = true;

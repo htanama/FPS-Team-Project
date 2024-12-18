@@ -2,32 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using Unity.VisualScripting;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
-public class enemyAI : MonoBehaviour, IDamage, IOpen
+public class enemyAI : baseEnemy, IOpen
 {
-    [Header("      ENEMY      ")]
-    [SerializeField] Renderer model;
-    [SerializeField] NavMeshAgent agent;
-
     [Header("      TRANSFORMS/POSITIONS      ")]
     [SerializeField] Transform shootPos;
     [SerializeField] Transform headPos;
-    [SerializeField] Transform healthBarPos;
 
     [Header("      ENEMY STATS      ")]
-    int HPOrig;
     float angleToPlayer;
     float stoppingDistOrig;
-    [SerializeField] int HP;
+    
     [SerializeField] int faceTargetSpeed;
     [SerializeField] int FOV;
     [SerializeField] int roamDist;  // sphere distance of roaming
     [SerializeField] int roamTimer; // how long to wait before move again
 
     [Header("      ANIMATION      ")]
-    [SerializeField] Animator animator;
+    //[SerializeField] Animator animator;
     [SerializeField] int animSpeedTransition;
 
     [Header("      DMG STATS      ")]
@@ -36,7 +31,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     [SerializeField] float shootRate;
 
     
-    // Flags/Bools //
+    // Flags/Bools
     bool playerInRange;
     bool isShooting;
     bool isRoaming;
@@ -45,13 +40,15 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
     Coroutine coroutine;
 
     // Vectors //
-    Vector3 playerDirection;
+    //Vector3 playerDirection;
     Vector3 startingPos;
-    Vector3 lastPlatformPosition;
 
     void Start()
     {
-        //GameManager.instance.UpdateGame(1);
+        currentHealth = maxHealth;
+        UpdateEnemyUI();
+
+        currentHealth = MaxHealth;
         colorOrig = model.material.color; // for flash red
         startingPos = transform.position; // to remember the starting position for roaming
         stoppingDistOrig = agent.stoppingDistance; // remember for roam/idle reset
@@ -59,6 +56,11 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
 
     // Update is called once per frame
     void Update()
+    {
+        Behavior();
+    }
+
+    protected override void Behavior()
     {
         // animation
         float agentSpeed = agent.velocity.normalized.magnitude;
@@ -86,7 +88,6 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
             }
         }
     }
-    
     // Enemy Roaming //
     IEnumerator roam()
     {
@@ -149,7 +150,7 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         // To know the location of the player by using raycasting, do we hit the player
         RaycastHit hit;
         // Player inside the sphere range and in FOV.
-        if (Physics.Raycast(headPos.position, playerDirection, out hit) && angleToPlayer <= FOV) 
+        if (Physics.Raycast(headPos.position, playerDirection, out hit)) 
         {
             // reset stopping distance
             agent.stoppingDistance = stoppingDistOrig;
@@ -216,32 +217,37 @@ public class enemyAI : MonoBehaviour, IDamage, IOpen
         transform.rotation = Quaternion.Lerp(transform.rotation, rot, Time.deltaTime * faceTargetSpeed);
     }
 
-    // Enemy Takes Damage //
-    public void takeDamage(int amount)
-    {   
-        // decrease _HP
-        HP -= amount;
-
-        // update UI/health bar....in progress
-
-        // stop Roaming
-        StopCoroutine(coroutine);
-        isRoaming = false;
+    public override void takeDamage(float amount)
+    {
+        base.takeDamage(amount);    //Calling base class method
         
-        // visual feedback flash red
-        StartCoroutine(flashRed());
-        
-        //run toward player's last known position
-        agent.SetDestination(GameManager.instance.Player.transform.position);
+        if(currentHealth > 0)
+        { 
+            if(coroutine != null) StopCoroutine(coroutine);
 
-        // no _HP left
-        if (HP <= 0)
-        {
-           /// this is only if the goal is killing enemies, want to make -1 to enemycount    
-           // GameManager.instance.UpdateGame(-1); // code okay problem code cannot kill the enemy
-           
-            // I am dead
-            Destroy(gameObject);            
+            isRoaming = false;
+            StartCoroutine(flashRed());
+            agent.SetDestination(GameManager.instance.Player.transform.position);
+            UpdateEnemyUI();
+            //UpdateHealth(-amount);                                                //*****
         }
     }
+
+    public void UpdateEnemyUI()
+    {
+        EnemyHPBar.fillAmount = currentHealth / maxHealth;
+    }
+
+    //public void UpdateHealth(float amount)
+    //{
+    //    currentHealth += amount;
+    //    currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+    //    UpdateEnemyHealthBar();
+    //}
+//    private void UpdateEnemyHealthBar()
+//    {
+//        float targetFillAmount = currentHealth / maxHealth;
+//        enemyHPFill.fillAmount = Mathf.Lerp(enemyHPFill.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+//        enemyHPFill.color = colorGradient.Evaluate(targetFillAmount);
+//    }
 }

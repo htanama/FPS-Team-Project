@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d34e0692bd1de3b418d5aade0c893a44, type: 2}
+  - {fileID: 2100000, guid: e214d4cadc22d544dae9aa451755af12, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   door: {fileID: 1255675704840629045}
   doorSpeed: 1
+  direction: 0
 --- !u!65 &2910848836264305212
 BoxCollider:
   m_ObjectHideFlags: 0

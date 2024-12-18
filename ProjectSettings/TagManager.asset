@@ -6,13 +6,14 @@ TagManager:
   tags:
   - HUD
   - Platform2
-  - Damage-Ball
   - Enemy
   - Flag
   - Damage
-  - RedBase
   - trap_door
-  - MovingPlatform
+  - OrbSpawn
+  - OrbGoal
+  - Portal B
+  - Portal A
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Enemy
   - Player Bullet
   - Enemy Bullet
-  - MovingPlatform
+  - Minimap
   - 
   - 
   - 
