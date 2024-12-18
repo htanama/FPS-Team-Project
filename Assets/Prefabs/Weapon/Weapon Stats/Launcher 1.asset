@@ -16,8 +16,8 @@ MonoBehaviour:
   damage: 5
   shootRate: 1
   weaponRange: 80
-  ammoCurrent: 1
-  ammoMax: 1
+  ammoCurrent: 999
+  ammoMax: 999
   areaOfEffectRadius: 0
   splashDamage: 0
   hitEffect: {fileID: 1301697207402410478, guid: 39f852c28f9c3fd45a427c24f3564ba7, type: 3}

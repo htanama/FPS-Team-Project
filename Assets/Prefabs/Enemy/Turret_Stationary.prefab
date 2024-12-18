@@ -726,9 +726,9 @@ MonoBehaviour:
   agent: {fileID: 6905248413312160302}
   model: {fileID: 7748544260741103767}
   animator: {fileID: 0}
+  enemyHPBar: {fileID: 0}
   maxHealth: 0
   currentHealth: 0
-  enemyHPFill: {fileID: 0}
   fillSpeed: 0
   colorGradient:
     serializedVersion: 2
@@ -762,7 +762,6 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   shootPos: {fileID: 1489819329415123171}
   headPos: {fileID: 1299757423617515860}
-  healthBarPos: {fileID: 0}
   faceTargetSpeed: 100
   FOV: 90
   roamDist: 0
@@ -782,10 +781,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c35335584d01a42a4fd8417296440d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flagStartBase: {fileID: 0}
-  flagGoalBase: {fileID: 0}
-  flagPickupDistance: 2
-  goalAreaSize: 2
+  orbSpawnPoint: {fileID: 0}
+  orbGoalPoint: {fileID: 0}
+  orbPickupDistance: 2
+  orbAreaSize: 2
 --- !u!114 &7209346801636874420
 MonoBehaviour:
   m_ObjectHideFlags: 0
