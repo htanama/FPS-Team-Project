@@ -35,22 +35,6 @@ public class GameManager : MonoBehaviour
 
     private bool isPaused;
 
-    // Properties //
-    //public GameObject PlayerDamageScreen
-    //{
-    //    get { return playerDamageScreen; }
-    //    set { playerDamageScreen = value; }
-    //}
-    //public int PlayerLives
-    //{
-    //    get { return playerLives; }
-    //    set
-    //    {
-    //        playerLives = value;
-    //        UpdateLivesUI();
-    //    }
-    //}
-
     public bool IsPaused
     {
         get => isPaused;
@@ -183,12 +167,4 @@ public class GameManager : MonoBehaviour
 
     }
 
-    // Times is up-- you Lose
-    //void TimeUp()
-    //{
-    //    // Handle what happens when the timer reaches zero
-    //    StatePause();
-    //    menuActive = menuLose; // Show the lose menu when time is up
-    //    menuActive.SetActive(true);
-    //}
 }
