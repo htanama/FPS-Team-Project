@@ -49,7 +49,7 @@ public class enemyAI : baseEnemy, IOpen
 
     void Start()
     {
-        CurrentHealth = MaxHealth;
+        currentHealth = maxHealth;
         UpdateEnemyHealthBar();
 
         colorOrig = model.material.color; // for flash red
@@ -242,6 +242,8 @@ public class enemyAI : baseEnemy, IOpen
     }
     private void UpdateEnemyHealthBar()
     {
-        enemyHealthBar.UpdateHealthBar(currentHealth, maxHealth);
+        float targetFillAmount = currentHealth / maxHealth;
+        enemyHPFill.fillAmount = Mathf.Lerp(enemyHPFill.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+        enemyHPFill.color = colorGradient.Evaluate(targetFillAmount);
     }
 }

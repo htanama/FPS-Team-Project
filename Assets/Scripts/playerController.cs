@@ -40,7 +40,10 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [Header("      STATS      ")]
     [SerializeField][Range(0, 20)] private float playerMaxHealth;
     [SerializeField][Range(0, 20)] private float playerCurrentHealth;
-    [SerializeField] private HealthBars playerHealthBar;
+    [SerializeField] Image playerHealthBar;
+    [SerializeField] float fillSpeed;
+    [SerializeField] Gradient colorGradient;
+
 
     [SerializeField][Range(1,  10)] int speed;      //Range adds a slider
     [SerializeField][Range(2,  5)]  int sprintMod;
@@ -109,7 +112,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         get { return playerCurrentHealth; }
         set { playerCurrentHealth = value; }
     }
-
 
     //getters and setters (used to calculate stun enemy speed)
     public int Speed
@@ -249,7 +251,11 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Player UI //
     public void updatePlayerUI()
     {
-        playerHealthBar.UpdateHealthBar(playerCurrentHealth, playerMaxHealth);
+
+        float targetFillAmount = playerCurrentHealth / playerMaxHealth;
+        playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+        playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
+
         GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
         GameManager.instance.UpdateLivesUI(); //Show lives on the UI
     }
