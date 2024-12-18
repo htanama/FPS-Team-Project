@@ -21,7 +21,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
     public Image playerHpBar; // from lecture
-        
+
+    int orbsToWin;
+
     private GameObject player;
     private playerController playerScript;
     private List<orbManager> orbScripts;
@@ -77,6 +79,8 @@ public class GameManager : MonoBehaviour
                 StateUnPause();
             }
         }
+
+        orbsToWin = FindObjectsOfType<orbManager>().Length;
     }
 
     public void StatePause()
@@ -116,7 +120,7 @@ public class GameManager : MonoBehaviour
         orbCaptureText.text = amount.ToString("F0");
         
         //win condition
-        if(FindObjectsOfType<orbManager>().Length <= amount)        //auto updates based on number of orbs in level
+        if(orbsToWin <= amount)        //auto updates based on number of orbs in level
         {
             WinGame();              //Change to reach the end point rather than collect the orbs
         }                           //or increase to final number to win the game
