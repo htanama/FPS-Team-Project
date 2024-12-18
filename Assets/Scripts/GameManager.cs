@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     private GameObject player;
     private playerController playerScript;
     private List<orbManager> orbScripts;
+    private Spawner spawner;
 
     public GameObject Player => player;     //Read-only getter
     public playerController PlayerScript => playerScript;
@@ -61,6 +62,8 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("No orbManager instances found! Ensure orbs are placed in the scene.");
         }
+
+        spawner = FindObjectOfType<Spawner>();
     }
 
     // Update is called once per frame
@@ -120,7 +123,7 @@ public class GameManager : MonoBehaviour
         orbCaptureText.text = amount.ToString("F0");
         
         //win condition
-        if(orbsToWin <= amount)        //auto updates based on number of orbs in level
+        if(orbsToWin <= amount && (spawner.SpawnCount == spawner.NumToSpawn))        //auto updates based on number of orbs in level
         {
             WinGame();              //Change to reach the end point rather than collect the orbs
         }                           //or increase to final number to win the game

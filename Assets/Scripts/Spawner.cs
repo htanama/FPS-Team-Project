@@ -13,11 +13,18 @@ public class Spawner : MonoBehaviour
 
     bool startSpawning;
     bool isSpawning;
+    bool[] objectSpawned;
+
+    public int NumToSpawn => numToSpawn;     //Read-only getter
+    public int SpawnCount => spawnCount;     //Read-only getter
+    public bool IsSpawning => isSpawning;     //Read-only getter
 
     // Start is called before the first frame update
     void Start()
     {
         GameManager.instance.UpdateOrbsCollected(numToSpawn);
+
+        objectSpawned = new bool[spawnPos.Length];
     }
 
     // Update is called once per frame
@@ -44,8 +51,14 @@ public class Spawner : MonoBehaviour
 
         int spawnInt = Random.Range(0, spawnPos.Length);
 
-        Instantiate(objectToSpawn, spawnPos[spawnInt].position, spawnPos[spawnInt].rotation);
-        spawnCount++;
+        if (objectSpawned[spawnInt] == false)
+        {
+            Instantiate(objectToSpawn, spawnPos[spawnInt].position, spawnPos[spawnInt].rotation);
+
+            objectSpawned[spawnInt] = true;
+
+            spawnCount++;
+        }
 
         isSpawning = false;
     }

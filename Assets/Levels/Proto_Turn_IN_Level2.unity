@@ -8485,7 +8485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ab8e036f78de8546a1e9ce8897be9c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToSpawn: {fileID: 1949946783}
+  objectToSpawn: {fileID: 4386975517030837889, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
   numToSpawn: 3
   timeBetweenSpawns: 0
   spawnPos:
@@ -10452,68 +10452,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4924130287515698, guid: ba75f6548b81ad440be3522e8695d23c, type: 3}
   m_PrefabInstance: {fileID: 1939191508}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1949946782
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4386975517030837889, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_Name
-      value: Orb
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.257
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 8.698
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 16.39
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6644161640688454281, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
---- !u!1 &1949946783 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4386975517030837889, guid: eea096b013f22644194d9b57b1b07da1, type: 3}
-  m_PrefabInstance: {fileID: 1949946782}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2013407253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11428,6 +11366,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spawn Room
       objectReference: {fileID: 0}
+    - target: {fileID: 1258801251159110416, guid: 609afd82f5127f04d894cb7135cda05e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 2288005649930586264, guid: 609afd82f5127f04d894cb7135cda05e, type: 3}
       propertyPath: Player
       value: 
@@ -11475,6 +11417,10 @@ PrefabInstance:
     - target: {fileID: 2294489853374517783, guid: 609afd82f5127f04d894cb7135cda05e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3717457089791332837, guid: 609afd82f5127f04d894cb7135cda05e, type: 3}
+      propertyPath: m_TagString
+      value: OrbGoal
       objectReference: {fileID: 0}
     - target: {fileID: 4311496118502208425, guid: 609afd82f5127f04d894cb7135cda05e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11641,5 +11587,4 @@ SceneRoots:
   - {fileID: 1276588606}
   - {fileID: 1139327818}
   - {fileID: 39992651}
-  - {fileID: 1949946782}
   - {fileID: 1599647260}

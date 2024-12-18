@@ -11,7 +11,7 @@ using UnityEngine;
 public class orbManager : MonoBehaviour
 {
     [Header("     Orb Options     ")]
-    [SerializeField] private Transform orbSpawnPoint;
+    //[SerializeField] private Transform orbSpawnPoint;
     [SerializeField] private Transform orbGoalPoint;
     [SerializeField][Range(2.0f, 5.0f)] float orbPickupDistance;   //How close to get to the orb to pick it up
     [SerializeField][Range(2.0f, 10.0f)] float orbAreaSize;     //How close to get to the goal
@@ -29,11 +29,11 @@ public class orbManager : MonoBehaviour
         set => orb = value;
     }
 
-    public Transform OrbSpawnPoint
-    { 
-        get => orbSpawnPoint;
-        set => orbSpawnPoint = value;
-    }
+    //public Transform OrbSpawnPoint
+    //{ 
+    //    get => orbSpawnPoint;
+    //    set => orbSpawnPoint = value;
+    //}
 
     public Transform OrbGoalPoint
     {
@@ -59,10 +59,10 @@ public class orbManager : MonoBehaviour
         playerTransform = GameManager.instance.Player.transform;
         orb = gameObject;
         //orb spawn and goal
-        orbSpawnPoint = GameObject.FindWithTag("OrbSpawn").transform;       //Might not need this if using spawner
+        //orbSpawnPoint = GameObject.FindWithTag("OrbSpawn").transform;       //Might not need this if using spawner
         orbGoalPoint = GameObject.FindWithTag("OrbGoal").transform;
         //Orb setup
-        ResetOrb();
+        //ResetOrb();
     }
 
     // Update is called once per frame
@@ -129,18 +129,19 @@ public class orbManager : MonoBehaviour
         //return the orb to base
         isHoldingOrb = false;
         orb.transform.SetParent(null);
-        orb.transform.position = orbSpawnPoint.transform.position + orbOffset; //Respawn/Move orb back at base
-        orb.GetComponent<Collider>().enabled = true; //Enable orb collider
+        //orb.transform.position = orbSpawnPoint.transform.position + orbOffset; //Respawn/Move orb back at base
+        //orb.GetComponent<Collider>().enabled = true; //Enable orb collider
+        DestroyObject(orb);
 
         Debug.Log("Orb returned to base");
     }
 
-    void ResetOrb()
-    {
-        //orb is reset to starting point
-        orb.transform.position = orbSpawnPoint.transform.position + orbOffset;
-        orb.GetComponent<Collider>().enabled = true;
-    }
+    //void ResetOrb()
+    //{
+    //    //orb is reset to starting point
+    //    orb.transform.position = orbSpawnPoint.transform.position + orbOffset;
+    //    orb.GetComponent<Collider>().enabled = true;
+    //}
 
     //called when enemy takes orb from player
     public void takeOrb(Transform enemyTransform)

@@ -47,10 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c35335584d01a42a4fd8417296440d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orbSpawnPoint: {fileID: 0}
   orbGoalPoint: {fileID: 0}
-  orbPickupDistance: 4
-  orbAreaSize: 2
+  orbPickupDistance: 2.99
+  orbAreaSize: 4
 --- !u!33 &7303962785908812308
 MeshFilter:
   m_ObjectHideFlags: 0
