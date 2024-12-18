@@ -150,7 +150,7 @@ public class enemyAI : baseEnemy, IOpen
         // To know the location of the player by using raycasting, do we hit the player
         RaycastHit hit;
         // Player inside the sphere range and in FOV.
-        if (Physics.Raycast(headPos.position, playerDirection, out hit) && angleToPlayer <= FOV) 
+        if (Physics.Raycast(headPos.position, playerDirection, out hit)) 
         {
             // reset stopping distance
             agent.stoppingDistance = stoppingDistOrig;
@@ -222,8 +222,9 @@ public class enemyAI : baseEnemy, IOpen
         base.takeDamage(amount);    //Calling base class method
         
         if(currentHealth > 0)
-        {
-            StopCoroutine(coroutine);
+        { 
+            if(coroutine != null) StopCoroutine(coroutine);
+
             isRoaming = false;
             StartCoroutine(flashRed());
             agent.SetDestination(GameManager.instance.Player.transform.position);

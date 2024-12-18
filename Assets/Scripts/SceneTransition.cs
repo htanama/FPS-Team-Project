@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneTransition : MonoBehaviour
 {
     // Name or index of the scene to load
-    //public string sceneToLoad;
+    public string sceneToLoad;
 
     // Called when another object enters the trigger
     private void OnTriggerEnter(Collider other)
@@ -17,8 +17,8 @@ public class SceneTransition : MonoBehaviour
             Debug.Log("Player entered the door. Loading scene...");
 
             // Load the specified scene
-           // SceneManager.LoadScene(sceneToLoad);
-            SceneManager.LoadScene("Tutorial");
+            SceneManager.LoadScene(sceneToLoad);
+            
         }
     }
 }

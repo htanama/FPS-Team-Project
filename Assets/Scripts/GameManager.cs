@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
     public Image playerHpBar; // from lecture
-
+        
     private GameObject player;
     private playerController playerScript;
     private List<orbManager> orbScripts;

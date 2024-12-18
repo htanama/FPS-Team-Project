@@ -65,14 +65,15 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // notes - weaponType; weaponEquipped; ammoCount; bool isReloading; isEquipping;
     // jammie will add gun list from lecture
     // jammie will add gun model from lecture
-    [SerializeField] GameObject bullet;
+    // [SerializeField] GameObject bullet; // not using the Damage bullet like the enemy
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
+    [SerializeField] int currentAmmo;
     [SerializeField] GameObject gunModel;
     [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
-    [SerializeField] Transform shootPos;
-
+    // [SerializeField] Transform shootPos; // not using this variable like the enemy 
+    
 
     [Header("      Player Audio      ")]
     [SerializeField] AudioSource aud;
@@ -97,6 +98,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     bool isSprinting;
     bool isPlayingStep;
     bool isCrouching;
+    bool isReloading;
 
     RaycastHit contact;
 
@@ -116,14 +118,14 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     //getters and setters (used to calculate stun enemy speed)
     public int Speed
     {
-        get => speed;
-        set => speed = value;
+        get { return Speed; }
+        set { Speed = value; }
     }
 
     public int SprintMod
     {
-        get => sprintMod;
-        set => sprintMod = value;
+        get { return SprintMod; }
+        set { SprintMod = value; }
     }
 
     // Start is called before the first frame update
@@ -132,7 +134,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         currentSpeed = speed;
         originalHeight = controller.height;
         originalCenter = controller.center;
-
+        
         // Health and Health Bar //
         playerCurrentHealth = playerMaxHealth;
         updatePlayerUI();
@@ -140,20 +142,26 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     // Update is called once per frame
     void Update()
-    {
+    {        
         //draw ray
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDistance, Color.red);
-
+        selectGun();
         //if game is not paused
-        if(!GameManager.instance.IsPaused)
+        if (!GameManager.instance.IsPaused)
         {
             //always checking for these
             movement();
-            selectGun();
-            crouch();  
+            
+            crouch();              
         }
 
         sprint(); //Outside of condition to prevent infinite sprint glitch
+
+
+        if(Input.GetButton("Gun Info"))
+        {
+            displayAllWeaponInfo();
+        }
     }
 
     // Player Movement
@@ -193,9 +201,16 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
         if (Input.GetButton("Fire1") && gunList.Count > 0 && !isShooting)
         {
-            StartCoroutine(Shoot());
+            if (gunList[gunListpos].ammoCurrent > 0) 
+            {
+                StartCoroutine(Shoot());                
+            }
         }
 
+        if (Input.GetButton("Reload"))
+            StartCoroutine(Reaload());
+
+     
     }
 
     void jump()
@@ -267,6 +282,17 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         GameManager.instance.UpdateLivesUI(); //Show currentn lives on the UI
     }
 
+    public void displayAllWeaponInfo()
+    {
+        if (gunList.Count != 0)
+        {
+            for (int i = 0; i < gunList.Count - 1; i++)
+            {
+                Debug.Log($"GetGunStat weapon: {gunList[i].model.name} and Index= {gunListpos}");
+            }
+        }
+    }
+
     public void GetGunStats(weaponStats gun)
     {
         gunList.Add(gun);        
@@ -274,9 +300,13 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         shootDamage = gun.damage;
         shootDistance = gun.weaponRange;
         shootRate = gun.shootRate;
+        currentAmmo = gun.ammoCurrent;
 
-        gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+
+        // name of the weapon when it is changing 
+        Debug.Log($"Add weapon: {gunList[gunListpos].model.name} and Index= {gunListpos} and length {gunList.Count}");
     }
 
     // somewhere around this section
@@ -286,26 +316,37 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     void selectGun()
     {
+        int prevGunPos = gunListpos;
+
         if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListpos < gunList.Count - 1)
         {
-            gunListpos++;
-            changeGun();
+            gunListpos++;                       
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListpos > 0)
         {
-            gunListpos--;
-            changeGun();
+            gunListpos--;         
         }
 
+        if(gunListpos != prevGunPos) changeGun();
+
+        Debug.Log($"gunListpos: {gunListpos}");           
     }
-    void changeGun()
+
+
+  void changeGun()
     {
         shootDamage = gunList[gunListpos].damage;
         shootDistance = gunList[gunListpos].weaponRange;
         shootRate = gunList[gunListpos].shootRate;
 
+        // keep track current ammo do not pull from the default weapon status. 
+        currentAmmo = gunList[gunListpos].ammoCurrent;
+
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListpos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListpos].model.GetComponent<MeshRenderer>().sharedMaterial;
+
+        // name of the weapon when it is changing 
+        Debug.Log($"Change weapon: {gunList[gunListpos].model.name} and Index= {gunListpos}");
     }
 
     // Player Damage and Weapons //   
@@ -314,14 +355,18 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         playerCurrentHealth -= amount;
         playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, playerMaxHealth);
 
-        updatePlayerUI();
-        StartCoroutine(screenFlashRed());
-        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
+        StartCoroutine(screenFlashRed());               
 
-        if(playerCurrentHealth <= 0)
+        updatePlayerUI();
+
+        if (playerCurrentHealth <= 0)
         {
-            GameManager.instance.Respawn();
+            GameManager.instance.LoseGame();
         }
+
+        updatePlayerUI();
+        
+        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);              
 
     }
 
@@ -330,7 +375,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {
         StartCoroutine(StunCoroutine(duration));        //In it's own method for simplification
     }
-
+    
     IEnumerator StunCoroutine(float duration)
     {
         Debug.Log("Stun started!");
@@ -355,27 +400,38 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     IEnumerator Shoot()
     {
         //turn on
-        isShooting = true;
-        //aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
-        aud.PlayOneShot(gunList[gunListpos].shootingSounds[Random.Range(0, gunList[gunListpos].shootingSounds.Length)], gunList[gunListpos].weaponSoundVolume);
+        isShooting = true;        
 
-        //shoot code        
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
+        aud.PlayOneShot(gunList[gunListpos].shootingSounds[gunListpos], gunList[gunListpos].weaponSoundVolume);
+                       
+        if (gunList[gunListpos].ammoCurrent > 0)
         {
-            Debug.Log(contact.collider.name);                   
-         
-            IDamage dmg = contact.collider.GetComponent<IDamage>();
+            gunList[gunListpos].ammoCurrent--;
+            Debug.Log($"Shooting weapon: {gunList[gunListpos].model.name}. Ammo left: {gunList[gunListpos].ammoCurrent}/{gunList[gunListpos].ammoMax}");
+            currentAmmo = gunList[gunListpos].ammoCurrent;
 
-            if (dmg != null)
+            //shoot code        
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
             {
-                dmg.takeDamage(shootDamage);
-            }
+                Debug.Log(contact.collider.name);
 
-            if (gunList[gunListpos].hitEffect != null) 
-            {
-                Instantiate(gunList[gunListpos].hitEffect, contact.point, Quaternion.identity);
+                IDamage dmg = contact.collider.GetComponent<IDamage>();
+
+                if (dmg != null)
+                {
+                    dmg.takeDamage(shootDamage);
+                }
+
+                if (gunList[gunListpos].hitEffect != null)
+                {
+                    Instantiate(gunList[gunListpos].hitEffect, contact.point, Quaternion.identity);
+                }
+
             }
-            
+        }
+        else
+        {
+            Debug.Log($"Out of ammo for {gunList[gunListpos].model.name}. Reload required.");
         }
 
         //**************To be added when pickup is implemented******************
@@ -407,8 +463,30 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
     }
 
-    // code for walking audio
+    IEnumerator Reaload()
+    {
+        isReloading = true;
+        if (!isReloading)
+        {
+            aud.PlayOneShot(gunList[gunListpos].reloadSounds[gunListpos], gunList[gunListpos].weaponSoundVolume);
+        }
+        
+        //aud.clip = gunList[0].reloadSounds[0];
+        //aud.Play();
 
+        gunList[gunListpos].ammoCurrent = gunList[gunListpos].ammoMax;
+        currentAmmo = gunList[gunListpos].ammoCurrent;
+
+        Debug.Log($"Reloading weapon: {gunList[gunListpos].model.name}. Ammo: {gunList[gunListpos].ammoCurrent}/{gunList[gunListpos].ammoMax}");
+
+        // Simulate reload time
+        yield return new WaitForSeconds(2.0f);       
+
+        isReloading = false;
+    }
+
+
+    // code for walking audio
     IEnumerator playStep()
     {
         isPlayingStep = true;
