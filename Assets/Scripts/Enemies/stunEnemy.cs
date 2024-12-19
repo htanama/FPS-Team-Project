@@ -40,11 +40,15 @@ public class stunEnemy : baseEnemy
         //drop orb right before dying
         if (currentHealth - amount <= 0)
         {
-            foreach (orbManager orb in GameManager.instance.OrbScripts)
+            //checks if the player is holding an orb
+            if (GameManager.instance.OrbScripts != null)
             {
-                if (orb.IsHoldingOrb && orb.transform.parent == transform)
+                foreach (orbManager orb in GameManager.instance.OrbScripts)
                 {
-                    orb.DropOrb(transform);     //drop orb at location of the parent
+                    if (orb.IsHoldingOrb && orb.transform.parent == transform)
+                    {
+                        orb.DropOrb(transform);     //drop orb at location of the parent
+                    }
                 }
             }
         }
@@ -69,12 +73,15 @@ public class stunEnemy : baseEnemy
     {
         bool playerHasOrb = false;
         //checks if the player is holding an orb
-        foreach (orbManager orb in GameManager.instance.OrbScripts)
+        if (GameManager.instance.OrbScripts != null)
         {
-            if (orb.IsHoldingOrb)
+            foreach (orbManager orb in GameManager.instance.OrbScripts)
             {
-                playerHasOrb = true;
-                break;
+                if (orb.IsHoldingOrb)
+                {
+                    playerHasOrb = true;
+                    break;
+                }
             }
         }
 
