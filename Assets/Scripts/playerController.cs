@@ -508,5 +508,4 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         playerCurrentHealth += item.HealAmount;
     }
 
-
 }
