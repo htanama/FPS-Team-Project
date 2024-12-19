@@ -157,10 +157,10 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         sprint(); //Outside of condition to prevent infinite sprint glitch
 
 
-        if(Input.GetButton("Gun Info"))
-        {
-            displayAllWeaponInfo();
-        }
+        //if(Input.GetButton("Gun Info"))
+        //{
+        //    displayAllWeaponInfo();
+        //}
     }
 
     // Player Movement
@@ -200,7 +200,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
         if (Input.GetButton("Fire1") && gunList.Count > 0 && !isShooting)
         {
-            if (gunList[gunListpos].ammoCurrent > 0) 
+            if (gunList[gunListpos].ammoCurrent > 0 && !isShooting) 
             {
                 StartCoroutine(Shoot());                
             }
@@ -284,16 +284,16 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         GameManager.instance.UpdateLivesUI(); //Show currentn lives on the UI
     }
 
-    public void displayAllWeaponInfo()
-    {
-        if (gunList.Count != 0)
-        {
-            for (int i = 0; i < gunList.Count - 1; i++)
-            {
-                Debug.Log($"GetGunStat weapon: {gunList[i].model.name} and Index= {gunListpos}");
-            }
-        }
-    }
+    //public void displayAllWeaponInfo()
+    //{
+    //    if (gunList.Count != 0)
+    //    {
+    //        for (int i = 0; i < gunList.Count - 1; i++)
+    //        {
+    //            Debug.Log($"GetGunStat weapon: {gunList[i].model.name} and Index= {gunListpos}");
+    //        }
+    //    }
+    //}
 
     public void GetGunStats(weaponStats gun)
     {
@@ -302,7 +302,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         shootDamage = gun.damage;
         shootDistance = gun.weaponRange;
         shootRate = gun.shootRate;
-        currentAmmo = gun.ammoCurrent;
+        //currentAmmo = gun.ammoCurrent;
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
@@ -315,18 +315,20 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     void selectGun()
     {     
 
-        int prevGunPos = gunListpos;
+        //int prevGunPos = gunListpos;
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListpos < gunList.Count - 1)
         {            
             gunListpos++;
+            changeGun();
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListpos > 0)
         {
-            gunListpos--;         
+            gunListpos--;
+            changeGun();
         }
 
-        if(gunListpos != prevGunPos) changeGun();
+        //if(gunListpos != prevGunPos) changeGun();
 
         Debug.Log($"gunListpos: {gunListpos}");           
     }
@@ -339,7 +341,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         shootRate = gunList[gunListpos].shootRate;
 
         // keep track current ammo do not pull from the default weapon status. 
-        currentAmmo = gunList[gunListpos].ammoCurrent;
+        //currentAmmo = gunList[gunListpos].ammoCurrent;
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListpos].model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListpos].model.GetComponent<MeshRenderer>().sharedMaterial;
