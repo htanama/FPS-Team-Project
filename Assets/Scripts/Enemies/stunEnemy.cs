@@ -37,10 +37,11 @@ public class stunEnemy : baseEnemy
 
     public override void takeDamage(float amount)
     {
+        //calling base method for damage handling
+        base.takeDamage(amount);
         //drop orb right before dying
         if (currentHealth - amount <= 0)
         {
-            //checks if the player is holding an orb
             if (GameManager.instance.OrbScripts != null)
             {
                 foreach (orbManager orb in GameManager.instance.OrbScripts)
@@ -52,8 +53,6 @@ public class stunEnemy : baseEnemy
                 }
             }
         }
-        //calling base method for damage handling
-        base.takeDamage(amount);
     }
 
     protected override void Behavior()
