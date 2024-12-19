@@ -124,8 +124,18 @@ public class enemyAI : baseEnemy, IOpen
     // Enemy Shoot //
     IEnumerator shoot()
     {
+
         // turn on
         isShooting = true;
+        
+        // how to keep shooting at player's waists?
+        // Adjust shooting direction (e.g., aim slightly upward)
+        //float angleX = -15f; // Adjust as needed
+        //float angleY = 0f;
+        //float angleZ = 0f;
+        //Vector3 adjustedDirection = Quaternion.Euler(angleX, angleY, angleZ) * transform.forward;
+        //create bullet        
+        //Instantiate(bullet, shootPos.position, Quaternion.LookRotation(adjustedDirection));
 
         // animation
         animator.SetTrigger("Shoot");
@@ -135,9 +145,10 @@ public class enemyAI : baseEnemy, IOpen
 
         // enemySpeedMult
         yield return new WaitForSeconds(shootRate);
-        
+
         // turn off
         isShooting = false;
+
     }
 
     // Enemy Sees Player //
