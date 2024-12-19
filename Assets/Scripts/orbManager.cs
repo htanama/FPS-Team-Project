@@ -53,6 +53,8 @@ public class orbManager : MonoBehaviour
         //limits to hold one orb at a time
         if (isHoldingOrb)
         {
+            GameManager.instance.orbIcon.enabled = true;
+
             if (Vector3.Distance(playerTransform.position, orbGoalPoint.transform.position) < orbAreaSize)
             {
                 //drop off the orb at the goal
@@ -61,6 +63,7 @@ public class orbManager : MonoBehaviour
         }
         else
         {
+            GameManager.instance.orbIcon.enabled = false;
             //If not holding orb check if close enough to pick it up
             if (Vector3.Distance(playerTransform.position, orb.transform.position) < orbPickupDistance)
                 PickupOrb();

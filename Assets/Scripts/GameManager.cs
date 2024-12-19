@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Goal Settings")]   
     [SerializeField] public TMP_Text orbCaptureText;            //change back
+    [SerializeField] public Image orbIcon;
     [SerializeField] GameObject timerGoal;
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
