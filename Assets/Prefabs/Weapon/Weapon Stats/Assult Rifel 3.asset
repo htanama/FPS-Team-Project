@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Assult Rifel 3
   m_EditorClassIdentifier: 
   model: {fileID: 7209185108777654096, guid: c214f39d559297a43a03f834d9dd4e0c, type: 3}
-  damage: 3
+  damage: 15
   shootRate: 0.3
   weaponRange: 100
   ammoCurrent: 999

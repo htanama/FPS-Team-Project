@@ -362,7 +362,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         if (playerCurrentHealth <= 0)
         {
-            GameManager.instance.LoseGame();
+            GameManager.instance.Respawn();
         }
 
         updatePlayerUI();

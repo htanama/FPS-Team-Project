@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Assult Rifel 1
   m_EditorClassIdentifier: 
   model: {fileID: 9123239264082400571, guid: 76981cf011c7822449fa3ba1e074b917, type: 3}
-  damage: 1
+  damage: 10
   shootRate: 0.3
   weaponRange: 100
-  ammoCurrent: 999
+  ammoCurrent: 957
   ammoMax: 999
+  reloadTime: 0
   areaOfEffectRadius: 0
   splashDamage: 0
   hitEffect: {fileID: 1301697207402410478, guid: 39f852c28f9c3fd45a427c24f3564ba7, type: 3}

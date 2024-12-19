@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Sniper Rifel
   m_EditorClassIdentifier: 
   model: {fileID: 4008194683298584516, guid: f4211f8783cdbf2428a00a62f5c84c54, type: 3}
-  damage: 6
+  damage: 25
   shootRate: 1
   weaponRange: 200
-  ammoCurrent: 999
+  ammoCurrent: 985
   ammoMax: 999
   reloadTime: 0
   areaOfEffectRadius: 0
