@@ -72,11 +72,12 @@ public class orbManager : MonoBehaviour
     void OrbGoalReached()
     {
 
+        DestroyOrb();
+
         GameManager.instance.UpdateOrbsCollected();  //Update the number of captures on the UI
 
         Debug.Log($"Orb collected!");
 
-        DestroyOrb();
     }
 
     void PickupOrb()

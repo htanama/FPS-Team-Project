@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
         orbCaptureText.text = orbScore.ToString("F0");
 
         //win condition: amount will have the current orbs collected passed in
-        if((orbScore >= spawner.NumToSpawn) && (spawner.SpawnCount == spawner.NumToSpawn))        //auto updates based on number of orbs in level
+        if(orbScore >= spawner.NumToSpawn)      //auto updates based on number of orbs in level
         {
             WinGame();              //Change to reach the end point rather than collect the orbs
         }                           //or increase to final number to win the game
