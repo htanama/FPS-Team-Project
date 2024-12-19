@@ -69,7 +69,6 @@ public class stunEnemy : baseEnemy
     {
         bool playerHasOrb = false;
         //checks if the player is holding an orb
-        if(GameManager.instance.OrbScripts.)
         foreach (orbManager orb in GameManager.instance.OrbScripts)
         {
             if (orb.IsHoldingOrb)
