@@ -90,7 +90,7 @@ public class orbManager : MonoBehaviour
         }
     }
 
-    void DropOrb(Transform objectTransform)
+    public void DropOrb(Transform objectTransform)
     {
         if (orb.transform.parent != null)
         {
