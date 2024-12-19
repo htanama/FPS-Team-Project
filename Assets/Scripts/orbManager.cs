@@ -53,6 +53,8 @@ public class orbManager : MonoBehaviour
         //limits to hold one orb at a time
         if (isHoldingOrb)
         {
+            GameManager.instance.toggleImage(true);
+
             if (Vector3.Distance(playerTransform.position, orbGoalPoint.transform.position) < orbAreaSize)
             {
                 //drop off the orb at the goal
