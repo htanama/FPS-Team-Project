@@ -41,9 +41,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField][Range(0, 20)] private float playerMaxHealth;
     [SerializeField][Range(0, 20)] private float playerCurrentHealth;
     [SerializeField] Image playerHealthBar;
-    [SerializeField] float fillSpeed;
-    [SerializeField] Gradient colorGradient;
-
+    //[SerializeField] float fillSpeed;
+    //SerializeField] Gradient colorGradient;
 
     [SerializeField][Range(1,  10)] int speed;      //Range adds a slider
     [SerializeField][Range(2,  5)]  int sprintMod;
@@ -311,10 +310,6 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         Debug.Log($"Add weapon: {gunList[gunListpos].model.name} and Index= {gunListpos} and length {gunList.Count}");
     }
 
-    // somewhere around this section
-    // jammie add get gun stats
-    // jammie add select gun scroll wheel (want to do a radial menu eventually)
-    // jammie add change gun
 
     void selectGun()
     {     
@@ -506,4 +501,11 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
         isPlayingStep = false;
     }
+
+    public void HealthItemPickup(healthItemPickup item)
+    {
+        playerCurrentHealth += item.HealAmount;
+    }
+
+
 }
