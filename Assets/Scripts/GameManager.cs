@@ -137,11 +137,13 @@ public class GameManager : MonoBehaviour
     {
         //updates 
         orbScore++;
+
+        toggleImage(false);
         //show orb captures on UI
         orbCaptureText.text = orbScore.ToString("F0");
 
         //win condition: amount will have the current orbs collected passed in
-        if((orbScore >= spawner.NumToSpawn) && (spawner.SpawnCount == spawner.NumToSpawn))        //auto updates based on number of orbs in level
+        if((orbScore >= spawner.NumToSpawn) && (spawner.SpawnCount == spawner.NumToSpawn) && !(FindObjectOfType<SceneTransition>()))        //auto updates based on number of orbs in level
         {
             WinGame();              //Change to reach the end point rather than collect the orbs
         }                           //or increase to final number to win the game
@@ -191,5 +193,13 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    public void toggleImage(bool isVisible)
+    {
+        if(orbIcon != null)
+        {
+            orbIcon.enabled = isVisible;
+        }
+    }    
 
 }
