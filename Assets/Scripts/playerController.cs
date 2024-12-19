@@ -117,14 +117,14 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     //getters and setters (used to calculate stun enemy speed)
     public int Speed
     {
-        get { return Speed; }
-        set { Speed = value; }
+        get { return speed; }
+        set { speed = value; }
     }
 
     public int SprintMod
     {
-        get { return SprintMod; }
-        set { SprintMod = value; }
+        get { return sprintMod; }
+        set { sprintMod = value; }
     }
 
     // Start is called before the first frame update
