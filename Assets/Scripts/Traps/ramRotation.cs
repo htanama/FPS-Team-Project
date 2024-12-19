@@ -17,6 +17,6 @@ public class ramRotation : MonoBehaviour
     void Update()
     {
         // rotate on the y axis
-        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime * 10);
     }
 }
