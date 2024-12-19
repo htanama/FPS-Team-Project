@@ -276,11 +276,12 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
 
         //variable to pass to game manager method total orbs collected from the list
-        int playerOrbsCollected = 0;
+        //int playerOrbsCollected = 0;
         //counting orbs collected
-        foreach(orbManager orbScript in GameManager.instance.OrbScripts) { playerOrbsCollected += orbScript.OrbsCollected; }
+        //foreach(orbManager orbScript in GameManager.instance.OrbScripts) { playerOrbsCollected += orbScript.OrbsCollected; }
         //show counted orb captures to the UI
-        GameManager.instance.UpdateOrbsCollected(playerOrbsCollected);
+        //GameManager.instance.UpdateOrbsCollected(playerOrbsCollected);
+
         GameManager.instance.UpdateLivesUI(); //Show currentn lives on the UI
     }
 
@@ -360,7 +361,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         StartCoroutine(screenFlashRed());               
 
-        updatePlayerUI();
+        //updatePlayerUI();
 
         if (playerCurrentHealth <= 0)
         {

@@ -16,13 +16,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject menuWin, menuLose;
 
     [Header("Goal Settings")]   
-    [SerializeField] TMP_Text orbCaptureText;
+    [SerializeField] public TMP_Text orbCaptureText;            //change back
     [SerializeField] GameObject timerGoal;
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
     public Image playerHpBar; // from lecture
 
-    int orbsToWin;
+    private int orbScore = 0;       //keep track of orbs collected
 
     private GameObject player;
     private playerController playerScript;
@@ -56,14 +56,7 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<playerController>();
 
-        //find all orbs with orbManager scripts in the scene
-        orbScripts = new List<orbManager>(FindObjectsOfType<orbManager>());
-        if (orbScripts.Count == 0)
-        {
-            Debug.LogWarning("No orbManager instances found! Ensure orbs are placed in the scene.");
-        }
-
-        spawner = FindObjectOfType<Spawner>();
+        spawner = FindObjectOfType<Spawner>();      //Specify when adding enemy spawners
     }
 
     // Update is called once per frame
@@ -129,13 +122,25 @@ public class GameManager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
-    public void UpdateOrbsCollected(int amount)      //Game goal
+    public void orbsSpawned()       //called when orbs are spawned
     {
-       //show orb captures on UI
-        orbCaptureText.text = amount.ToString("F0");
-        
-        //win condition
-        if(orbsToWin <= amount && (spawner.SpawnCount == spawner.NumToSpawn))        //auto updates based on number of orbs in level
+        //find all orbs with orbManager scripts in the scene
+        orbScripts = new List<orbManager>(FindObjectsOfType<orbManager>());
+        if (orbScripts.Count == 0)
+        {
+            Debug.LogWarning("No orbManager instances found! Ensure orbs are placed in the scene.");
+        }
+    }
+
+    public void UpdateOrbsCollected()      //Game goal
+    {
+        //updates 
+        orbScore++;
+        //show orb captures on UI
+        orbCaptureText.text = orbScore.ToString("F0");
+
+        //win condition: amount will have the current orbs collected passed in
+        if((orbScore >= spawner.NumToSpawn) && (spawner.SpawnCount == spawner.NumToSpawn))        //auto updates based on number of orbs in level
         {
             WinGame();              //Change to reach the end point rather than collect the orbs
         }                           //or increase to final number to win the game

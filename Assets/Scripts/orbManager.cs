@@ -11,7 +11,6 @@ using UnityEngine;
 public class orbManager : MonoBehaviour
 {
     [Header("     Orb Options     ")]
-    //[SerializeField] private Transform orbSpawnPoint;
     [SerializeField] private Transform orbGoalPoint;
     [SerializeField][Range(2.0f, 5.0f)] float orbPickupDistance;   //How close to get to the orb to pick it up
     [SerializeField][Range(2.0f, 10.0f)] float orbAreaSize;     //How close to get to the goal
@@ -19,8 +18,6 @@ public class orbManager : MonoBehaviour
     private GameObject orb;
     private Transform playerTransform;
     private bool isHoldingOrb = false;
-    private Vector3 orbOffset = new Vector3(0, 2.9f, 0); //Adjust orb to not clip the ground        DELETE??
-    private int orbsCollected = 0;   //To keep track of score
 
     //Getters and setters
     public GameObject Orb
@@ -29,22 +26,10 @@ public class orbManager : MonoBehaviour
         set => orb = value;
     }
 
-    //public Transform OrbSpawnPoint
-    //{ 
-    //    get => orbSpawnPoint;
-    //    set => orbSpawnPoint = value;
-    //}
-
     public Transform OrbGoalPoint
     {
         get => orbGoalPoint;
         set => orbGoalPoint = value;
-    }
-
-    public int OrbsCollected
-    {
-        get => orbsCollected;
-        set => orbsCollected = value;
     }
 
     public bool IsHoldingOrb
@@ -58,11 +43,8 @@ public class orbManager : MonoBehaviour
     {
         playerTransform = GameManager.instance.Player.transform;
         orb = gameObject;
-        //orb spawn and goal
-        //orbSpawnPoint = GameObject.FindWithTag("OrbSpawn").transform;       //Might not need this if using spawner
+        //orb goal
         orbGoalPoint = GameObject.FindWithTag("OrbGoal").transform;
-        //Orb setup
-        //ResetOrb();
     }
 
     // Update is called once per frame
@@ -75,7 +57,6 @@ public class orbManager : MonoBehaviour
             {
                 //drop off the orb at the goal
                 OrbGoalReached();
-                //GameManager.instance.UpdateOrbsCollected(orbsCollected); //Update capture count to the UI
             }
         }
         else
@@ -88,14 +69,12 @@ public class orbManager : MonoBehaviour
 
     void OrbGoalReached()
     {
-        isHoldingOrb = false;
-        orbsCollected++;
 
-        GameManager.instance.UpdateOrbsCollected(orbsCollected);  //Update the number of captures on the UI
+        GameManager.instance.UpdateOrbsCollected();  //Update the number of captures on the UI
 
-        Debug.Log($"Orb collected! Total collected: {orbsCollected}");
+        Debug.Log($"Orb collected!");
 
-        ReturnOrb();
+        DestroyOrb();
     }
 
     void PickupOrb()
@@ -111,7 +90,7 @@ public class orbManager : MonoBehaviour
         }
     }
 
-    public void DropOrb(Transform objectTransform)
+    void DropOrb(Transform objectTransform)
     {
         if (orb.transform.parent != null)
         {
@@ -124,24 +103,17 @@ public class orbManager : MonoBehaviour
         }
     }
 
-    void ReturnOrb()                //Might not need anymore
+    void DestroyOrb()                //Might not need anymore
     {
         //return the orb to base
         isHoldingOrb = false;
         orb.transform.SetParent(null);
         //orb.transform.position = orbSpawnPoint.transform.position + orbOffset; //Respawn/Move orb back at base
         //orb.GetComponent<Collider>().enabled = true; //Enable orb collider
-        DestroyObject(orb);
+        Object.Destroy(orb);
 
         Debug.Log("Orb returned to base");
     }
-
-    //void ResetOrb()
-    //{
-    //    //orb is reset to starting point
-    //    orb.transform.position = orbSpawnPoint.transform.position + orbOffset;
-    //    orb.GetComponent<Collider>().enabled = true;
-    //}
 
     //called when enemy takes orb from player
     public void takeOrb(Transform enemyTransform)

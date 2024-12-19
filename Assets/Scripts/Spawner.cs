@@ -9,7 +9,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] int timeBetweenSpawns;
     [SerializeField] Transform[] spawnPos;
 
-    int spawnCount;
+    int spawnCount = 0;
 
     bool startSpawning;
     bool isSpawning;
@@ -22,7 +22,7 @@ public class Spawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.instance.UpdateOrbsCollected(numToSpawn);
+        //GameManager.instance.UpdateOrbsCollected(numToSpawn);
 
         objectSpawned = new bool[spawnPos.Length];
     }
@@ -30,9 +30,13 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (startSpawning && spawnCount < numToSpawn && !isSpawning)
+        if (startSpawning && (spawnCount < numToSpawn) && !isSpawning)
         {
             StartCoroutine(spawn());
+        }
+        else if(spawnCount == numToSpawn)
+        {
+            GameManager.instance.orbsSpawned();
         }
     }
 
@@ -47,6 +51,7 @@ public class Spawner : MonoBehaviour
     IEnumerator spawn()
     {
         isSpawning = true;
+
         yield return new WaitForSeconds(timeBetweenSpawns);
 
         int spawnInt = Random.Range(0, spawnPos.Length);
