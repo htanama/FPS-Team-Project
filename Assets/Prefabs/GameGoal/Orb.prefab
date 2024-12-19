@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orbGoalPoint: {fileID: 0}
-  orbPickupDistance: 2.99
-  orbAreaSize: 4
+  orbPickupDistance: 2.5
+  orbAreaSize: 3
 --- !u!33 &7303962785908812308
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -78,7 +78,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d34e0692bd1de3b418d5aade0c893a44, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
