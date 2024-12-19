@@ -5,9 +5,9 @@
 
   Edited by: Lemons (Weapons)
             - Added fields shoot damage, distance, rate
-            - Also field HP
+            - Also field _HP
             - uncommented layer mask
-            - Added bool/flag isShooting
+            - Added bool/orb isShooting
             - update, added draw ray (raycast)
             - movement, added "fire"
             - added take damage 
@@ -17,15 +17,16 @@
             - workin on a feedback crosshair
 
         Edited: Erik Segura
-            - Added HP Bar functionality
+            - Added _HP Bar functionality
             - Added audio to movement, gun firing, jump
 */
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Principal;
 using Unity.VisualScripting;
-using UnityEditor.TextCore.Text;
 using UnityEngine;
+using UnityEngine.UI;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 public class playerController : MonoBehaviour, IDamage, IOpen
@@ -35,9 +36,13 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] Renderer model;
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;              //Use when shooting is implemented
-    
+
     [Header("      STATS      ")]
-    [SerializeField][Range(1, 10)] public int HP; /// turn into Get/Setter
+    [SerializeField][Range(0, 20)] private float playerMaxHealth;
+    [SerializeField][Range(0, 20)] private float playerCurrentHealth;
+    [SerializeField] Image playerHealthBar;
+    //[SerializeField] float fillSpeed;
+    //SerializeField] Gradient colorGradient;
 
     [SerializeField][Range(1,  10)] int speed;      //Range adds a slider
     [SerializeField][Range(2,  5)]  int sprintMod;
@@ -53,26 +58,21 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     // Crouching variables
     private int currentSpeed;     //To avoid bugs by modifying speed directly
     private float originalHeight; //When releasing crouch
-    //private float targetHeight;
     private Vector3 originalCenter;
-
-    //private float originalScaleY; //For use when crouching
-    //private Vector3 originalScale; //Used when releasing crouch
-    //private Vector3 targetScale; //For use when releasing crouch
 
     [Header("      WEAPONS      ")]
     // notes - weaponType; weaponEquipped; ammoCount; bool isReloading; isEquipping;
     // jammie will add gun list from lecture
     // jammie will add gun model from lecture
-    [SerializeField] GameObject bullet;
+    // [SerializeField] GameObject bullet; // not using the Damage bullet like the enemy
     [SerializeField] int shootDamage;
     [SerializeField] int shootDistance;
     [SerializeField] float shootRate;
+    [SerializeField] int currentAmmo;
     [SerializeField] GameObject gunModel;
     [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
-    int gunListpos; 
-
-    [SerializeField] Transform shootPos;
+    // [SerializeField] Transform shootPos; // not using this variable like the enemy 
+    
 
     [Header("      Player Audio      ")]
     [SerializeField] AudioSource aud;
@@ -82,9 +82,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] [Range(0, 1)] float audStepVol;
     [SerializeField] AudioClip[] audDamage;
     [SerializeField] [Range(0, 10)] float audDamageVol;
-    [SerializeField] AudioClip[] audShootSound;
-    [SerializeField] [Range(0, 1)] float audShootSoundVol;
-
+    
     // Vectors //
     Vector3 moveDirection;
     Vector3 horizontalVelocity;
@@ -93,17 +91,41 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     Color colorOrig;
 
     int jumpCount;
-    int HPOrig;
-    // jammie add list pos
+    int gunListpos;
 
     bool isShooting;
     bool isSprinting;
     bool isPlayingStep;
     bool isCrouching;
-    //bool isCrouchLerping;                 //To allow to modify crouch speed
+    bool isReloading;
 
     RaycastHit contact;
-    
+
+    // Properties //
+    // Health //
+    public float PlayerMaxHealth
+    {
+        get { return playerMaxHealth; }
+        set { playerMaxHealth = value; }
+    }
+    public float PlayerCurrentHealth
+    {
+        get { return playerCurrentHealth; }
+        set { playerCurrentHealth = value; }
+    }
+
+    //getters and setters (used to calculate stun enemy speed)
+    public int Speed
+    {
+        get { return speed; }
+        set { speed = value; }
+    }
+
+    public int SprintMod
+    {
+        get { return sprintMod; }
+        set { sprintMod = value; }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -111,30 +133,34 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         currentSpeed = speed;
         originalHeight = controller.height;
         originalCenter = controller.center;
-        //originalScaleY = controller.transform.localScale.y;
-        //originalScale = controller.transform.localScale;
-
-        HPOrig = HP;
+        
+        // Health and Health Bar //
+        playerCurrentHealth = playerMaxHealth;
         updatePlayerUI();
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {        
         //draw ray
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDistance, Color.red);
 
         //if game is not paused
-        if(!GameManager.instance.IsPaused)
+        if (!GameManager.instance.IsPaused)
         {
             //always checking for these
             movement();
-            // jammie add gun select method
-
+            selectGun();
+            crouch();              
         }
 
         sprint(); //Outside of condition to prevent infinite sprint glitch
-        crouch();      
+
+
+        if(Input.GetButton("Gun Info"))
+        {
+            displayAllWeaponInfo();
+        }
     }
 
     // Player Movement
@@ -160,7 +186,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         jump();
 
-        //gives jump speed (y) a value
+        //gives jump enemySpeedMult (y) a value
         controller.Move(horizontalVelocity * Time.deltaTime);
         //start pulling down immediately after the jump
         horizontalVelocity.y -= gravity * Time.deltaTime;
@@ -172,11 +198,20 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         }
 
         
-        if (Input.GetButton("Fire1") && !isShooting)
+        if (Input.GetButton("Fire1") && gunList.Count > 0 && !isShooting)
         {
-            StartCoroutine(Shoot());
+            if (gunList[gunListpos].ammoCurrent > 0) 
+            {
+                StartCoroutine(Shoot());                
+            }
         }
 
+        if (Input.GetButton("Reload") && gunList.Count > 0 && !isReloading)
+        {
+            if (gunList[gunListpos].ammoCurrent < gunList[gunListpos].ammoMax)
+                StartCoroutine(Reload());
+        }
+     
     }
 
     void jump()
@@ -194,7 +229,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         if (Input.GetButtonDown("Sprint") && !isCrouching)  //Won't sprint if crouching
         {
             speed *= sprintMod;
-            currentSpeed = speed * sprintMod; // *nice catches here for powerup
+            currentSpeed = speed; // *nice catches here for powerup
             isSprinting = true;
         }
         else if (Input.GetButtonUp("Sprint"))               //Potential bug with crouching
@@ -209,104 +244,193 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     {
         if (Input.GetButtonDown("Crouch")) //When the crouch key is pressed
         {
-            isCrouching = true;
+            isCrouching = !isCrouching;
+        }
+        if(isCrouching)
+        {
             currentSpeed = Mathf.RoundToInt(speed * crouchWalkSpeed); //Reduce speed
 
             //Change height when crouching
             controller.height = originalHeight * crouchHeight;
             controller.center = new Vector3(0, controller.height / 2, 0);
-
-            //isCrouchLerping = true;
         }
-        else if (Input.GetButtonUp("Crouch")) //When the crouch key is released
+        else if (!isCrouching) //When the crouch key is released
         {
-            isCrouching = false;
             currentSpeed = speed; //Restore speed
 
             //Restore height when releasing crouch button
             controller.height = originalHeight;
             controller.center = originalCenter;
-
-            //isCrouchLerping = true;
         }
-        //Adjust speed at which player crouches/uncrouches
-        //if (isCrouchLerping)
-        //{
-        //    controller.height = Mathf.Lerp(controller.height, targetHeight, Time.deltaTime * uncrouchSpeed);  //Change scale accordingly
-
-        //    isCrouchLerping = false;
-        //}
-        //Note: The line above is here and not in the if statement b/c of the nature in which Unity checks for button presses,
-        //      the line would only execute about half way or so
     }
 
     // Player UI //
     public void updatePlayerUI()
     {
-        GameManager.instance.PlayerHPBar.fillAmount = (float)HP / HPOrig;
-        GameManager.instance.UpdateCaptures(GameManager.instance.FlagScript.CaptureCount);  //Show flag captures on UI
-        GameManager.instance.UpdateLives(); //Show lives on the UI
+        //update player health bar
+        GameManager.instance.playerHpBar.fillAmount = playerCurrentHealth / playerMaxHealth;
+
+        //float targetFillAmount = playerCurrentHealth / playerMaxHealth;
+        //playerHealthBar.fillAmount = Mathf.Lerp(playerHealthBar.fillAmount, targetFillAmount, Time.deltaTime * fillSpeed);
+        //playerHealthBar.color = colorGradient.Evaluate(targetFillAmount);
+
+        //variable to pass to game manager method total orbs collected from the list
+        //int playerOrbsCollected = 0;
+        //counting orbs collected
+        //foreach(orbManager orbScript in GameManager.instance.OrbScripts) { playerOrbsCollected += orbScript.OrbsCollected; }
+        //show counted orb captures to the UI
+        //GameManager.instance.UpdateOrbsCollected(playerOrbsCollected);
+
+        GameManager.instance.UpdateLivesUI(); //Show currentn lives on the UI
     }
 
-
-    // Player Damage and Weapons //   
-    public void takeDamage(int amount)
+    public void displayAllWeaponInfo()
     {
-        HP -= amount;
-
-        updatePlayerUI();
-        StartCoroutine(screenFlashRed());
-        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);
-
-        if (HP <= 0)
+        if (gunList.Count != 0)
         {
-            //death/lose screen in Respawn() method
-            GameManager.instance.Respawn();
+            for (int i = 0; i < gunList.Count - 1; i++)
+            {
+                Debug.Log($"GetGunStat weapon: {gunList[i].model.name} and Index= {gunListpos}");
+            }
         }
     }
 
     public void GetGunStats(weaponStats gun)
     {
-        gunList.Add(gun);
+        gunList.Add(gun);        
+
         shootDamage = gun.damage;
         shootDistance = gun.weaponRange;
         shootRate = gun.shootRate;
-        gunModel. GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
+        currentAmmo = gun.ammoCurrent;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gun.model.GetComponent<MeshFilter>().sharedMesh;
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
+
+        // name of the weapon when it is changing 
+        Debug.Log($"Add weapon: {gunList[gunListpos].model.name} and Index= {gunListpos} and length {gunList.Count}");
     }
 
-    // somewhere around this section
-    // jammie add get gun stats
-    // jammie add select gun scroll wheel (want to do a radial menu eventually)
-    // jammie add change gun
+
+    void selectGun()
+    {     
+
+        int prevGunPos = gunListpos;
+
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListpos < gunList.Count - 1)
+        {            
+            gunListpos++;
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListpos > 0)
+        {
+            gunListpos--;         
+        }
+
+        if(gunListpos != prevGunPos) changeGun();
+
+        Debug.Log($"gunListpos: {gunListpos}");           
+    }
+
+
+  void changeGun()
+    {
+        shootDamage = gunList[gunListpos].damage;
+        shootDistance = gunList[gunListpos].weaponRange;
+        shootRate = gunList[gunListpos].shootRate;
+
+        // keep track current ammo do not pull from the default weapon status. 
+        currentAmmo = gunList[gunListpos].ammoCurrent;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListpos].model.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListpos].model.GetComponent<MeshRenderer>().sharedMaterial;
+
+        // name of the weapon when it is changing 
+        Debug.Log($"Change weapon: {gunList[gunListpos].model.name} and Index= {gunListpos}");
+    }
+
+    // Player Damage and Weapons //   
+    public void takeDamage(float amount)
+    {
+        playerCurrentHealth -= amount;
+        playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, playerMaxHealth);
+
+        StartCoroutine(screenFlashRed());               
+
+        //updatePlayerUI();
+
+        if (playerCurrentHealth <= 0)
+        {
+            GameManager.instance.LoseGame();
+        }
+
+        updatePlayerUI();
+        
+        aud.PlayOneShot(audDamage[Random.Range(0, audDamage.Length)], audDamageVol);              
+
+    }
+
+    //When the player is stunned this is called
+    public void stun(float duration)
+    {
+        StartCoroutine(StunCoroutine(duration));        //In it's own method for simplification
+    }
+    
+    IEnumerator StunCoroutine(float duration)
+    {
+        Debug.Log("Stun started!");
+
+        //disable movement
+        GetComponent<playerController>().enabled = false;
+        //stun duration
+        yield return new WaitForSeconds(duration);
+        //enableMovement();
+        GetComponent<playerController>().enabled = true;
+        
+        Debug.Log("Stun ended!");
+    }
 
     IEnumerator screenFlashRed()
     {   
-        GameManager.instance.PlayerDamageScreen.SetActive(true);
+        GameManager.instance.playerDamageScreen.SetActive(true);
         yield return new WaitForSeconds(0.1f);
-        GameManager.instance.PlayerDamageScreen.SetActive(false);
+        GameManager.instance.playerDamageScreen.SetActive(false);
     }
     
     IEnumerator Shoot()
     {
         //turn on
         isShooting = true;
-        aud.PlayOneShot(audShootSound[Random.Range(0, audShootSound.Length)], audShootSoundVol);
 
-        //shoot code        
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
+        aud.PlayOneShot(gunList[gunListpos].shootingSounds[Random.Range(0, gunList[gunListpos].shootingSounds.Length)], gunList[gunListpos].weaponSoundVolume);
+                       
+        if (gunList[gunListpos].ammoCurrent > 0)
         {
-            Debug.Log(contact.collider.name);                   
-         
-            IDamage dmg = contact.collider.GetComponent<IDamage>();
+            gunList[gunListpos].ammoCurrent--;
+            Debug.Log($"Shooting weapon: {gunList[gunListpos].model.name}. Ammo left: {gunList[gunListpos].ammoCurrent}/{gunList[gunListpos].ammoMax}");
+            currentAmmo = gunList[gunListpos].ammoCurrent;
 
-            if (dmg != null)
+            //shoot code        
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out contact, shootDistance, ~ignoreMask))
             {
-                dmg.takeDamage(shootDamage);
-            }
-            
-            // jammie add gunlist if statement
+                Debug.Log(contact.collider.name);
 
+                IDamage dmg = contact.collider.GetComponent<IDamage>();
+
+                if (dmg != null)
+                {
+                    dmg.takeDamage(shootDamage);
+                }
+
+                if (gunList[gunListpos].hitEffect != null)
+                {
+                    Instantiate(gunList[gunListpos].hitEffect, contact.point, Quaternion.identity);
+                }
+
+            }
+        }
+        else
+        {
+            Debug.Log($"Out of ammo for {gunList[gunListpos].model.name}. Reload required.");
         }
 
         //**************To be added when pickup is implemented******************
@@ -335,10 +459,34 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
         //turn off
         isShooting = false;
+        
     }
 
-    // code for walking audio
+    IEnumerator Reload()
+    {
+        weaponStats gun = gunList[gunListpos];
 
+        if (isReloading || gun.ammoCurrent == gun.ammoMax) yield break;
+
+        isReloading = true;
+
+        aud.PlayOneShot(gun.reloadSounds[gunListpos], gun.weaponSoundVolume);
+
+        yield return new WaitForSeconds(gun.reloadTime);       
+
+        gun.ammoCurrent = gun.ammoMax;
+
+        //gunList[gunListpos].ammoCurrent = gunList[gunListpos].ammoMax;
+        //currentAmmo = gunList[gunListpos].ammoCurrent;
+
+        Debug.Log($"Reloading weapon: {gunList[gunListpos].model.name}. Ammo: {gunList[gunListpos].ammoCurrent}/{gunList[gunListpos].ammoMax}");
+
+        // Simulate reload time
+        isReloading = false;
+    }
+
+
+    // code for walking audio
     IEnumerator playStep()
     {
         isPlayingStep = true;
@@ -355,26 +503,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         isPlayingStep = false;
     }
 
-    // Triggers //
-    // Paint ball gun effect implementation
-    //    private void OnTriggerEnter(Collider other)
-    //    {
-    //        // Check if the trigger is the sphere
-    //        if (other.CompareTag("Damage-Ball"))
-    //        {
-    //#if UNITY_EDITOR
-    //            //Debug.Log("Player hit by ball");
-    //#endif
+    public void HealthItemPickup(healthItemPickup item)
+    {
+        playerCurrentHealth += item.HealAmount;
+    }
 
-    //            // Get the direction vector from the ball (sphere) to the player
-    //            Vector3 pushDirection = (transform.position - other.transform.position).normalized;
-
-    //            // Define the push distance
-    //            float pushDistance = 13.0f; // knock player backward.
-
-    //            // Use CharacterController to move the player
-    //            controller.Move(pushDirection * pushDistance);
-    //        }
-    //        // is there an exit? ontriggerenter ontriggerexit?
-    //    }
 }

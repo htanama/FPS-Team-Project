@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3263493355357335529}
   - component: {fileID: 2161547353132635787}
   - component: {fileID: 8904270560392216281}
-  - component: {fileID: 4567766797330920090}
+  - component: {fileID: -8076767559612085684}
   m_Layer: 0
   m_Name: wall-1
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4567766797330920090
+--- !u!65 &-8076767559612085684
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,5 +103,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 0.99999994, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 111c584ca97bcc9489ab8685fc853bf5, type: 3}
+  m_Name: Assult Rifel 4
+  m_EditorClassIdentifier: 
+  model: {fileID: 3368331593303936535, guid: 7aac2d89d5917204584d58bd46604c2e, type: 3}
+  damage: 4
+  shootRate: 0.5
+  weaponRange: 100
+  ammoCurrent: 999
+  ammoMax: 999
+  areaOfEffectRadius: 0
+  splashDamage: 0
+  hitEffect: {fileID: 1301697207402410478, guid: 39f852c28f9c3fd45a427c24f3564ba7, type: 3}
+  shootingSounds:
+  - {fileID: 8300000, guid: 16aca2265729b44428cf48de6daca525, type: 3}
+  weaponSoundVolume: 0.6
+  reloadSounds:
+  - {fileID: 8300000, guid: 310829a1dda43d0408a52b3f812f9061, type: 3}
+  emptySounds:
+  - {fileID: 8300000, guid: a3558e8ebc7c23946be8bfc0dbd8770b, type: 3}
