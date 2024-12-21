@@ -13,16 +13,17 @@ MonoBehaviour:
   m_Name: Assult Rifel 3
   m_EditorClassIdentifier: 
   model: {fileID: 7209185108777654096, guid: c214f39d559297a43a03f834d9dd4e0c, type: 3}
-  damage: 3
+  damage: 15
   shootRate: 0.3
   weaponRange: 100
   ammoCurrent: 999
   ammoMax: 999
+  reloadTime: 0
   areaOfEffectRadius: 0
   splashDamage: 0
-  hitEffect: {fileID: 1301697207402410478, guid: 39f852c28f9c3fd45a427c24f3564ba7, type: 3}
+  hitEffect: {fileID: 8567743453655228817, guid: 212ef1a41838ce044a9ac54994866708, type: 3}
   shootingSounds:
-  - {fileID: 8300000, guid: 16aca2265729b44428cf48de6daca525, type: 3}
+  - {fileID: 8300000, guid: cd9a92dedfe874f4b84017da6f195ccb, type: 3}
   weaponSoundVolume: 0.6
   reloadSounds:
   - {fileID: 8300000, guid: 310829a1dda43d0408a52b3f812f9061, type: 3}

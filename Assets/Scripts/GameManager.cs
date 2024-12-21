@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [Header("Goal Settings")]   
     [SerializeField] public TMP_Text orbCaptureText;            //change back
     [SerializeField] public Image orbIcon;
+    [SerializeField] TMP_Text orbCountText;
     [SerializeField] GameObject timerGoal;
     [SerializeField] Transform spawnPoint;
     [SerializeField] int playerLives = 3;
@@ -58,6 +59,7 @@ public class GameManager : MonoBehaviour
         playerScript = player.GetComponent<playerController>();
 
         spawner = FindObjectOfType<Spawner>();      //Specify when adding enemy spawners
+        orbCountText.text = spawner.NumToSpawn.ToString("F0");
     }
 
     // Update is called once per frame
@@ -143,7 +145,7 @@ public class GameManager : MonoBehaviour
         orbCaptureText.text = orbScore.ToString("F0");
 
         //win condition: amount will have the current orbs collected passed in
-        if((orbScore >= spawner.NumToSpawn) && (spawner.SpawnCount == spawner.NumToSpawn) && !(FindObjectOfType<SceneTransition>()))        //auto updates based on number of orbs in level
+        if(orbScore >= spawner.NumToSpawn)      //auto updates based on number of orbs in level
         {
             WinGame();              //Change to reach the end point rather than collect the orbs
         }                           //or increase to final number to win the game
@@ -194,6 +196,14 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    public void toggleImage(bool isVisible)
+    {
+        if(orbIcon != null)
+        {
+            orbIcon.enabled = isVisible;
+        }
+    }    
 
     public void toggleImage(bool isVisible)
     {
