@@ -205,12 +205,4 @@ public class GameManager : MonoBehaviour
         }
     }    
 
-    public void toggleImage(bool isVisible)
-    {
-        if(orbIcon != null)
-        {
-            orbIcon.enabled = isVisible;
-        }
-    }    
-
 }
