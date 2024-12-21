@@ -71,7 +71,10 @@ public class orbManager : MonoBehaviour
 
     void OrbGoalReached()
     {
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         GameManager.instance.UpdateOrbsCollected();  //Update the number of captures on the UI
 
         Debug.Log($"Orb collected!");
