@@ -53,6 +53,8 @@ public class orbManager : MonoBehaviour
         //limits to hold one orb at a time
         if (isHoldingOrb)
         {
+            GameManager.instance.toggleImage(true);
+
             if (Vector3.Distance(playerTransform.position, orbGoalPoint.transform.position) < orbAreaSize)
             {
                 //drop off the orb at the goal
@@ -70,11 +72,12 @@ public class orbManager : MonoBehaviour
     void OrbGoalReached()
     {
 
+        DestroyOrb();
+
         GameManager.instance.UpdateOrbsCollected();  //Update the number of captures on the UI
 
         Debug.Log($"Orb collected!");
 
-        DestroyOrb();
     }
 
     void PickupOrb()

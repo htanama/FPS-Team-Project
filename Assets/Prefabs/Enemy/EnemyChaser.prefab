@@ -639,7 +639,7 @@ MonoBehaviour:
   model: {fileID: 6792750619603409624}
   animator: {fileID: 5537889187698844268}
   enemyHPBar: {fileID: 9127614934585837741}
-  maxHealth: 50
+  maxHealth: 100
   currentHealth: 0
   fillSpeed: 0
   colorGradient:
@@ -1331,9 +1331,9 @@ Transform:
   m_GameObject: {fileID: 8986088916520264069}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 3.39, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3466203801428221098}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}

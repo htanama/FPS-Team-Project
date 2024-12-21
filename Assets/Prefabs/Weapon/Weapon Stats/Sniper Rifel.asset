@@ -13,16 +13,17 @@ MonoBehaviour:
   m_Name: Sniper Rifel
   m_EditorClassIdentifier: 
   model: {fileID: 4008194683298584516, guid: f4211f8783cdbf2428a00a62f5c84c54, type: 3}
-  damage: 6
+  damage: 25
   shootRate: 1
   weaponRange: 200
-  ammoCurrent: 999
+  ammoCurrent: 985
   ammoMax: 999
+  reloadTime: 0
   areaOfEffectRadius: 0
   splashDamage: 0
   hitEffect: {fileID: 1301697207402410478, guid: 39f852c28f9c3fd45a427c24f3564ba7, type: 3}
   shootingSounds:
-  - {fileID: 8300000, guid: 16aca2265729b44428cf48de6daca525, type: 3}
+  - {fileID: 8300000, guid: cd9a92dedfe874f4b84017da6f195ccb, type: 3}
   weaponSoundVolume: 0.6
   reloadSounds:
   - {fileID: 8300000, guid: 310829a1dda43d0408a52b3f812f9061, type: 3}

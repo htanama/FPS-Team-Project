@@ -20,6 +20,7 @@ public class stunEnemy : baseEnemy
     private enum EnemyState { Chasing, Fleeing }            //Behavior changes when taking orb
     private EnemyState currentState = EnemyState.Chasing;   //Starts by chasing the player
     bool isFleeing = false;     //Used to set speed once
+    bool enemyHasOrb;
 
     // Start is called before the first frame update
     void Start()
@@ -37,8 +38,6 @@ public class stunEnemy : baseEnemy
 
     public override void takeDamage(float amount)
     {
-        //calling base method for damage handling
-        base.takeDamage(amount);
         //drop orb right before dying
         if (currentHealth - amount <= 0)
         {
@@ -46,13 +45,15 @@ public class stunEnemy : baseEnemy
             {
                 foreach (orbManager orb in GameManager.instance.OrbScripts)
                 {
-                    if (orb.IsHoldingOrb && orb.transform.parent == transform)
+                    if (enemyHasOrb && orb.transform.parent == transform)
                     {
                         orb.DropOrb(transform);     //drop orb at location of the parent
                     }
                 }
             }
         }
+        //calling base method for damage handling
+        base.takeDamage(amount);
     }
 
     protected override void Behavior()
@@ -145,6 +146,7 @@ public class stunEnemy : baseEnemy
                 //takes orb and attaches to the enemy
                 orb.takeOrb(transform);    //Passing enemy transform
                 currentState = EnemyState.Fleeing;  //Change enemy state when taking the orb
+                enemyHasOrb = true;
                 break;
             }
         }
