@@ -15,8 +15,8 @@ GameObject:
   m_Name: Minimap Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &1922599115646856035
 Transform:
@@ -99,8 +99,8 @@ GameObject:
   m_Name: Reciever B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &4705205315502491712
 Transform:
@@ -205,8 +205,8 @@ GameObject:
   m_Name: Portal A
   m_TagString: Portal A
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &1520070699316183333
 Transform:
