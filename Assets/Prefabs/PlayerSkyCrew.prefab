@@ -226,8 +226,8 @@ MonoBehaviour:
   playerMaxHealth: 20
   playerCurrentHealth: 20
   playerHealthBar: {fileID: 0}
-  speed: 7
-  sprintMod: 3
+  speed: 5
+  sprintMod: 2
   jumpMax: 2
   jumpSpeed: 11
   gravity: 30
@@ -491,7 +491,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0.0067079132, b: 0.05660379, a: 0}
+  m_BackGroundColor: {r: 0.70754707, g: 0.74932605, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -516,7 +516,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 25
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -560,7 +560,7 @@ Transform:
   m_GameObject: {fileID: 8739690148036258581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.39004135, z: 0}
+  m_LocalPosition: {x: 0, y: 0.89004135, z: 0}
   m_LocalScale: {x: 1, y: 1.83, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

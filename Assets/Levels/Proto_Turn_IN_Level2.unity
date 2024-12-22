@@ -8634,30 +8634,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1542453580400707048, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: orthographic size
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1542453580400707048, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1542453580400707048, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.74932605
-      objectReference: {fileID: 0}
-    - target: {fileID: 1542453580400707048, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.70754707
-      objectReference: {fileID: 0}
-    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: speed
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3623263726600380458, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: sprintMod
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3858927733294379704, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
       propertyPath: m_LocalPosition.x
       value: -25.47
@@ -8701,14 +8677,6 @@ PrefabInstance:
     - target: {fileID: 6419302545626054111, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
       propertyPath: m_Name
       value: PlayerSkyCrew
-      objectReference: {fileID: 0}
-    - target: {fileID: 6611081723880924785, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9169877820377261127, guid: d4ccc26fc18a5614da720b24392b7b24, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.89004135
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
