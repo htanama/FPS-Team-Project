@@ -147,6 +147,8 @@ public class stunEnemy : baseEnemy
                 orb.takeOrb(transform);    //Passing enemy transform
                 currentState = EnemyState.Fleeing;  //Change enemy state when taking the orb
                 enemyHasOrb = true;
+                //turn off orb UI icon
+                GameManager.instance.toggleImage(false);
                 break;
             }
         }

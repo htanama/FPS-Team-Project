@@ -162,6 +162,7 @@ public class GameManager : MonoBehaviour
         //respawn while player has lives
         if (playerLives > 0)
         {
+            toggleImage(false); //toggle orb icon image
             //drop all orbs held
             foreach (orbManager orb in orbScripts)
             {
