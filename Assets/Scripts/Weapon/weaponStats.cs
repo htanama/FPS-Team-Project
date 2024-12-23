@@ -19,7 +19,7 @@ public class weaponStats : ScriptableObject //Acts as data storage
     public int weaponRange;
     public int ammoCurrent;
     public int ammoMax;
-    public float reloadTime;
+    public int reloadTime;
 
     [Header("Area Damage")]
     public float areaOfEffectRadius;
@@ -29,7 +29,7 @@ public class weaponStats : ScriptableObject //Acts as data storage
     public ParticleSystem hitEffect;//Drag weapon hit effect here
     public AudioClip[] shootingSounds;  //As an array to choose different sounds
     public float weaponSoundVolume;
-    public AudioClip[] reloadSounds;
+    public AudioClip reloadSounds;
     public AudioClip[] emptySounds;
 
 }
