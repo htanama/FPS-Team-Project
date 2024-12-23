@@ -35,8 +35,11 @@ public class GameManager : MonoBehaviour
     public playerController PlayerScript => playerScript;
     public List<orbManager> OrbScripts => orbScripts;
 
+    // Player Information
     [SerializeField] public GameObject playerDamageScreen;      // *****
-    [SerializeField] TMP_Text playerLivesText;
+    [SerializeField] TMP_Text playerLivesText;    
+    [SerializeField] public TMP_Text currentAmmo;
+    [SerializeField] public TMP_Text maxAmmo;
 
     private bool isPaused;
 
