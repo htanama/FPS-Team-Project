@@ -10,7 +10,7 @@ using UnityEngine;
 public class barrierEnemy : baseEnemy
 {
     [Header("     Barrier Enemy Stats     ")]
-    [SerializeField][Range(0.5f, 10f)] private GameObject barrierObj;     //place barrier object here
+    [SerializeField] private GameObject barrierObj;     //place barrier object here
     [SerializeField][Range(0.5f, 10.0f)] private float barrierCooldown;//time between barrier casts
     [SerializeField][Range(2.0f, 20.0f)] private float barrierLifetime;//how long the barrier is up for
     [SerializeField][Range(1.0f, 25.0f)] private float allyDetectionRadius;//radius to find enemy AI's
@@ -80,7 +80,7 @@ public class barrierEnemy : baseEnemy
         }
     }
 
-    private void createBarrier()
+    private void createBarrier()            //add limit to one per enemy
     {
         //check for nearby enemies(allies) to support
         Collider[] alliesInRange = Physics.OverlapSphere(transform.position, allyDetectionRadius);
@@ -97,7 +97,8 @@ public class barrierEnemy : baseEnemy
                 barrier.transform.SetParent(ally.transform);
 
                 //destroy barrier after lifetime is over
-                Destroy(barrier, barrierLifetime);
+                if(barrierObj)
+                    Destroy(barrier, barrierLifetime);
             }
         }
     }
