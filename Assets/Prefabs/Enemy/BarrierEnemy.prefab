@@ -1300,6 +1300,9 @@ MonoBehaviour:
   agent: {fileID: 4514793812737614296}
   model: {fileID: 6583073126775624661}
   animator: {fileID: 6957005240342361058}
+  ignoreMask:
+    serializedVersion: 2
+    m_Bits: 0
   enemyHPBar: {fileID: 0}
   maxHealth: 10
   currentHealth: 0
@@ -1335,7 +1338,7 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 3
   barrierObj: {fileID: 1126020180645033478, guid: b90cdbc10fb9c654691a1fd2cf1cf13a, type: 3}
-  barrierCooldown: 0.5
+  barrierCooldown: 5
   barrierLifetime: 10
   allyDetectionRadius: 25
   followDistance: 5

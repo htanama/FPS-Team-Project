@@ -194,7 +194,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //physics fix, under object
         if ((controller.collisionFlags & CollisionFlags.Above) != 0)
         {
-            horizontalVelocity.y = Vector3.zero.y; // horizontal velocity is lecture player velocity?
+            horizontalVelocity.y = Vector3.zero.y; // horizontal velocity is lecture player velocity? yes
         }
 
         
@@ -281,7 +281,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         //show counted orb captures to the UI
         //GameManager.instance.UpdateOrbsCollected(playerOrbsCollected);
 
-        GameManager.instance.UpdateLivesUI(); //Show currentn lives on the UI
+        GameManager.instance.UpdateLivesUI(); //Show current lives on the UI
     }
 
     //public void displayAllWeaponInfo()

@@ -17,7 +17,8 @@ public abstract class baseEnemy : MonoBehaviour, IDamage
     [SerializeField] protected NavMeshAgent agent;      //Components shared between all/most enemy types
     [SerializeField] protected Renderer model;
     [SerializeField] protected Animator animator;
-    
+
+    [SerializeField] LayerMask ignoreMask;          //prevents from damaging each other
     [SerializeField] protected Image enemyHPBar;
     [SerializeField] protected float maxHealth;
     [SerializeField] protected float currentHealth;

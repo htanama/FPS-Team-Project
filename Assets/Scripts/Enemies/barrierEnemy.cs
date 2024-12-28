@@ -94,7 +94,8 @@ public class barrierEnemy : baseEnemy
                 if (ally.GetComponentInChildren<barrier>() == null)
                 {
                     //instantiate a barrier object on the ally's position
-                    GameObject barrier = Instantiate(barrierObj, ally.transform.position, Quaternion.identity);
+                    //ally.bounds.center creates the barrier at the center of the collider
+                    GameObject barrier = Instantiate(barrierObj, ally.bounds.center, Quaternion.identity);
 
                     //attach barrier to ally to follow them
                     barrier.transform.SetParent(ally.transform);
