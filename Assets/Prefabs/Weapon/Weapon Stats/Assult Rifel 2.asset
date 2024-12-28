@@ -16,16 +16,15 @@ MonoBehaviour:
   damage: 15
   shootRate: 0.3
   weaponRange: 100
-  ammoCurrent: 988
-  ammoMax: 999
-  reloadTime: 0
+  ammoCurrent: 25
+  ammoMax: 25
+  reloadTime: 1
   areaOfEffectRadius: 0
   splashDamage: 0
   hitEffect: {fileID: 3836854531972415411, guid: 4790206eadc817b4196e071640e653af, type: 3}
   shootingSounds:
   - {fileID: 8300000, guid: 16aca2265729b44428cf48de6daca525, type: 3}
   weaponSoundVolume: 0.6
-  reloadSounds:
-  - {fileID: 8300000, guid: 310829a1dda43d0408a52b3f812f9061, type: 3}
+  reloadSounds: {fileID: 8300000, guid: 310829a1dda43d0408a52b3f812f9061, type: 3}
   emptySounds:
   - {fileID: 8300000, guid: a3558e8ebc7c23946be8bfc0dbd8770b, type: 3}
