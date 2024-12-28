@@ -90,15 +90,19 @@ public class barrierEnemy : baseEnemy
             //checking if colliders in range or not itself and only enemy types
             if (ally.gameObject != this.gameObject && ally.GetComponent<baseEnemy>() != null)
             {
-                //instantiate a barrier object on the ally's position
-                GameObject barrier = Instantiate(barrierObj, ally.transform.position, Quaternion.identity);
+                //check if ally already has a barrier on them (limits one per ally)
+                if (ally.GetComponentInChildren<barrier>() == null)
+                {
+                    //instantiate a barrier object on the ally's position
+                    GameObject barrier = Instantiate(barrierObj, ally.transform.position, Quaternion.identity);
 
-                //attach barrier to ally to follow them
-                barrier.transform.SetParent(ally.transform);
+                    //attach barrier to ally to follow them
+                    barrier.transform.SetParent(ally.transform);
 
-                //destroy barrier after lifetime is over
-                if(barrierObj)
-                    Destroy(barrier, barrierLifetime);
+                    //destroy barrier after lifetime is over
+                    if (barrierObj)
+                        Destroy(barrier, barrierLifetime);
+                }
             }
         }
     }
