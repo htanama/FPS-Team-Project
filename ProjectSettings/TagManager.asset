@@ -6,8 +6,6 @@ TagManager:
   tags:
   - HUD
   - Enemy
-  - trap_door
-  - OrbSpawn
   - OrbGoal
   - Portal B
   - Portal A

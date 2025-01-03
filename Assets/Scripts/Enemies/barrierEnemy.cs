@@ -5,12 +5,13 @@
 */
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class barrierEnemy : baseEnemy
 {
     [Header("     Barrier Enemy Stats     ")]
-    [SerializeField][Range(0.5f, 10f)] private GameObject barrierObj;     //place barrier object here
+    [SerializeField] private GameObject barrierObj;     //place barrier object here
     [SerializeField][Range(0.5f, 10.0f)] private float barrierCooldown;//time between barrier casts
     [SerializeField][Range(2.0f, 20.0f)] private float barrierLifetime;//how long the barrier is up for
     [SerializeField][Range(1.0f, 25.0f)] private float allyDetectionRadius;//radius to find enemy AI's
@@ -23,17 +24,17 @@ public class barrierEnemy : baseEnemy
 
     Transform closestAlly;      //keep track of closest enemy(ally)
 
+    // Update is called once per frame
+    void Update()
+    {
+        Behavior();
+    }
+
     //overriding from baseEnemy
     protected override void Behavior()
     {
         stayBehindEnemies();
         manageBarriers();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Behavior();
     }
 
     private void stayBehindEnemies()
@@ -68,6 +69,9 @@ public class barrierEnemy : baseEnemy
             //move agent to that position
             agent.SetDestination(posBehindAlly);
         }
+        else
+            closestDistance = Mathf.Infinity;    //reset find distance if no enemies are found
+
     }
 
     private void manageBarriers()
@@ -80,7 +84,7 @@ public class barrierEnemy : baseEnemy
         }
     }
 
-    private void createBarrier()
+    private void createBarrier()            //add limit to one per enemy
     {
         //check for nearby enemies(allies) to support
         Collider[] alliesInRange = Physics.OverlapSphere(transform.position, allyDetectionRadius);
@@ -90,14 +94,20 @@ public class barrierEnemy : baseEnemy
             //checking if colliders in range or not itself and only enemy types
             if (ally.gameObject != this.gameObject && ally.GetComponent<baseEnemy>() != null)
             {
-                //instantiate a barrier object on the ally's position
-                GameObject barrier = Instantiate(barrierObj, ally.transform.position, Quaternion.identity);
+                //check if ally already has a barrier on them (limits one per ally)
+                if (ally.GetComponentInChildren<barrier>() == null)
+                {
+                    //instantiate a barrier object on the ally's position
+                    //ally.bounds.center creates the barrier at the center of the collider
+                    GameObject barrier = Instantiate(barrierObj, ally.bounds.center, Quaternion.identity);
 
-                //attach barrier to ally to follow them
-                barrier.transform.SetParent(ally.transform);
+                    //attach barrier to ally to follow them
+                    barrier.transform.SetParent(ally.transform);
 
-                //destroy barrier after lifetime is over
-                Destroy(barrier, barrierLifetime);
+                    //destroy barrier after lifetime is over
+                    if (barrierObj)
+                        Destroy(barrier, barrierLifetime);
+                }
             }
         }
     }
