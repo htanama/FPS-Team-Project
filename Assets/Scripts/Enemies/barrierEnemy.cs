@@ -5,6 +5,7 @@
 */
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class barrierEnemy : baseEnemy
@@ -23,17 +24,17 @@ public class barrierEnemy : baseEnemy
 
     Transform closestAlly;      //keep track of closest enemy(ally)
 
+    // Update is called once per frame
+    void Update()
+    {
+        Behavior();
+    }
+
     //overriding from baseEnemy
     protected override void Behavior()
     {
         stayBehindEnemies();
         manageBarriers();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Behavior();
     }
 
     private void stayBehindEnemies()
@@ -68,6 +69,9 @@ public class barrierEnemy : baseEnemy
             //move agent to that position
             agent.SetDestination(posBehindAlly);
         }
+        else
+            closestDistance = Mathf.Infinity;    //reset find distance if no enemies are found
+
     }
 
     private void manageBarriers()
