@@ -933,7 +933,7 @@ MonoBehaviour:
   yMax: -9
   zMin: -104
   zMax: -104
-  maximumEnemyCount: 10
+  maximumEnemyCount: 1
   spawningRate: 0.5
   randomizeRespawnPosition: 0
 --- !u!4 &373847464
@@ -3502,6 +3502,10 @@ PrefabInstance:
     - target: {fileID: 2553693519100847746, guid: e9cdb426649e87244b842608c207ead6, type: 3}
       propertyPath: m_Name
       value: Spawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 2553693519100847746, guid: e9cdb426649e87244b842608c207ead6, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4098946842573096498, guid: e9cdb426649e87244b842608c207ead6, type: 3}
       propertyPath: m_LocalPosition.x
