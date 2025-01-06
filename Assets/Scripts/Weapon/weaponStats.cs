@@ -20,6 +20,7 @@ public class weaponStats : ScriptableObject //Acts as data storage
     public int ammoCurrent;
     public int ammoMax;
     public int reloadTime;
+  
 
     [Header("Area Damage")]
     public float areaOfEffectRadius;
@@ -31,5 +32,9 @@ public class weaponStats : ScriptableObject //Acts as data storage
     public float weaponSoundVolume;
     public AudioClip reloadSounds;
     public AudioClip[] emptySounds;
+
+    [Header("Weapon UI")]
+    public Sprite weaponSprite;
+
 
 }
