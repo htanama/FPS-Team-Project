@@ -71,7 +71,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     [SerializeField] float shootRate;    
     [SerializeField] GameObject gunModel;
     [SerializeField] List<weaponStats> gunList = new List<weaponStats>();
-    
+
+ 
     // [SerializeField] Transform shootPos; // not using this variable like the enemy 
 
 
@@ -134,13 +135,11 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         currentSpeed = speed;
         originalHeight = controller.height;
         originalCenter = controller.center;
-
-        gunListpos = 0;
-        gunList[gunListpos].ammoCurrent = 0;       
-
+       
         // Health and Health Bar //
         playerCurrentHealth = playerMaxHealth;
-        updatePlayerUI();
+        updatePlayerUI();                        
+        
     }
 
     // Update is called once per frame
@@ -162,7 +161,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
         // update gun information if gun list is more than zero
         if (gunList.Count > 0)
-        {
+        {            
             changeGun();
         }
 
@@ -298,7 +297,8 @@ public class playerController : MonoBehaviour, IDamage, IOpen
 
     public void GetGunStats(weaponStats gun)
     {
-        gunList.Add(gun);        
+        gunList.Add(gun);
+        gunListpos = gunList.Count - 1;
 
         shootDamage = gun.damage;
         shootDistance = gun.weaponRange;
@@ -310,7 +310,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         gunModel.GetComponent<MeshRenderer>().sharedMaterial = gun.model.GetComponent<MeshRenderer>().sharedMaterial;
 
         // name of the weapon when it is changing 
-        Debug.Log($"Add weapon: {gunList[gunListpos].model.name} and Index= {gunListpos} and length {gunList.Count}");
+        //Debug.Log($"Add weapon: {gunList[gunListpos].model.name} and Index= {gunListpos} and length {gunList.Count}");
     }
 
 
@@ -345,10 +345,9 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         GameManager.instance.maxAmmo.text = gunList[gunListpos].ammoMax.ToString();
 
         gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListpos].model.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListpos].model.GetComponent<MeshRenderer>().sharedMaterial;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListpos].model.GetComponent<MeshRenderer>().sharedMaterial;             
 
-        // name of the weapon when it is changing 
-        Debug.Log($"Change weapon: {gunList[gunListpos].model.name} and Index= {gunListpos}");
+        changeWeaponUI();
     }
 
     // Player Damage and Weapons //   
@@ -477,10 +476,7 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         
         gunList[gunListpos].ammoCurrent = gunList[gunListpos].ammoMax;
 
-        yield return new WaitForSeconds(gunList[gunListpos].reloadTime);
-
-
-        Debug.Log($"Reloading weapon: {gunList[gunListpos].model.name}. Ammo: {gunList[gunListpos].ammoCurrent}/{gunList[gunListpos].ammoMax}");
+        yield return new WaitForSeconds(gunList[gunListpos].reloadTime);               
 
         // Simulate reload time
         isReloading = false;
@@ -507,6 +503,35 @@ public class playerController : MonoBehaviour, IDamage, IOpen
     public void HealthItemPickup(healthItemPickup item)
     {
         playerCurrentHealth += item.HealAmount;
+    }
+
+    void changeWeaponUI()
+    {
+        if(gunList[gunListpos].name == "Assult Rifel 1")
+        {
+            SpriteChanger.instance.GetChangedWeaponSprite(gunList[gunListpos].weaponSprite);
+        }
+        else if (gunList[gunListpos].name == "Assult Rifel 2")
+        {
+            SpriteChanger.instance.GetChangedWeaponSprite(gunList[gunListpos].weaponSprite);
+        }
+        else if (gunList[gunListpos].name == "Assult Rifel 3")
+        {
+            SpriteChanger.instance.GetChangedWeaponSprite(gunList[gunListpos].weaponSprite);
+        }
+        else if (gunList[gunListpos].name == "Assult Rifel 4")
+        {
+            SpriteChanger.instance.GetChangedWeaponSprite(gunList[gunListpos].weaponSprite);
+        }
+        else if(gunList[gunListpos].name == "Launcher 1")
+        {
+            SpriteChanger.instance.GetChangedWeaponSprite(gunList[gunListpos].weaponSprite);
+        }
+        else if (gunList[gunListpos].name == "Sniper Rifel")
+        {
+            SpriteChanger.instance.GetChangedWeaponSprite(gunList[gunListpos].weaponSprite);
+        }
+
     }
 
 }

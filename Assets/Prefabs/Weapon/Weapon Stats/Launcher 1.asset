@@ -28,3 +28,4 @@ MonoBehaviour:
   reloadSounds: {fileID: 8300000, guid: 310829a1dda43d0408a52b3f812f9061, type: 3}
   emptySounds:
   - {fileID: 8300000, guid: a3558e8ebc7c23946be8bfc0dbd8770b, type: 3}
+  weaponSprite: {fileID: 21300032, guid: 6674e8c43c63e4f4184cbd009379498d, type: 3}
