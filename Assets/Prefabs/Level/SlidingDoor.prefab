@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e214d4cadc22d544dae9aa451755af12, type: 2}
+  - {fileID: 2100000, guid: 7a96efe9fc4ca4b4d983841fec5db176, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 3209042496932252687}
   m_Layer: 0
   m_Name: SlidingDoor
-  m_TagString: Untagged
+  m_TagString: OrbGoal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5235375122484218132}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6768b8ccbeb2d640b2b030b611fb205, type: 3}
   m_Name: 

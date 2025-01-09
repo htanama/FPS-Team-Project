@@ -510,4 +510,19 @@ public class playerController : MonoBehaviour, IDamage, IOpen
         playerCurrentHealth += item.HealAmount;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("OrbGoal"))
+        {
+            foreach (orbManager orb in GameManager.instance.OrbScripts)
+            {
+                if (orb.IsHoldingOrb)
+                {
+                    orb.OrbGoalReached();
+                }
+            }
+        }
+
+    }
+
 }

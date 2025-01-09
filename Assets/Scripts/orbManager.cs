@@ -41,8 +41,8 @@ public class orbManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerTransform = GameManager.instance.Player.transform;
-        orb = gameObject;
+
+        //orb = gameObject;
         //orb goal
         orbGoalPoint = GameObject.FindWithTag("OrbGoal").transform;
     }
@@ -50,26 +50,28 @@ public class orbManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        playerTransform = GameManager.instance.Player.transform;
         //limits to hold one orb at a time
         if (isHoldingOrb)
         {
             GameManager.instance.toggleImage(true);
 
-            if (Vector3.Distance(playerTransform.position, orbGoalPoint.transform.position) < orbAreaSize)
-            {
+
+            //if (playerTransform.position)     //moved to playerController
+            //{
                 //drop off the orb at the goal
-                OrbGoalReached();
-            }
+             //   OrbGoalReached();
+            //}
         }
         else
         {
             //If not holding orb check if close enough to pick it up
-            if (Vector3.Distance(playerTransform.position, orb.transform.position) < orbPickupDistance)
+            if (Vector3.Distance(playerTransform.position, gameObject.transform.position) < orbPickupDistance)
                 PickupOrb();
         }
     }
 
-    void OrbGoalReached()
+    public void OrbGoalReached()
     {
 
         DestroyOrb();
@@ -82,25 +84,25 @@ public class orbManager : MonoBehaviour
 
     void PickupOrb()
     {
-        if (orb.transform.parent == null)
+        if (gameObject.transform.parent == null)
         {
             //pick up the orb
             isHoldingOrb = true;
             //playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-            orb.transform.SetParent(playerTransform);  //Orb attaches to the player
-            orb.transform.localPosition = new Vector3(0, 1, 0); //Set orb position on player
-            orb.GetComponent<Collider>().enabled = false; //Turn off orb collider
+            gameObject.transform.SetParent(playerTransform);  //Orb attaches to the player
+            gameObject.transform.localPosition = new Vector3(0, 1, 0); //Set orb position on player
+            gameObject.GetComponent<Collider>().enabled = false; //Turn off orb collider
         }
     }
 
     public void DropOrb(Transform objectTransform)
     {
-        if (orb.transform.parent != null)
+        if (gameObject.transform.parent != null)
         {
             isHoldingOrb = false;
-            orb.transform.SetParent(null);     //Detach orb from carrier
-            orb.transform.position = objectTransform.position; //Drop orb at carrier's location
-            orb.GetComponent<Collider>().enabled = true;   //Enable orb collider for pickup
+            gameObject.transform.SetParent(null);     //Detach orb from carrier
+            gameObject.transform.position = objectTransform.position; //Drop orb at carrier's location
+            gameObject.GetComponent<Collider>().enabled = true;   //Enable orb collider for pickup
 
             Debug.Log("Orb Dropped");
         }
@@ -110,10 +112,10 @@ public class orbManager : MonoBehaviour
     {
         //return the orb to base
         isHoldingOrb = false;
-        orb.transform.SetParent(null);
+        gameObject.transform.SetParent(null);
         //orb.transform.position = orbSpawnPoint.transform.position + orbOffset; //Respawn/Move orb back at base
         //orb.GetComponent<Collider>().enabled = true; //Enable orb collider
-        Object.Destroy(orb);
+        Object.Destroy(gameObject);
 
         Debug.Log("Orb returned to base");
     }
@@ -125,12 +127,12 @@ public class orbManager : MonoBehaviour
         {
             //separate orb from player model
             isHoldingOrb= false;
-            orb.transform.SetParent(null);
+            gameObject.transform.SetParent(null);
 
             //attach orb to enemy
-            orb.transform.SetParent(enemyTransform);
-            orb.transform.localPosition = new Vector3(0, 1, 0);    //Set location on enemy
-            orb.GetComponent<Collider>().enabled = false;     //Can't take orb from enemy
+            gameObject.transform.SetParent(enemyTransform);
+            gameObject.transform.localPosition = new Vector3(0, 1, 0);    //Set location on enemy
+            gameObject.GetComponent<Collider>().enabled = false;     //Can't take orb from enemy
 
             Debug.Log("Orb taken by enemy");
         }
